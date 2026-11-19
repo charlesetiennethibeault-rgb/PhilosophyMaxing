@@ -1,7 +1,7 @@
 import { supabase } from './supabase'
 import { emptyFilters } from './draw'
 import { families, themes, philosophies as seedPhilosophies, allTopics as seedTopics } from './seed'
-import type { Draw, DrawSettings, Filters, Note, Philosophy, Topic } from './types'
+import type { Draw, DrawSettings, Family, Filters, Note, Philosophy, Synthesis, Theme, Topic } from './types'
 
 /* ---------- correspondance base (snake_case) <-> application (camelCase) ---------- */
 
@@ -55,8 +55,20 @@ export const noteToRow = (n: Note): Row => ({
   reaction: n.reaction, status: n.status, favorite: n.favorite, tags: n.tags,
 })
 
+export const familyFromRow = (r: Row): Family => ({ id: r.id, name: r.name, color: r.color, order: r.sort_order })
+export const familyToRow = (f: Family): Row => ({ id: f.id, name: f.name, color: f.color, sort_order: f.order })
+export const themeFromRow = (r: Row): Theme => ({ id: r.id, name: r.name, order: r.sort_order })
+export const themeToRow = (t: Theme): Row => ({ id: t.id, name: t.name, sort_order: t.order })
+
+export const synthesisFromRow = (r: Row): Synthesis => ({
+  philosophy: r.philosophy_id, theme: r.theme_id, body: r.body, status: r.status, updatedAt: r.updated_at,
+})
+export const synthesisToRow = (s: Synthesis): Row => ({
+  philosophy_id: s.philosophy, theme_id: s.theme, body: s.body, status: s.status,
+})
+
 export const drawFromRow = (r: Row): Draw => ({
-  type: r.type, philosophy: r.philosophy_id, topic: r.topic_id ?? undefined, at: r.drawn_at,
+  id: r.id, type: r.type, philosophy: r.philosophy_id, topic: r.topic_id ?? undefined, at: r.drawn_at,
 })
 
 export interface Prefs { settings: DrawSettings; filters: Filters; seeded: boolean }
@@ -101,6 +113,18 @@ export async function loadNotes(): Promise<Note[]> {
   const rows = check<Row[]>(await supabase.from('notes').select('*').range(0, 9999))
   return rows.map(noteFromRow)
 }
+export async function loadFamilies(): Promise<Family[]> {
+  const rows = check<Row[]>(await supabase.from('families').select('*').order('sort_order').range(0, 999))
+  return rows.map(familyFromRow)
+}
+export async function loadThemes(): Promise<Theme[]> {
+  const rows = check<Row[]>(await supabase.from('themes').select('*').order('sort_order').range(0, 999))
+  return rows.map(themeFromRow)
+}
+export async function loadSyntheses(): Promise<Synthesis[]> {
+  const rows = check<Row[]>(await supabase.from('theme_syntheses').select('*').range(0, 9999))
+  return rows.map(synthesisFromRow)
+}
 export async function loadDraws(): Promise<Draw[]> {
   const rows = check<Row[]>(await supabase.from('draws').select('*').order('drawn_at').range(0, 9999))
   return rows.map(drawFromRow)
@@ -134,5 +158,30 @@ export async function seedIfNeeded(userId: string, prefs: Prefs): Promise<void> 
     { user_id: userId, ...prefsToRow(prefs.settings, prefs.filters), seeded: true },
     { onConflict: 'user_id' },
   )
+  if (res.error) throw new Error(`settings : ${res.error.message}`)
+}
+
+/* ---------- import d'une sauvegarde JSON ---------- */
+
+/** Réécrit les lignes de la sauvegarde (mêmes identifiants = mises à jour, rien n'est supprimé). */
+export async function importBackup(userId: string, b: import('./backup').Backup): Promise<void> {
+  const withUser = (rows: Row[]) => rows.map((r) => ({ ...r, user_id: userId }))
+  const steps: [string, Row[], string][] = [
+    ['families', b.families.map(familyToRow), 'user_id,id'],
+    ['themes', b.themes.map(themeToRow), 'user_id,id'],
+    ['philosophies', b.philosophies.map(philosophyToRow), 'user_id,id'],
+    ['topics', b.topics.map(topicToRow), 'user_id,id'],
+    ['notes', b.notes.map(noteToRow), 'user_id,philosophy_id,topic_id'],
+    ['theme_syntheses', b.syntheses.map(synthesisToRow), 'user_id,philosophy_id,theme_id'],
+    ['draws', b.draws.filter((d) => d.id).map((d) => ({ id: d.id, type: d.type, philosophy_id: d.philosophy, topic_id: d.topic ?? null, drawn_at: d.at })), 'id'],
+  ]
+  for (const [table, rows, onConflict] of steps) {
+    for (let i = 0; i < rows.length; i += 100) {
+      const res = await supabase.from(table).upsert(withUser(rows.slice(i, i + 100)), { onConflict })
+      if (res.error) throw new Error(`${table} : ${res.error.message}`)
+    }
+  }
+  const res = await supabase.from('settings').upsert(
+    { user_id: userId, ...prefsToRow(b.settings, b.filters), seeded: true }, { onConflict: 'user_id' })
   if (res.error) throw new Error(`settings : ${res.error.message}`)
 }

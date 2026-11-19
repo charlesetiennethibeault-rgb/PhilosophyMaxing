@@ -1,16 +1,17 @@
 import { ERAS, emptyFilters } from '../lib/draw'
-import { REGIONS, families } from '../lib/seed'
-import { FAMILY_GLYPHS } from '../lib/ui'
+import { REGIONS } from '../lib/seed'
+import { useData } from '../lib/DataContext'
+import { glyphFor } from '../lib/ui'
 import type { DrawSettings, EraId, Filters } from '../lib/types'
 
 interface Props {
   filters: Filters
-  settings: DrawSettings
+  settings?: DrawSettings
   onFilters: (f: Filters) => void
-  onSettings: (s: Partial<DrawSettings>) => void
-  onResetHistory: () => void
+  onSettings?: (s: Partial<DrawSettings>) => void
+  onResetHistory?: () => void
   wheelCount: number
-  historyCount: number
+  historyCount?: number
 }
 
 function toggle<T>(list: T[], v: T): T[] {
@@ -18,7 +19,9 @@ function toggle<T>(list: T[], v: T): T[] {
 }
 
 export default function FiltersPanel(p: Props) {
-  const { filters: f, settings: s } = p
+  const { families } = useData()
+  const { filters: f } = p
+  const s = p.settings
   const set = (patch: Partial<Filters>) => p.onFilters({ ...f, ...patch })
   const range = f.yearRange ?? [-600, 2000]
 
@@ -33,7 +36,7 @@ export default function FiltersPanel(p: Props) {
         {families.map((fam, i) => (
           <label key={fam.id} className="check">
             <input type="checkbox" checked={f.families.includes(fam.id)} onChange={() => set({ families: toggle(f.families, fam.id) })} />
-            <span className="swatch" style={{ background: fam.color }} aria-hidden="true">{FAMILY_GLYPHS[i]}</span>
+            <span className="swatch" style={{ background: fam.color }} aria-hidden="true">{glyphFor(i)}</span>
             <span>{fam.name}</span>
           </label>
         ))}
@@ -88,32 +91,34 @@ export default function FiltersPanel(p: Props) {
         <button type="button" className="link" onClick={() => p.onFilters(emptyFilters)}>Effacer les filtres</button>
       </fieldset>
 
+      {s && p.onSettings && p.onResetHistory && (
       <fieldset>
         <legend>Tirage</legend>
         <label className="check">
-          <input type="checkbox" checked={s.noRepeat} onChange={(e) => p.onSettings({ noRepeat: e.target.checked })} />
+          <input type="checkbox" checked={s.noRepeat} onChange={(e) => p.onSettings?.({ noRepeat: e.target.checked })} />
           <span>Ne pas retomber sur une case déjà tirée</span>
         </label>
         <label className="check">
-          <input type="checkbox" checked={s.onlyRemaining} onChange={(e) => p.onSettings({ onlyRemaining: e.target.checked })} />
+          <input type="checkbox" checked={s.onlyRemaining} onChange={(e) => p.onSettings?.({ onlyRemaining: e.target.checked })} />
           <span>Seulement ce qui reste à faire (hors approfondi)</span>
         </label>
         <label className="check">
-          <input type="checkbox" checked={s.discovery} onChange={(e) => p.onSettings({ discovery: e.target.checked })} />
+          <input type="checkbox" checked={s.discovery} onChange={(e) => p.onSettings?.({ discovery: e.target.checked })} />
           <span>Mode découverte (favorise ce que j’ai le moins creusé)</span>
         </label>
         <label className="check">
-          <input type="checkbox" checked={s.sound} onChange={(e) => p.onSettings({ sound: e.target.checked })} />
+          <input type="checkbox" checked={s.sound} onChange={(e) => p.onSettings?.({ sound: e.target.checked })} />
           <span>Son de la roue</span>
         </label>
         <button
           type="button" className="btn small"
-          disabled={p.historyCount === 0}
-          onClick={() => { if (window.confirm('Réinitialiser tout l’historique des tirages ? Tes notes ne sont pas touchées.')) p.onResetHistory() }}
+          disabled={!p.historyCount}
+          onClick={() => { if (window.confirm('Réinitialiser tout l’historique des tirages ? Tes notes ne sont pas touchées.')) p.onResetHistory?.() }}
         >
           Réinitialiser l’historique des tirages ({p.historyCount})
         </button>
       </fieldset>
+      )}
     </div>
   )
 }

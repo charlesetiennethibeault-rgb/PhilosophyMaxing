@@ -3,11 +3,16 @@ import Wheel, { type WheelHandle, type WheelItem } from './components/Wheel'
 import FiltersPanel from './components/FiltersPanel'
 import PhilosophyCard from './components/PhilosophyCard'
 import NoteView from './components/NoteView'
+import Carnet, { type CarnetSub } from './components/Carnet'
+import Compare from './components/Compare'
+import Progress from './components/Progress'
+import { DataProvider, useData } from './lib/DataContext'
 import { useAppState } from './lib/store'
+import type { AppState } from './lib/appState'
 import { availableTopics, drawPhilosophy, drawTopic, emptyFilters, progressOf, wheelPhilosophies, type DrawContext } from './lib/draw'
 import { cellKey, emptyNote, type Topic } from './lib/types'
 import { RECORD_DRAWS } from './lib/config'
-import { familyById, familyIndex, OCHRE } from './lib/ui'
+import { OCHRE } from './lib/ui'
 
 type Tab = 'roue' | 'carnet' | 'comparer' | 'progression'
 const TABS: { id: Tab; label: string }[] = [
@@ -35,13 +40,12 @@ function shade(hex: string, amount: number) {
   return '#' + [f(n >> 16), f((n >> 8) & 255), f(n & 255)].map((c) => c.toString(16).padStart(2, '0')).join('')
 }
 
-type AppState = ReturnType<typeof useAppState>
-
 const SYNC_SHORT = { saved: 'Synchronisé', pending: 'Envoi…', error: 'Hors ligne' } as const
 
 function Workspace({ st, email, onSignOut }: { st: AppState; email: string; onSignOut: () => void }) {
   const reduced = useReducedMotion()
   const wheelRef = useRef<WheelHandle>(null)
+  const { family, familyIdx } = useData()
 
   const [tab, setTab] = useState<Tab>('roue')
   const [mode, setMode] = useState<'philosophies' | 'topics'>('philosophies')
@@ -53,15 +57,18 @@ function Workspace({ st, email, onSignOut }: { st: AppState; email: string; onSi
   const [message, setMessage] = useState<null | { text: string; action?: { label: string; run: () => void } }>(null)
   const [sheetOpen, setSheetOpen] = useState(false)
   const [drawerOpen, setDrawerOpen] = useState(false)
-  const [view, setView] = useState<'wheel' | 'note'>('wheel')
+  const [noteTarget, setNoteTarget] = useState<{ p: string; t: string } | null>(null)
+  const [carnetSub, setCarnetSub] = useState<CarnetSub>('philosophies')
+  const [ficheId, setFicheId] = useState<string | null>(null)
+  const openNote = useCallback((p: string, t: string) => setNoteTarget({ p, t }), [])
 
   // Retour sur l'onglet : on recharge depuis Supabase, sauf pendant l'écriture d'une note.
   const { refresh } = st
   useEffect(() => {
-    const onShow = () => { if (document.visibilityState === 'visible' && view !== 'note') void refresh() }
+    const onShow = () => { if (document.visibilityState === 'visible' && !noteTarget) void refresh() }
     document.addEventListener('visibilitychange', onShow)
     return () => document.removeEventListener('visibilitychange', onShow)
-  }, [refresh, view])
+  }, [refresh, noteTarget])
 
   const ctx: DrawContext = useMemo(
     () => ({ philosophies: st.philosophies, topics: st.topics, filters: st.filters, settings: st.settings, history: st.history, statuses: st.statuses }),
@@ -70,22 +77,24 @@ function Workspace({ st, email, onSignOut }: { st: AppState; email: string; onSi
 
   const wheel = useMemo(() => wheelPhilosophies(ctx), [ctx])
   const current = st.philosophies.find((p) => p.id === currentId) ?? null
+  const notePhilosophy = noteTarget ? st.philosophies.find((p) => p.id === noteTarget.p) : undefined
+  const noteTopic = noteTarget ? st.topics.find((t) => t.id === noteTarget.t) : undefined
   const topic = topicItems.find((t) => t.id === topicId) ?? st.topics.find((t) => t.id === topicId) ?? null
 
   const phItems: WheelItem[] = useMemo(
-    () => wheel.map((p) => ({ id: p.id, label: p.name, color: familyById(p.family).color, pattern: familyIndex(p.family) % 9 })),
-    [wheel],
+    () => wheel.map((p) => ({ id: p.id, label: p.name, color: family(p.family).color, pattern: familyIdx(p.family) % 9 })),
+    [wheel, family, familyIdx],
   )
   const tpItems: WheelItem[] = useMemo(
     () => topicItems.map((t, i) => ({
       id: t.id,
       label: t.short,
-      color: t.scope === 'own' ? OCHRE : shade(familyById(current?.family ?? 'antiquite').color, i % 2 ? 0.18 : 0),
+      color: t.scope === 'own' ? OCHRE : shade(family(current?.family ?? '').color, i % 2 ? 0.18 : 0),
       pattern: 0,
       star: t.scope === 'own',
       status: st.statuses[cellKey(current?.id ?? '', t.id)] ?? 'empty',
     })),
-    [topicItems, current, st.statuses],
+    [topicItems, current, st.statuses, family],
   )
 
   const items = mode === 'philosophies' ? phItems : tpItems
@@ -137,7 +146,7 @@ function Workspace({ st, email, onSignOut }: { st: AppState; email: string; onSi
     } else if (current) {
       const t = topicItems[index]
       if (!t) return
-      setTopicId(t.id); setSheetOpen(false); setView('note')
+      setTopicId(t.id); setSheetOpen(false); setNoteTarget({ p: current.id, t: t.id })
       if (RECORD_DRAWS) st.addDraw({ type: 'topic', philosophy: current.id, topic: t.id })
     }
   }
@@ -178,19 +187,27 @@ function Workspace({ st, email, onSignOut }: { st: AppState; email: string; onSi
         <div className="topbar-right">
           <span className={`sync-pill sync-${st.sync}`} role="status" title={email}>{SYNC_SHORT[st.sync]}</span>
           <button type="button" className="btn small signout-top" onClick={onSignOut}>Déconnexion</button>
-          <button type="button" className="btn small filters-toggle" onClick={() => setDrawerOpen(true)}>Filtres</button>
+          {tab === 'roue' && !noteTarget && (
+            <button type="button" className="btn small filters-toggle" onClick={() => setDrawerOpen(true)}>Filtres</button>
+          )}
         </div>
       </header>
 
-      {view === 'note' && current && topic ? (
+      {noteTarget && notePhilosophy && noteTopic ? (
         <NoteView
-          key={cellKey(current.id, topic.id)}
-          philosophy={current} topic={topic}
-          note={st.notes[cellKey(current.id, topic.id)] ?? emptyNote(current.id, topic.id)}
+          key={cellKey(noteTarget.p, noteTarget.t)}
+          philosophy={notePhilosophy} topic={noteTopic}
+          note={st.notes[cellKey(noteTarget.p, noteTarget.t)] ?? emptyNote(noteTarget.p, noteTarget.t)}
           sync={st.sync}
           onChange={st.saveNote}
-          onBack={() => setView('wheel')}
+          onBack={() => setNoteTarget(null)}
         />
+      ) : tab === 'carnet' ? (
+        <Carnet st={st} sub={carnetSub} onSub={setCarnetSub} ficheId={ficheId} onFiche={setFicheId} onOpenNote={openNote} />
+      ) : tab === 'comparer' ? (
+        <Compare philosophies={st.philosophies} topics={st.topics} notes={st.notes} syntheses={st.syntheses} onOpenNote={openNote} />
+      ) : tab === 'progression' ? (
+        <Progress philosophies={st.philosophies} topics={st.topics} statuses={st.statuses} />
       ) : tab === 'roue' ? (
         <main className="layout">
           <div className={`filters-col${drawerOpen ? ' open' : ''}`}>
@@ -247,16 +264,11 @@ function Workspace({ st, email, onSignOut }: { st: AppState; email: string; onSi
 
           {side}
         </main>
-      ) : (
-        <main className="placeholder">
-          <h2>{TABS.find((t) => t.id === tab)!.label}</h2>
-          <p>Cette vue arrive à la phase 3.</p>
-        </main>
-      )}
+      ) : null}
 
       <nav className="bottom-nav" aria-label="Navigation principale">
         {TABS.map((t) => (
-          <button key={t.id} type="button" aria-current={tab === t.id ? 'page' : undefined} className={tab === t.id ? 'on' : ''} onClick={() => setTab(t.id)}>
+          <button key={t.id} type="button" aria-current={tab === t.id ? 'page' : undefined} className={tab === t.id ? 'on' : ''} onClick={() => { setTab(t.id); setNoteTarget(null) }}>
             {t.label}
           </button>
         ))}
@@ -283,5 +295,9 @@ export default function App({ userId, email, onSignOut }: { userId: string; emai
   if (!st.ready) {
     return <main className="login"><h1>PhilosophyMaxing</h1><p className="tagline" role="status">Chargement de ton carnet…</p></main>
   }
-  return <Workspace st={st} email={email} onSignOut={onSignOut} />
+  return (
+    <DataProvider families={st.families} themes={st.themes}>
+      <Workspace st={st} email={email} onSignOut={onSignOut} />
+    </DataProvider>
+  )
 }

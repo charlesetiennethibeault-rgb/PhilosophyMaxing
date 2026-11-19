@@ -1,0 +1,344 @@
+import { useMemo, useRef, useState } from 'react'
+import { downloadJson, buildBackup, parseBackup, type Backup } from '../lib/backup'
+import { useData } from '../lib/DataContext'
+import { REGIONS } from '../lib/seed'
+import { move, normalize, slugify } from '../lib/tools'
+import type { AppState } from '../lib/appState'
+import type { Family, Philosophy, Theme, Topic } from '../lib/types'
+
+type Section = 'philosophies' | 'topics' | 'families' | 'themes' | 'backup'
+const SECTIONS: { id: Section; label: string }[] = [
+  { id: 'philosophies', label: 'Philosophies' },
+  { id: 'topics', label: 'Sujets' },
+  { id: 'families', label: 'Familles' },
+  { id: 'themes', label: 'Thèmes' },
+  { id: 'backup', label: 'Sauvegarde' },
+]
+
+function Arrows({ onUp, onDown, name }: { onUp: () => void; onDown: () => void; name: string }) {
+  return (
+    <span className="arrows">
+      <button type="button" className="icon-btn sm" aria-label={`Monter ${name}`} onClick={onUp}>↑</button>
+      <button type="button" className="icon-btn sm" aria-label={`Descendre ${name}`} onClick={onDown}>↓</button>
+    </span>
+  )
+}
+
+/* ---------- philosophies ---------- */
+
+function PhilosophyForm({ initial, families, onSave, onCancel }: {
+  initial: Philosophy; families: Family[]; onSave: (p: Philosophy) => void; onCancel: () => void
+}) {
+  const [p, setP] = useState(initial)
+  const [actors, setActors] = useState(initial.actors.join(', '))
+  const set = (patch: Partial<Philosophy>) => setP((x) => ({ ...x, ...patch }))
+  return (
+    <form className="mform" onSubmit={(e) => {
+      e.preventDefault()
+      onSave({ ...p, name: p.name.trim(), actors: actors.split(',').map((a) => a.trim()).filter(Boolean) })
+    }}>
+      <label>Nom<input required value={p.name} onChange={(e) => set({ name: e.target.value })} /></label>
+      <label>Famille
+        <select value={p.family} onChange={(e) => set({ family: e.target.value })}>
+          {families.map((f) => <option key={f.id} value={f.id}>{f.name}</option>)}
+        </select>
+      </label>
+      <label>Région
+        <select value={p.region} onChange={(e) => set({ region: e.target.value })}>
+          {REGIONS.map((r) => <option key={r}>{r}</option>)}
+        </select>
+      </label>
+      <label>Année de début (négative avant J.-C.)<input type="number" required value={p.startYear} onChange={(e) => set({ startYear: Number(e.target.value) })} /></label>
+      <label>Année de fin (si le courant est clos)<input type="number" value={p.endYear ?? ''} onChange={(e) => set({ endYear: e.target.value === '' ? null : Number(e.target.value) })} /></label>
+      <label>Libellé de dates<input value={p.dateLabel} placeholder="vers 300 av. J.-C." onChange={(e) => set({ dateLabel: e.target.value })} /></label>
+      <label>Fondateur ou origine<input value={p.founder} onChange={(e) => set({ founder: e.target.value })} /></label>
+      <label>Principaux acteurs (séparés par des virgules)<input value={actors} onChange={(e) => setActors(e.target.value)} /></label>
+      <label>Description (une phrase)<textarea rows={3} value={p.description} onChange={(e) => set({ description: e.target.value })} /></label>
+      <div className="mform-actions">
+        <button type="submit" className="btn primary">Enregistrer</button>
+        <button type="button" className="btn" onClick={onCancel}>Annuler</button>
+      </div>
+    </form>
+  )
+}
+
+function PhilosophiesSection({ st }: { st: AppState }) {
+  const { families, family } = useData()
+  const [q, setQ] = useState('')
+  const [editing, setEditing] = useState<Philosophy | null>(null)
+  const sorted = useMemo(() => [...st.philosophies].sort((a, b) => a.order - b.order), [st.philosophies])
+  const shown = sorted.filter((p) => !q || normalize(p.name).includes(normalize(q)))
+
+  const blank = (): Philosophy => ({
+    id: '', name: '', family: families[0]?.id ?? '', region: REGIONS[0], startYear: 2000, endYear: null, dateLabel: '',
+    founder: '', actors: [], description: '', aVerifier: false, reserve: false, favorite: false, tags: [],
+    order: Math.max(0, ...st.philosophies.map((p) => p.order)) + 1,
+  })
+
+  if (editing) {
+    return (
+      <PhilosophyForm
+        initial={editing} families={families} onCancel={() => setEditing(null)}
+        onSave={(p) => {
+          st.savePhilosophy(p.id ? p : { ...p, id: slugify(p.name, st.philosophies.map((x) => x.id)) })
+          setEditing(null)
+        }}
+      />
+    )
+  }
+  return (
+    <section>
+      <div className="manage-bar">
+        <input type="search" aria-label="Filtrer les philosophies" placeholder="Filtrer par nom…" value={q} onChange={(e) => setQ(e.target.value)} />
+        <button type="button" className="btn primary" onClick={() => setEditing(blank())}>Ajouter une philosophie</button>
+      </div>
+      <ul className="mlist">
+        {shown.map((p) => (
+          <li key={p.id}>
+            <span className="swatch" style={{ background: family(p.family).color }} aria-hidden="true" />
+            <span className="mname">{p.name}</span>
+            <Arrows name={p.name} onUp={() => st.reorder('philosophies', move(sorted, p.id, -1))} onDown={() => st.reorder('philosophies', move(sorted, p.id, 1))} />
+            <button type="button" className="btn small" onClick={() => setEditing(p)}>Modifier</button>
+            <button
+              type="button" className="btn small danger"
+              onClick={() => { if (window.confirm(`Supprimer « ${p.name} » ? Ses sujets propres, ses notes et ses synthèses seront supprimés aussi. Cette action est définitive.`)) st.deletePhilosophy(p.id) }}
+            >Supprimer</button>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )
+}
+
+/* ---------- sujets ---------- */
+
+function TopicForm({ initial, st, onSave, onCancel }: { initial: Topic; st: AppState; onSave: (t: Topic) => void; onCancel: () => void }) {
+  const { themes } = useData()
+  const isNew = !initial.id
+  const [t, setT] = useState(initial)
+  const set = (patch: Partial<Topic>) => setT((x) => ({ ...x, ...patch }))
+  return (
+    <form className="mform" onSubmit={(e) => { e.preventDefault(); onSave({ ...t, name: t.name.trim(), short: (t.short || t.name).trim() }) }}>
+      <label>Nom du sujet<input required value={t.name} onChange={(e) => set({ name: e.target.value })} /></label>
+      <label>Nom court (sur la roue)<input value={t.short} maxLength={26} onChange={(e) => set({ short: e.target.value })} /></label>
+      <label>Question de recherche<input value={t.question} placeholder="Que dit [philosophie] de … ?" onChange={(e) => set({ question: e.target.value })} /></label>
+      {isNew && (
+        <fieldset className="statuses">
+          <legend>Portée</legend>
+          <label className={`seg${t.scope === 'common' ? ' on' : ''}`}><input type="radio" name="tscope" checked={t.scope === 'common'} onChange={() => set({ scope: 'common', philosophy: undefined, theme: themes[0]?.id })} />Global (rejoint la roue commune)</label>
+          <label className={`seg${t.scope === 'own' ? ' on' : ''}`}><input type="radio" name="tscope" checked={t.scope === 'own'} onChange={() => set({ scope: 'own', theme: undefined, philosophy: st.philosophies[0]?.id })} />Propre à une philosophie</label>
+        </fieldset>
+      )}
+      {t.scope === 'common' ? (
+        <label>Thème
+          <select value={t.theme ?? ''} onChange={(e) => set({ theme: e.target.value })}>
+            {themes.map((th) => <option key={th.id} value={th.id}>{th.name}</option>)}
+          </select>
+        </label>
+      ) : (
+        isNew && (
+          <label>Philosophie
+            <select value={t.philosophy ?? ''} onChange={(e) => set({ philosophy: e.target.value })}>
+              {st.philosophies.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
+            </select>
+          </label>
+        )
+      )}
+      <div className="mform-actions">
+        <button type="submit" className="btn primary">Enregistrer</button>
+        <button type="button" className="btn" onClick={onCancel}>Annuler</button>
+      </div>
+    </form>
+  )
+}
+
+function TopicsSection({ st }: { st: AppState }) {
+  const { themes } = useData()
+  const [editing, setEditing] = useState<Topic | null>(null)
+  const [ownFor, setOwnFor] = useState(st.philosophies[0]?.id ?? '')
+  const common = st.topics.filter((t) => t.scope === 'common').sort((a, b) => a.order - b.order)
+  const own = st.topics.filter((t) => t.scope === 'own' && t.philosophy === ownFor).sort((a, b) => a.order - b.order)
+  const themeName = (id?: string) => themes.find((t) => t.id === id)?.name ?? '—'
+
+  if (editing) {
+    return (
+      <TopicForm
+        initial={editing} st={st} onCancel={() => setEditing(null)}
+        onSave={(t) => {
+          const scopeList = st.topics.filter((x) => x.scope === t.scope && (t.scope === 'common' || x.philosophy === t.philosophy))
+          const id = t.id || (t.scope === 'own' ? `${t.philosophy}--${slugify(t.name, [])}` : slugify(t.name, []))
+          const unique = t.id ? id : (st.topics.some((x) => x.id === id) ? `${id}-${Date.now().toString(36)}` : id)
+          st.saveTopic({
+            ...t, id: unique, aVerifier: t.id ? t.aVerifier : false,
+            order: t.id ? t.order : Math.max(0, ...scopeList.map((x) => x.order)) + 1,
+            question: t.question || (t.scope === 'common' ? `Que dit [philosophie] de ${t.name.toLowerCase()} ?` : `Que dit ${st.philosophies.find((p) => p.id === t.philosophy)?.name ?? ''} de « ${t.name} » ?`),
+          })
+          setEditing(null)
+        }}
+      />
+    )
+  }
+
+  const blank = (scope: 'common' | 'own'): Topic => ({
+    id: '', name: '', short: '', scope, theme: scope === 'common' ? themes[0]?.id : undefined,
+    philosophy: scope === 'own' ? ownFor : undefined, active: true, question: '', order: 0,
+  })
+
+  const row = (t: Topic, list: Topic[]) => (
+    <li key={t.id}>
+      {t.scope === 'common' && (
+        <label className="switch" title="Activer ou désactiver ce sujet pour toutes les philosophies">
+          <input type="checkbox" checked={t.active} onChange={(e) => st.setTopicActive(t.id, e.target.checked)} aria-label={`Sujet ${t.name} actif`} />
+        </label>
+      )}
+      <span className="mname">{t.scope === 'own' && <span aria-hidden="true">★ </span>}{t.name}{t.scope === 'common' && <span className="plist-sub"> · {themeName(t.theme)}</span>}</span>
+      <Arrows name={t.name} onUp={() => st.reorder('topics', move(list, t.id, -1))} onDown={() => st.reorder('topics', move(list, t.id, 1))} />
+      <button type="button" className="btn small" onClick={() => setEditing(t)}>Modifier</button>
+      <button
+        type="button" className="btn small danger"
+        onClick={() => { if (window.confirm(`Supprimer le sujet « ${t.name} » ? Les notes liées seront supprimées aussi.`)) st.deleteTopic(t.id) }}
+      >Supprimer</button>
+    </li>
+  )
+
+  return (
+    <section>
+      <h3>Sujets communs</h3>
+      <p className="hint">L’interrupteur retire un sujet de la roue pour toutes les philosophies, sans le supprimer.</p>
+      <ul className="mlist">{common.map((t) => row(t, common))}</ul>
+      <button type="button" className="btn" onClick={() => setEditing(blank('common'))}>Ajouter un sujet global</button>
+
+      <h3>Sujets propres</h3>
+      <label className="inline-select">Philosophie
+        <select value={ownFor} onChange={(e) => setOwnFor(e.target.value)}>
+          {[...st.philosophies].sort((a, b) => a.order - b.order).map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
+        </select>
+      </label>
+      <ul className="mlist">
+        {own.map((t) => row(t, own))}
+        {own.length === 0 && <li className="md-empty">Aucun sujet propre pour cette philosophie.</li>}
+      </ul>
+      <button type="button" className="btn" onClick={() => setEditing(blank('own'))}>Ajouter un sujet propre</button>
+    </section>
+  )
+}
+
+/* ---------- familles et thèmes ---------- */
+
+function NamedList<T extends { id: string; name: string; order: number }>({ items, noun, used, color, onSave, onDelete, onReorder, make }: {
+  items: T[]; noun: string; used: (id: string) => number; color?: boolean
+  onSave: (item: T) => void; onDelete: (id: string) => void; onReorder: (list: T[]) => void; make: (name: string, order: number) => T
+}) {
+  const sorted = [...items].sort((a, b) => a.order - b.order)
+  const [name, setName] = useState('')
+  return (
+    <section>
+      <ul className="mlist">
+        {sorted.map((it) => {
+          const n = used(it.id)
+          return (
+            <li key={it.id}>
+              {color && <input type="color" aria-label={`Couleur de ${it.name}`} value={(it as unknown as Family).color} onChange={(e) => onSave({ ...it, color: e.target.value } as T)} />}
+              <input className="mname-input" aria-label={`Nom : ${it.name}`} defaultValue={it.name} onBlur={(e) => { const v = e.target.value.trim(); if (v && v !== it.name) onSave({ ...it, name: v }) }} />
+              <span className="plist-sub">{n} utilisée{n > 1 ? 's' : ''}</span>
+              <Arrows name={it.name} onUp={() => onReorder(move(sorted, it.id, -1) as T[])} onDown={() => onReorder(move(sorted, it.id, 1) as T[])} />
+              <button
+                type="button" className="btn small danger" disabled={n > 0}
+                title={n > 0 ? `Impossible : encore utilisée. Déplace ou supprime d’abord ce qui l’utilise.` : undefined}
+                onClick={() => { if (window.confirm(`Supprimer « ${it.name} » ?`)) onDelete(it.id) }}
+              >Supprimer</button>
+            </li>
+          )
+        })}
+      </ul>
+      <form className="manage-bar" onSubmit={(e) => { e.preventDefault(); const v = name.trim(); if (v) { onSave(make(v, Math.max(0, ...items.map((i) => i.order)) + 1)); setName('') } }}>
+        <input aria-label={`Nom de la nouvelle ${noun}`} placeholder={`Nouvelle ${noun}…`} value={name} onChange={(e) => setName(e.target.value)} />
+        <button type="submit" className="btn primary">Ajouter</button>
+      </form>
+    </section>
+  )
+}
+
+/* ---------- sauvegarde ---------- */
+
+function BackupSection({ st }: { st: AppState }) {
+  const fileRef = useRef<HTMLInputElement>(null)
+  const [pending, setPending] = useState<Backup | null>(null)
+  const [msg, setMsg] = useState<{ kind: 'ok' | 'error'; text: string } | null>(null)
+  const [busy, setBusy] = useState(false)
+
+  const onFile = async (file: File | undefined) => {
+    setMsg(null); setPending(null)
+    if (!file) return
+    const r = parseBackup(await file.text())
+    if (r.ok) setPending(r.backup)
+    else setMsg({ kind: 'error', text: r.error })
+    if (fileRef.current) fileRef.current.value = ''
+  }
+
+  return (
+    <section>
+      <h3>Exporter</h3>
+      <p>Télécharge toutes tes données (philosophies, sujets, notes, synthèses, historique, réglages) dans un fichier JSON de secours.</p>
+      <button
+        type="button" className="btn primary"
+        onClick={() => downloadJson(`philosophymaxing-${new Date().toISOString().slice(0, 10)}.json`, buildBackup(st.exportData()))}
+      >Exporter mes données (JSON)</button>
+
+      <h3>Importer</h3>
+      <p>Choisis un fichier exporté depuis PhilosophyMaxing. Les éléments de même identifiant sont mis à jour ; rien n’est supprimé.</p>
+      <input ref={fileRef} type="file" accept="application/json,.json" aria-label="Fichier de sauvegarde" onChange={(e) => void onFile(e.target.files?.[0])} />
+      {pending && (
+        <div className="message" role="alert">
+          <p>
+            Cette sauvegarde contient {pending.philosophies.length} philosophies, {pending.topics.length} sujets, {pending.notes.length} notes
+            et {pending.syntheses.length} synthèses (exportée le {new Date(pending.exportedAt).toLocaleDateString('fr-CA')}).
+            Les éléments existants de même identifiant seront écrasés par ceux du fichier.
+          </p>
+          <button
+            type="button" className="btn primary" disabled={busy}
+            onClick={async () => {
+              setBusy(true)
+              try { await st.importData(pending); setMsg({ kind: 'ok', text: 'Import terminé.' }); setPending(null) }
+              catch (e) { setMsg({ kind: 'error', text: `Import impossible : ${e instanceof Error ? e.message : e}` }) }
+              finally { setBusy(false) }
+            }}
+          >{busy ? 'Import…' : 'Importer et remplacer'}</button>
+          <button type="button" className="btn small" onClick={() => setPending(null)}>Annuler</button>
+        </div>
+      )}
+      {msg && <p className={msg.kind === 'error' ? 'error' : 'notice'} role={msg.kind === 'error' ? 'alert' : 'status'}>{msg.text}</p>}
+    </section>
+  )
+}
+
+export default function Manage({ st }: { st: AppState }) {
+  const [section, setSection] = useState<Section>('philosophies')
+  const { families, themes } = useData()
+  return (
+    <div className="manage">
+      <div className="tabs manage-tabs" role="tablist" aria-label="Éléments à gérer">
+        {SECTIONS.map((s) => (
+          <button key={s.id} type="button" role="tab" aria-selected={section === s.id} className={section === s.id ? 'on' : ''} onClick={() => setSection(s.id)}>{s.label}</button>
+        ))}
+      </div>
+      {section === 'philosophies' && <PhilosophiesSection st={st} />}
+      {section === 'topics' && <TopicsSection st={st} />}
+      {section === 'families' && (
+        <NamedList<Family>
+          items={families} noun="famille" color used={(id) => st.philosophies.filter((p) => p.family === id).length}
+          onSave={st.saveFamily} onDelete={st.deleteFamily} onReorder={(l) => st.reorder('families', l)}
+          make={(name, order) => ({ id: slugify(name, families.map((f) => f.id)), name, color: '#7a6a55', order })}
+        />
+      )}
+      {section === 'themes' && (
+        <NamedList<Theme>
+          items={themes} noun="thème" used={(id) => st.topics.filter((t) => t.theme === id).length}
+          onSave={st.saveTheme} onDelete={st.deleteTheme} onReorder={(l) => st.reorder('themes', l)}
+          make={(name, order) => ({ id: slugify(name, themes.map((t) => t.id)), name, order })}
+        />
+      )}
+      {section === 'backup' && <BackupSection st={st} />}
+    </div>
+  )
+}

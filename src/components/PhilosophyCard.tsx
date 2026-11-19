@@ -1,5 +1,6 @@
 import type { Philosophy } from '../lib/types'
-import { FAMILY_GLYPHS, familyById, familyIndex } from '../lib/ui'
+import { useData } from '../lib/DataContext'
+import { glyphFor } from '../lib/ui'
 
 interface Props {
   philosophy: Philosophy
@@ -10,12 +11,13 @@ interface Props {
 }
 
 export default function PhilosophyCard({ philosophy: p, progress, onPatch, onTopicWheel, onClose }: Props) {
-  const fam = familyById(p.family)
+  const { family, familyIdx } = useData()
+  const fam = family(p.family)
   return (
     <article className="card" style={{ ['--fam' as string]: fam.color }} aria-labelledby="card-title">
       <header>
         <p className="fam-tag">
-          <span className="swatch" style={{ background: fam.color }} aria-hidden="true">{FAMILY_GLYPHS[familyIndex(p.family)]}</span>
+          <span className="swatch" style={{ background: fam.color }} aria-hidden="true">{glyphFor(familyIdx(p.family))}</span>
           {fam.name}
         </p>
         <div className="row">

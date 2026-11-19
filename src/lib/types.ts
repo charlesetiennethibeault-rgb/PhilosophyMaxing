@@ -38,6 +38,7 @@ export interface Topic {
 export const cellKey = (philosophyId: string, topicId: string) => `${philosophyId}|${topicId}`
 
 export interface Draw {
+  id?: string
   type: 'philosophy' | 'topic'
   philosophy: string
   topic?: string
@@ -79,4 +80,15 @@ export interface Note {
 
 export const emptyNote = (philosophy: string, topic: string): Note => ({
   philosophy, topic, research: '', sources: [], reaction: '', status: 'empty', favorite: false, tags: [], updatedAt: '',
+})
+
+export interface Synthesis {
+  philosophy: string
+  theme: string
+  body: string
+  status: NoteStatus
+  updatedAt: string
+}
+export const emptySynthesis = (philosophy: string, theme: string): Synthesis => ({
+  philosophy, theme, body: '', status: 'empty', updatedAt: '',
 })

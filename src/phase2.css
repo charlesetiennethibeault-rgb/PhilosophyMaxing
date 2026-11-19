@@ -40,7 +40,7 @@
 .mdfield.tab-write .preview { display: none; }
 .mdfield.tab-preview textarea { display: none; }
 @media (min-width: 1000px) {
-  .tabs { display: none; }
+  .mdfield .tabs { display: none; }
   .mdfield-body { grid-template-columns: 1fr 1fr; }
   .mdfield.tab-write .preview, .mdfield.tab-preview textarea { display: block; }
 }

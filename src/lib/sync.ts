@@ -1,6 +1,6 @@
 import { supabase } from './supabase'
-import { noteToRow, philosophyPatchToRow, prefsToRow } from './db'
-import type { DrawSettings, Filters, Note, Philosophy } from './types'
+import { noteToRow, philosophyPatchToRow, prefsToRow, synthesisToRow } from './db'
+import type { DrawSettings, Filters, Note, Philosophy, Synthesis } from './types'
 
 /**
  * File d'écritures vers Supabase. Les modifications sont déjà visibles à l'écran (interface optimiste) ;
@@ -14,6 +14,9 @@ export type Job =
   | { kind: 'settings'; key: string; payload: { settings: DrawSettings; filters: Filters } }
   | { kind: 'draw'; key: string; payload: { type: 'philosophy' | 'topic'; philosophy: string; topic?: string; at: string } }
   | { kind: 'resetDraws'; key: string; payload: null }
+  | { kind: 'synthesis'; key: string; payload: Synthesis }
+  | { kind: 'row'; key: string; payload: { table: 'families' | 'themes' | 'philosophies' | 'topics'; row: Record<string, unknown> } }
+  | { kind: 'del'; key: string; payload: { table: 'families' | 'themes' | 'philosophies' | 'topics'; id: string } }
 
 type Stored = Job & { v: number; runAt: number }
 export type SyncStatus = 'saved' | 'pending' | 'error'
@@ -57,6 +60,12 @@ export class SyncQueue {
     this.persist()
     this.set('pending')
     this.schedule()
+  }
+
+  /** Retire les écritures en attente devenues sans objet (ex. notes d'une philosophie supprimée). */
+  drop(predicate: (job: Job) => boolean) {
+    this.jobs = this.jobs.filter((j) => !predicate(j))
+    this.persist()
   }
 
   /** Attend que la file soit vide (ou le délai écoulé), en envoyant tout de suite. */
@@ -136,6 +145,15 @@ export class SyncQueue {
           user_id: uid, type: job.payload.type, philosophy_id: job.payload.philosophy,
           topic_id: job.payload.topic ?? null, drawn_at: job.payload.at,
         }))
+        break
+      case 'synthesis':
+        fail(await supabase.from('theme_syntheses').upsert({ ...synthesisToRow(job.payload), user_id: uid }, { onConflict: 'user_id,philosophy_id,theme_id' }))
+        break
+      case 'row':
+        fail(await supabase.from(job.payload.table).upsert({ ...job.payload.row, user_id: uid }, { onConflict: 'user_id,id' }))
+        break
+      case 'del':
+        fail(await supabase.from(job.payload.table).delete().eq('user_id', uid).eq('id', job.payload.id))
         break
       case 'resetDraws':
         fail(await supabase.from('draws').delete().eq('user_id', uid))

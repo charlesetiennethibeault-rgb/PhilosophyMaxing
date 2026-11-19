@@ -1,10 +1,7 @@
-import { families } from './seed'
-
 /** Icône textuelle et motif de la roue, pour ne pas dépendre de la couleur seule. */
 export const FAMILY_GLYPHS = ['◆', '●', '▲', '■', '✚', '✦', '⬟', '◐', '✿']
 
-export const familyIndex = (id: string) => families.findIndex((f) => f.id === id)
-export const familyById = (id: string) => families.find((f) => f.id === id)!
+export const glyphFor = (index: number) => FAMILY_GLYPHS[index % FAMILY_GLYPHS.length]
 
 export const OCHRE = '#C9962B'
 

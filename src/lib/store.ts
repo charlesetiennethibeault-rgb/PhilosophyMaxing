@@ -1,8 +1,14 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { loadDraws, loadNotes, loadPhilosophies, loadPrefs, loadTopics, seedIfNeeded } from './db'
-import { SyncQueue, type SyncStatus } from './sync'
-import type { Draw, DrawSettings, Filters, Note, NoteStatus, Philosophy, Topic } from './types'
+import {
+  importBackup as importBackupDb, loadDraws, loadFamilies, loadNotes, loadPhilosophies, loadPrefs, loadSyntheses,
+  loadThemes, loadTopics, philosophyToRow, seedIfNeeded, topicToRow, familyToRow, themeToRow,
+} from './db'
+import { SyncQueue, type Job, type SyncStatus } from './sync'
+import type { Backup } from './backup'
+import type { Draw, DrawSettings, Family, Filters, Note, NoteStatus, Philosophy, Synthesis, Theme, Topic } from './types'
 import { cellKey } from './types'
+
+type Table = 'families' | 'themes' | 'philosophies' | 'topics'
 
 /** État de l'application, synchronisé avec Supabase (interface optimiste + file d'écritures). */
 export function useAppState(userId: string) {
@@ -11,9 +17,12 @@ export function useAppState(userId: string) {
   const [loadError, setLoadError] = useState<string | null>(null)
   const [sync, setSync] = useState<SyncStatus>(queue.status)
 
+  const [families, setFamilies] = useState<Family[]>([])
+  const [themes, setThemes] = useState<Theme[]>([])
   const [philosophies, setPhilosophies] = useState<Philosophy[]>([])
   const [topics, setTopics] = useState<Topic[]>([])
   const [notes, setNotes] = useState<Record<string, Note>>({})
+  const [syntheses, setSyntheses] = useState<Record<string, Synthesis>>({})
   const [history, setHistory] = useState<Draw[]>([])
   const [settings, setSettingsState] = useState<DrawSettings>({ noRepeat: true, onlyRemaining: false, discovery: false, sound: true })
   const [filters, setFiltersState] = useState<Filters>({ families: [], eras: [], yearRange: null, regions: [], favoritesOnly: false, toVerifyOnly: false })
@@ -23,9 +32,12 @@ export function useAppState(userId: string) {
   useEffect(() => queue.onStatus(setSync), [queue])
 
   const fetchData = useCallback(async () => {
-    const [ph, tp, nt, dr] = await Promise.all([loadPhilosophies(), loadTopics(), loadNotes(), loadDraws()])
-    setPhilosophies(ph); setTopics(tp); setHistory(dr)
+    const [fa, th, ph, tp, nt, sy, dr] = await Promise.all([
+      loadFamilies(), loadThemes(), loadPhilosophies(), loadTopics(), loadNotes(), loadSyntheses(), loadDraws(),
+    ])
+    setFamilies(fa); setThemes(th); setPhilosophies(ph); setTopics(tp); setHistory(dr)
     setNotes(Object.fromEntries(nt.map((n) => [cellKey(n.philosophy, n.topic), n])))
+    setSyntheses(Object.fromEntries(sy.map((s) => [`${s.philosophy}|${s.theme}`, s])))
   }, [])
 
   const boot = useCallback(async () => {
@@ -51,10 +63,11 @@ export function useAppState(userId: string) {
   }, [queue, fetchData])
 
   useEffect(() => {
-    const onHide = () => { if (document.visibilityState === 'hidden') queue.flushNow() }
+    const flush = () => queue.flushNow()
+    const onHide = () => { if (document.visibilityState === 'hidden') flush() }
     document.addEventListener('visibilitychange', onHide)
-    window.addEventListener('pagehide', () => queue.flushNow())
-    return () => document.removeEventListener('visibilitychange', onHide)
+    window.addEventListener('pagehide', flush)
+    return () => { document.removeEventListener('visibilitychange', onHide); window.removeEventListener('pagehide', flush) }
   }, [queue])
 
   const statuses = useMemo(() => {
@@ -63,7 +76,9 @@ export function useAppState(userId: string) {
     return m
   }, [notes])
 
-  const patchPhilosophy = useCallback((id: string, patch: Partial<Pick<Philosophy, 'favorite' | 'reserve' | 'aVerifier'>>) => {
+  /* ----- fiches, réglages, tirages ----- */
+
+  const patchPhilosophy = useCallback((id: string, patch: Partial<Philosophy>) => {
     setPhilosophies((l) => l.map((p) => (p.id === id ? { ...p, ...patch } : p)))
     queue.add({ kind: 'philosophy', key: `ph:${id}`, payload: { id, patch } }, 300)
   }, [queue])
@@ -105,9 +120,97 @@ export function useAppState(userId: string) {
     queue.add({ kind: 'note', key: `note:${cellKey(note.philosophy, note.topic)}`, payload: next }, 800)
   }, [queue])
 
+  const saveSynthesis = useCallback((s: Synthesis) => {
+    const next = { ...s, updatedAt: new Date().toISOString() }
+    setSyntheses((m) => ({ ...m, [`${s.philosophy}|${s.theme}`]: next }))
+    queue.add({ kind: 'synthesis', key: `synth:${s.philosophy}|${s.theme}`, payload: next }, 800)
+  }, [queue])
+
+  /* ----- édition des listes (philosophies, sujets, familles, thèmes) ----- */
+
+  const writeRow = useCallback((table: Table, id: string, row: Record<string, unknown>, delay = 300) => {
+    queue.add({ kind: 'row', key: `row:${table}:${id}`, payload: { table, row } } as Job, delay)
+  }, [queue])
+
+  const savePhilosophy = useCallback((p: Philosophy) => {
+    setPhilosophies((l) => (l.some((x) => x.id === p.id) ? l.map((x) => (x.id === p.id ? p : x)) : [...l, p]))
+    queue.drop((j) => j.kind === 'philosophy' && j.payload.id === p.id) // la ligne complète remplace les petits patchs
+    writeRow('philosophies', p.id, philosophyToRow(p))
+  }, [queue, writeRow])
+
+  const deletePhilosophy = useCallback((id: string) => {
+    setPhilosophies((l) => l.filter((p) => p.id !== id))
+    setTopics((l) => l.filter((t) => t.philosophy !== id))
+    setNotes((m) => Object.fromEntries(Object.entries(m).filter(([, n]) => n.philosophy !== id)))
+    setSyntheses((m) => Object.fromEntries(Object.entries(m).filter(([, s]) => s.philosophy !== id)))
+    queue.drop((j) => (j.kind === 'note' && j.payload.philosophy === id) || (j.kind === 'synthesis' && j.payload.philosophy === id)
+      || (j.kind === 'philosophy' && j.payload.id === id) || j.key === `row:philosophies:${id}` || j.key.startsWith(`row:topics:${id}--`)
+      || (j.kind === 'draw' && j.payload.philosophy === id))
+    queue.add({ kind: 'del', key: `del:philosophies:${id}`, payload: { table: 'philosophies', id } })
+  }, [queue])
+
+  const saveTopic = useCallback((t: Topic) => {
+    setTopics((l) => (l.some((x) => x.id === t.id) ? l.map((x) => (x.id === t.id ? t : x)) : [...l, t]))
+    queue.drop((j) => j.kind === 'topic' && j.payload.id === t.id)
+    writeRow('topics', t.id, topicToRow(t))
+  }, [queue, writeRow])
+
+  const deleteTopic = useCallback((id: string) => {
+    setTopics((l) => l.filter((t) => t.id !== id))
+    setNotes((m) => Object.fromEntries(Object.entries(m).filter(([, n]) => n.topic !== id)))
+    queue.drop((j) => (j.kind === 'note' && j.payload.topic === id) || (j.kind === 'topic' && j.payload.id === id) || j.key === `row:topics:${id}`)
+    queue.add({ kind: 'del', key: `del:topics:${id}`, payload: { table: 'topics', id } })
+  }, [queue])
+
+  const saveFamily = useCallback((f: Family) => {
+    setFamilies((l) => (l.some((x) => x.id === f.id) ? l.map((x) => (x.id === f.id ? f : x)) : [...l, f]))
+    writeRow('families', f.id, familyToRow(f))
+  }, [writeRow])
+  const deleteFamily = useCallback((id: string) => {
+    setFamilies((l) => l.filter((f) => f.id !== id))
+    queue.drop((j) => j.key === `row:families:${id}`)
+    queue.add({ kind: 'del', key: `del:families:${id}`, payload: { table: 'families', id } })
+  }, [queue])
+
+  const saveTheme = useCallback((t: Theme) => {
+    setThemes((l) => (l.some((x) => x.id === t.id) ? l.map((x) => (x.id === t.id ? t : x)) : [...l, t]))
+    writeRow('themes', t.id, themeToRow(t))
+  }, [writeRow])
+  const deleteTheme = useCallback((id: string) => {
+    setThemes((l) => l.filter((t) => t.id !== id))
+    setSyntheses((m) => Object.fromEntries(Object.entries(m).filter(([, s]) => s.theme !== id)))
+    queue.drop((j) => j.key === `row:themes:${id}` || (j.kind === 'synthesis' && j.payload.theme === id))
+    queue.add({ kind: 'del', key: `del:themes:${id}`, payload: { table: 'themes', id } })
+  }, [queue])
+
+  /** Réécrit l'ordre d'une liste après un déplacement. */
+  const reorder = useCallback((table: Table, list: { id: string; order: number }[]) => {
+    const apply = <T extends { id: string; order: number }>(l: T[]) => l.map((x) => ({ ...x, order: list.find((y) => y.id === x.id)?.order ?? x.order }))
+    if (table === 'families') { const next = apply(families); setFamilies(next); next.forEach((f) => writeRow('families', f.id, familyToRow(f))) }
+    if (table === 'themes') { const next = apply(themes); setThemes(next); next.forEach((t) => writeRow('themes', t.id, themeToRow(t))) }
+    if (table === 'philosophies') { const next = apply(philosophies); setPhilosophies(next); next.forEach((p) => writeRow('philosophies', p.id, philosophyToRow(p))) }
+    if (table === 'topics') { const next = apply(topics); setTopics(next); next.forEach((t) => writeRow('topics', t.id, topicToRow(t))) }
+  }, [families, themes, philosophies, topics, writeRow])
+
+  /** Import d'une sauvegarde JSON : met à jour les lignes de même identifiant, ne supprime rien. */
+  const importData = useCallback(async (b: Backup) => {
+    await queue.drain(4000)
+    await importBackupDb(userId, b)
+    await fetchData()
+    setSettingsState(b.settings); setFiltersState(b.filters)
+  }, [queue, userId, fetchData])
+
+  const exportData = useCallback((): Omit<Backup, 'app' | 'version' | 'exportedAt'> => ({
+    families, themes, philosophies, topics,
+    notes: Object.values(notes), syntheses: Object.values(syntheses), draws: history,
+    settings, filters,
+  }), [families, themes, philosophies, topics, notes, syntheses, history, settings, filters])
+
   return {
     ready, loadError, retryLoad: boot, sync, refresh,
-    philosophies, topics, notes, statuses, history, filters, settings,
-    patchPhilosophy, setFilters, setSettings, addDraw, resetHistory, setTopicActive, saveNote,
+    families, themes, philosophies, topics, notes, syntheses, statuses, history, filters, settings,
+    patchPhilosophy, setFilters, setSettings, addDraw, resetHistory, setTopicActive, saveNote, saveSynthesis,
+    savePhilosophy, deletePhilosophy, saveTopic, deleteTopic, saveFamily, deleteFamily, saveTheme, deleteTheme,
+    reorder, importData, exportData,
   }
 }
