@@ -1,0 +1,27 @@
+[
+  {
+    "id": "finitude",
+    "name": "Finitude et temps",
+    "order": 1
+  },
+  {
+    "id": "esprit",
+    "name": "Esprit et liberté",
+    "order": 2
+  },
+  {
+    "id": "au-dela",
+    "name": "Au-delà de l'humain",
+    "order": 3
+  },
+  {
+    "id": "bien-vivre",
+    "name": "Bien vivre",
+    "order": 4
+  },
+  {
+    "id": "ensemble",
+    "name": "Vivre ensemble",
+    "order": 5
+  }
+]

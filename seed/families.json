@@ -1,0 +1,56 @@
+[
+  {
+    "id": "antiquite",
+    "name": "Antiquité gréco-romaine",
+    "color": "#8E3B46",
+    "order": 1
+  },
+  {
+    "id": "inde",
+    "name": "Inde et bouddhismes",
+    "color": "#C76B3A",
+    "order": 2
+  },
+  {
+    "id": "asie-est",
+    "name": "Asie de l'Est et du Sud-Est",
+    "color": "#5C8A3C",
+    "order": 3
+  },
+  {
+    "id": "religieux",
+    "name": "Traditions religieuses et monde arabo-perse",
+    "color": "#5B4B8A",
+    "order": 4
+  },
+  {
+    "id": "afrique",
+    "name": "Afrique",
+    "color": "#6B4A2B",
+    "order": 5
+  },
+  {
+    "id": "ameriques",
+    "name": "Amériques et Océanie",
+    "color": "#2F7F95",
+    "order": 6
+  },
+  {
+    "id": "moderne",
+    "name": "Moderne (XVIe au XVIIIe)",
+    "color": "#34447A",
+    "order": 7
+  },
+  {
+    "id": "xix-xx",
+    "name": "XIXe et XXe siècles",
+    "color": "#B0446E",
+    "order": 8
+  },
+  {
+    "id": "contemporain",
+    "name": "Contemporain et modes de vie",
+    "color": "#6E7F80",
+    "order": 9
+  }
+]

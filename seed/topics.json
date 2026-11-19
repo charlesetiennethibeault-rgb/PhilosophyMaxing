@@ -1,0 +1,152 @@
+[
+  {
+    "id": "mort-et-vie-apres-la-mort",
+    "theme": "finitude",
+    "name": "Mort et vie après la mort",
+    "short": "Mort",
+    "scope": "common",
+    "active": true,
+    "order": 1,
+    "question": "Que dit [philosophie] de mort et vie après la mort ?"
+  },
+  {
+    "id": "le-temps",
+    "theme": "finitude",
+    "name": "Le temps",
+    "short": "Temps",
+    "scope": "common",
+    "active": true,
+    "order": 2,
+    "question": "Que dit [philosophie] de le temps ?"
+  },
+  {
+    "id": "sens-de-la-vie",
+    "theme": "finitude",
+    "name": "Sens de la vie",
+    "short": "Sens",
+    "scope": "common",
+    "active": true,
+    "order": 3,
+    "question": "Que dit [philosophie] de sens de la vie ?"
+  },
+  {
+    "id": "le-soi-la-conscience-et-l-identite",
+    "theme": "esprit",
+    "name": "Le soi, la conscience et l'identité",
+    "short": "Soi",
+    "scope": "common",
+    "active": true,
+    "order": 4,
+    "question": "Que dit [philosophie] de le soi, la conscience et l'identité ?"
+  },
+  {
+    "id": "determinisme-et-libre-arbitre",
+    "theme": "esprit",
+    "name": "Déterminisme et libre arbitre",
+    "short": "Libre arbitre",
+    "scope": "common",
+    "active": true,
+    "order": 5,
+    "question": "Que dit [philosophie] de déterminisme et libre arbitre ?"
+  },
+  {
+    "id": "realite-et-connaissance",
+    "theme": "esprit",
+    "name": "Réalité et connaissance",
+    "short": "Réalité",
+    "scope": "common",
+    "active": true,
+    "order": 6,
+    "question": "Que dit [philosophie] de réalité et connaissance ?"
+  },
+  {
+    "id": "dieu-et-le-divin",
+    "theme": "au-dela",
+    "name": "Dieu et le divin",
+    "short": "Dieu",
+    "scope": "common",
+    "active": true,
+    "order": 7,
+    "question": "Que dit [philosophie] de dieu et le divin ?"
+  },
+  {
+    "id": "rapport-a-la-nature-et-au-cosmos",
+    "theme": "au-dela",
+    "name": "Rapport à la nature et au cosmos",
+    "short": "Nature",
+    "scope": "common",
+    "active": true,
+    "order": 8,
+    "question": "Que dit [philosophie] de rapport à la nature et au cosmos ?"
+  },
+  {
+    "id": "bonheur-et-souffrance",
+    "theme": "bien-vivre",
+    "name": "Bonheur et souffrance",
+    "short": "Bonheur",
+    "scope": "common",
+    "active": true,
+    "order": 9,
+    "question": "Que dit [philosophie] de bonheur et souffrance ?"
+  },
+  {
+    "id": "morale-bien-et-mal",
+    "theme": "bien-vivre",
+    "name": "Morale, bien et mal",
+    "short": "Morale",
+    "scope": "common",
+    "active": true,
+    "order": 10,
+    "question": "Que dit [philosophie] de morale, bien et mal ?"
+  },
+  {
+    "id": "corps-plaisir-et-emotions",
+    "theme": "bien-vivre",
+    "name": "Corps, plaisir et émotions",
+    "short": "Corps",
+    "scope": "common",
+    "active": true,
+    "order": 11,
+    "question": "Que dit [philosophie] de corps, plaisir et émotions ?"
+  },
+  {
+    "id": "effort-travail-et-reussite",
+    "theme": "bien-vivre",
+    "name": "Effort, travail et réussite",
+    "short": "Effort",
+    "scope": "common",
+    "active": true,
+    "order": 12,
+    "question": "Que dit [philosophie] de effort, travail et réussite ?"
+  },
+  {
+    "id": "societe-et-politique",
+    "theme": "ensemble",
+    "name": "Société et politique",
+    "short": "Société",
+    "scope": "common",
+    "active": true,
+    "order": 13,
+    "question": "Que dit [philosophie] de société et politique ?"
+  },
+  {
+    "id": "amour-relations-et-desir",
+    "theme": "ensemble",
+    "name": "Amour, relations et désir",
+    "short": "Amour",
+    "scope": "common",
+    "active": true,
+    "order": 14,
+    "question": "Que dit [philosophie] de amour, relations et désir ?"
+  },
+  {
+    "id": "nature-humaine",
+    "theme": "ensemble",
+    "name": "Nature humaine",
+    "short": "Nature humaine",
+    "scope": "common",
+    "active": true,
+    "order": 15,
+    "question": "Que dit [philosophie] de nature humaine ?"
+  }
+]
