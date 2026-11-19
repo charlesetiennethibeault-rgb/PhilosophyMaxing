@@ -28,13 +28,19 @@
   --success: #2B6B49;
   --warn: #8A5A00;
 
-  /* Carnet : papier (voir design.md §12). Les SVG de carnet.css recopient ces couleurs. */
-  --sheet: #FBFBF8;
-  --rule: #BCCBE2;
-  --rule-fine: #E1E8F2;
-  --margin: #D77A7A;
-  --tape: #E6DDBF;
-  --highlight: #F3E58B;
+  /* Carnet : cuir et papier kraft (voir design.md §12). Les SVG de carnet.css recopient ces couleurs. */
+  --kraft: #E4CC9F;
+  --kraft-2: #EEDDB7;
+  --ink: #2B1C12;
+  --ink-2: #5A4129;
+  --rule: #8A6A44;
+  --highlight: #F2DE7A;
+  --leather: #6C3A1F;
+  --leather-edge: #4A2713;
+  --stitch: #E0BC72;
+  --elastic: #3A3633;
+  --ribbon: #8E2F2B;
+  --silver: #C5CCD3;
 
   /* Typographie */
   --font-ui: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;

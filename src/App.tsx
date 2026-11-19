@@ -213,6 +213,13 @@ function Workspace({ st, email, onSignOut }: { st: AppState; email: string; onSi
 
   return (
     <div className="app">
+      {/* Filtre « encre » du carnet : ondule légèrement le tracé des titres manuscrits (design.md §12). */}
+      <svg width="0" height="0" aria-hidden="true" focusable="false" style={{ position: 'absolute' }}>
+        <filter id="ink-wobble" x="-2%" y="-10%" width="104%" height="120%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="7" result="n" />
+          <feDisplacementMap in="SourceGraphic" in2="n" scale="2.2" xChannelSelector="R" yChannelSelector="G" />
+        </filter>
+      </svg>
       <a
         className="skip-link" href="#main"
         onClick={(e) => { e.preventDefault(); const m = document.querySelector('main') as HTMLElement | null; m?.setAttribute('tabindex', '-1'); m?.focus() }}

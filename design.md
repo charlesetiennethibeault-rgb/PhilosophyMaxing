@@ -114,26 +114,32 @@ Dégradés et texte en dégradé · violet/indigo · halos, ombres colorées, ve
 
 Deuxième personne (« tu »), voix active, phrases courtes, ton posé et concret. Libellés d'action précis (« Enregistrer le code secret », pas « Valider »). Espaces insécables avant `:` `;` `?` `!` et à l'intérieur de « guillemets ». Vrais points de suspension « … ». Formats locaux (« 1 234 », « 62 % »).
 
-## 12. Le Carnet : un vrai cahier (exception voulue)
+## 12. Le Carnet : un vrai cahier de cuir et de papier kraft (exception voulue)
 
-Décision de l'utilisateur : l'onglet **Carnet** (liste, mes notes, historique, gérer), la **fiche** d'une philosophie et la **page de note** ressemblent à un cahier de notes un peu brouillon, écrit à la main. C'est la seule partie de l'application qui sort du style « atelier » plat ; la roue, la comparaison et la progression gardent le système des sections 1 à 11.
+Décision de l'utilisateur, d'après deux photos de référence (carnet à spirale en papier kraft ligné ; journal de cuir cousu avec dorures et élastique) : l'onglet **Carnet** (liste, mes notes, historique, gérer), la **fiche** d'une philosophie et la **page de note** ressemblent à un cahier de notes un peu brouillon, **inscrit à la main**. C'est la seule partie qui sort du style « atelier » plat ; la roue, la comparaison et la progression gardent les sections 1 à 11.
 
-- **Classe** : `notebook` sur le `<main>` de ces écrans ; tout le style est dans `src/styles/carnet.css`, rien ne déborde sur les autres écrans.
-- **Écriture manuscrite** : famille **Shantell Sans** (variable, hébergée via `@fontsource-variable/shantell-sans`, axes poids, « rebond » BNCE et « informalité » INFM). Raison : une écriture marqueur lisible à 16-20 px, avec tous les accents français, et un réglage « brouillon » sans changer de police. C'est la **troisième famille** autorisée, réservée à ces écrans : les mots de l'utilisateur et les titres y sont manuscrits. Les champs de formulaire de « Gérer » restent en IBM Plex Sans.
-- **Tailles** : l'échelle fixe est respectée (16 méta, 20 texte et noms, 28 titres de section, 40 titre de page). Corps des notes : 20 px sur une interligne de 32 px, alignée sur les lignes de la feuille.
-- **Papier** (tokens, valeurs OKLCH) :
+- **Classe** : `notebook` sur le `<main>` de ces écrans ; tout le style est dans `src/styles/carnet.css`. Dans `.notebook`, les tokens neutres (`--text`, `--surface`, `--border`…) sont **redéfinis localement** avec les couleurs du papier, pour que boutons, champs et messages suivent sans règle par composant.
+- **Structure** : `.cover` (couverture de cuir) > `.sheet` (page kraft). Couverture : cuir à grain, couture dorée en pointillé, coins dorés, élastique vertical, signet de ruban qui dépasse du bas. Page : kraft à fines lignes brunes tous les 32 px, spirale métallique à gauche (anneaux argentés dans des trous), tranche des pages empilées à droite et en bas (aplats décalés, pas d'ombre floue).
+- **Matières** (hex ; OKLCH) :
 
 | Token | Hex | OKLCH | Rôle |
 |---|---|---|---|
-| `--sheet` | `#FBFBF8` | 98,7 % 0,004 106 | feuille (jamais `#fff`) |
-| `--rule` | `#BCCBE2` | 83,8 % 0,036 259 | lignes principales (bleu de cahier) |
-| `--rule-fine` | `#E1E8F2` | 92,9 % 0,016 257 | carreaux |
-| `--margin` | `#D77A7A` | 68,2 % 0,116 21 | double trait de marge, filet de fiche bristol |
-| `--tape` | `#E6DDBF` | 89,7 % 0,041 93 | bout de ruban adhésif, étiquettes |
-| `--highlight` | `#F3E58B` | 91,4 % 0,112 101 | surligneur (survol, sujet propre) ; texte dessus à 12:1 |
+| `--kraft` | `#E4CC9F` | 85,4 % 0,065 83 | page |
+| `--kraft-2` | `#EEDDB7` | 90,2 % 0,053 87 | fiche bristol, champs, messages |
+| `--ink` | `#2B1C12` | 24,2 % 0,030 55 | encre (10,5:1 sur kraft) |
+| `--ink-2` | `#5A4129` | 39,7 % 0,051 64 | encre secondaire, bordures de champ (6,0:1) |
+| `--rule` | `#8A6A44` | 54,7 % 0,067 70 | lignes de la page (décoratif) |
+| `--highlight` | `#F2DE7A` | 89,6 % 0,123 98 | surligneur (texte dessus : 12:1) |
+| `--leather` | `#6C3A1F` | 40,5 % 0,081 48 | couverture |
+| `--leather-edge` | `#4A2713` | 31,4 % 0,061 49 | bord de couverture |
+| `--stitch` | `#E0BC72` | 81,1 % 0,102 84 | couture et dorures |
+| `--elastic` | `#3A3633` | 33,6 % 0,008 59 | élastique |
+| `--ribbon` | `#8E2F2B` | 44,5 % 0,130 26 | signet |
+| `--silver` | `#C5CCD3` | 84,2 % 0,012 248 | spirale |
 
-  L'encre reste `--text` (15:1 sur la feuille). Le vermillon `--brand` reste réservé aux actions et à l'élément actif.
-- **Motifs sans dégradé** : carreaux de 32 px, trous de reliure, traits d'écriture, soulignés et cercles à la main sont des **SVG** (jamais `linear-gradient`). Les couleurs des SVG sont recopiées des tokens ci-dessus (un SVG ne lit pas les variables CSS).
-- **Un peu brouillon, sans animation** : légères rotations (±0,3°) et décalages (±3 px) fixes, répartis par `:nth-child`. Rien ne bouge : la propriété `rotate` n'est jamais animée, donc rien à adapter pour `prefers-reduced-motion`.
-- **Éléments** : feuille à carreaux avec double marge rouge et trous de reliure à gauche (rayon 6, ombre `--shadow-2`) ; titre manuscrit souligné d'un trait à la main ; onglet actif entouré d'un cercle gribouillé ; fiche = fiche bristol (filet rouge en haut, ruban adhésif, légère rotation) ; états des sujets = cases dessinées à la main (vide : cercle ; brouillon : cercle hachuré ; approfondi : cercle coché) ; sujet propre = étoile dessinée + surligneur ; zone d'écriture = feuille réglée avec lignes alignées sur le texte.
-- **Accessibilité inchangée** : mêmes contrastes, mêmes cibles (≥ 44 px sur téléphone), même focus visible, mêmes libellés.
+  États sur kraft (texte ≥ 4,5:1) : succès `#22573A`, alerte `#6B4400`, danger `#8F1F34`. Le vermillon `--brand` reste réservé aux actions et à l'élément actif.
+- **Écriture manuscrite** : **Shantell Sans** (variable ; axes poids, rebond BNCE, informalité INFM), troisième famille autorisée, réservée à ces écrans. Tout le texte du cahier est manuscrit, **y compris boutons et champs**. Échelle fixe respectée : 16 méta, 20 texte et noms, 28 titres de section, 40 titre de page ; interligne du texte de note 32 px, alignée sur les lignes.
+- **Inscrit à la main** : (1) un filtre SVG « encre » (`feTurbulence` + `feDisplacementMap`, déplacement de 2 px) ondule les **titres** seulement, jamais le texte à lire ; (2) boîtes aux coins irréguliers (`border-radius` à 8 valeurs, exception à l'échelle des rayons) ; (3) soulignés, cercles et cases dessinés en SVG ; (4) légères rotations (±0,6°) et décalages (±3 px) fixes par `:nth-child` ; (5) l'encre est brun-noir, jamais un noir pur.
+- **Motifs sans dégradé** : lignes, grain du papier et du cuir (bruit `feTurbulence`), anneaux de spirale, couture, coins, signet sont des **SVG**. Aucun `linear-gradient`. Les SVG recopient les couleurs du tableau (ils ne lisent pas les variables).
+- **Rien n'est animé** : les rotations sont fixes ; rien à adapter pour `prefers-reduced-motion`.
+- **Accessibilité inchangée** : contrastes ci-dessus, cibles ≥ 44 px sur téléphone, focus visible (contour `--text` = encre), mêmes libellés. Le grain et les motifs sont décoratifs (arrière-plans).
