@@ -7,10 +7,27 @@ import '@fontsource/source-serif-4/latin-400.css'
 import '@fontsource/source-serif-4/latin-400-italic.css'
 import '@fontsource/source-serif-4/latin-600.css'
 import './styles.css'
+import './phase2.css'
 import App from './App'
+import Login, { useSession } from './components/Login'
+import { supabase } from './lib/supabase'
+
+function Root() {
+  const { session, loading } = useSession()
+  if (loading) return <main className="login"><h1>PhilosophyMaxing</h1></main>
+  if (!session) return <Login />
+  return (
+    <App
+      key={session.user.id}
+      userId={session.user.id}
+      email={session.user.email ?? ''}
+      onSignOut={() => void supabase.auth.signOut()}
+    />
+  )
+}
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <App />
+    <Root />
   </StrictMode>,
 )

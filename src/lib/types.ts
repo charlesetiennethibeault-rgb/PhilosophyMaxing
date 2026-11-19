@@ -61,3 +61,22 @@ export interface DrawSettings {
   discovery: boolean
   sound: boolean
 }
+
+export type SourceType = 'livre' | 'article' | 'video'
+export interface Source { title: string; url: string; type: SourceType }
+
+export interface Note {
+  philosophy: string
+  topic: string
+  research: string
+  sources: Source[]
+  reaction: string
+  status: NoteStatus
+  favorite: boolean
+  tags: string[]
+  updatedAt: string
+}
+
+export const emptyNote = (philosophy: string, topic: string): Note => ({
+  philosophy, topic, research: '', sources: [], reaction: '', status: 'empty', favorite: false, tags: [], updatedAt: '',
+})

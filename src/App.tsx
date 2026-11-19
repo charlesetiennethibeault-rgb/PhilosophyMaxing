@@ -2,10 +2,10 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import Wheel, { type WheelHandle, type WheelItem } from './components/Wheel'
 import FiltersPanel from './components/FiltersPanel'
 import PhilosophyCard from './components/PhilosophyCard'
-import TopicResult from './components/TopicResult'
+import NoteView from './components/NoteView'
 import { useAppState } from './lib/store'
 import { availableTopics, drawPhilosophy, drawTopic, emptyFilters, progressOf, wheelPhilosophies, type DrawContext } from './lib/draw'
-import { cellKey, type Topic } from './lib/types'
+import { cellKey, emptyNote, type Topic } from './lib/types'
 import { RECORD_DRAWS } from './lib/config'
 import { familyById, familyIndex, OCHRE } from './lib/ui'
 
@@ -35,8 +35,11 @@ function shade(hex: string, amount: number) {
   return '#' + [f(n >> 16), f((n >> 8) & 255), f(n & 255)].map((c) => c.toString(16).padStart(2, '0')).join('')
 }
 
-export default function App() {
-  const st = useAppState()
+type AppState = ReturnType<typeof useAppState>
+
+const SYNC_SHORT = { saved: 'Synchronisé', pending: 'Envoi…', error: 'Hors ligne' } as const
+
+function Workspace({ st, email, onSignOut }: { st: AppState; email: string; onSignOut: () => void }) {
   const reduced = useReducedMotion()
   const wheelRef = useRef<WheelHandle>(null)
 
@@ -50,6 +53,15 @@ export default function App() {
   const [message, setMessage] = useState<null | { text: string; action?: { label: string; run: () => void } }>(null)
   const [sheetOpen, setSheetOpen] = useState(false)
   const [drawerOpen, setDrawerOpen] = useState(false)
+  const [view, setView] = useState<'wheel' | 'note'>('wheel')
+
+  // Retour sur l'onglet : on recharge depuis Supabase, sauf pendant l'écriture d'une note.
+  const { refresh } = st
+  useEffect(() => {
+    const onShow = () => { if (document.visibilityState === 'visible' && view !== 'note') void refresh() }
+    document.addEventListener('visibilitychange', onShow)
+    return () => document.removeEventListener('visibilitychange', onShow)
+  }, [refresh, view])
 
   const ctx: DrawContext = useMemo(
     () => ({ philosophies: st.philosophies, topics: st.topics, filters: st.filters, settings: st.settings, history: st.history, statuses: st.statuses }),
@@ -125,7 +137,7 @@ export default function App() {
     } else if (current) {
       const t = topicItems[index]
       if (!t) return
-      setTopicId(t.id); setSheetOpen(true)
+      setTopicId(t.id); setSheetOpen(false); setView('note')
       if (RECORD_DRAWS) st.addDraw({ type: 'topic', philosophy: current.id, topic: t.id })
     }
   }
@@ -143,15 +155,7 @@ export default function App() {
 
   const side = (
     <aside className={`side${sheetOpen ? ' open' : ''}`} aria-live="polite">
-      {mode === 'topics' && current && topic && topicId ? (
-        <TopicResult
-          philosophy={current} topic={topic}
-          status={st.statuses[cellKey(current.id, topic.id)] ?? 'empty'}
-          onStatus={(s) => st.setStatus(cellKey(current.id, topic.id), s)}
-          onBack={backToPhilosophies}
-          onAgain={goTopics}
-        />
-      ) : current ? (
+      {current ? (
         <PhilosophyCard
           philosophy={current} progress={progress}
           onPatch={(patch) => st.patchPhilosophy(current.id, patch)}
@@ -171,10 +175,23 @@ export default function App() {
     <div className="app">
       <header className="topbar">
         <h1>PhilosophyMaxing</h1>
-        <button type="button" className="btn small filters-toggle" onClick={() => setDrawerOpen(true)}>Filtres</button>
+        <div className="topbar-right">
+          <span className={`sync-pill sync-${st.sync}`} role="status" title={email}>{SYNC_SHORT[st.sync]}</span>
+          <button type="button" className="btn small signout-top" onClick={onSignOut}>Déconnexion</button>
+          <button type="button" className="btn small filters-toggle" onClick={() => setDrawerOpen(true)}>Filtres</button>
+        </div>
       </header>
 
-      {tab === 'roue' ? (
+      {view === 'note' && current && topic ? (
+        <NoteView
+          key={cellKey(current.id, topic.id)}
+          philosophy={current} topic={topic}
+          note={st.notes[cellKey(current.id, topic.id)] ?? emptyNote(current.id, topic.id)}
+          sync={st.sync}
+          onChange={st.saveNote}
+          onBack={() => setView('wheel')}
+        />
+      ) : tab === 'roue' ? (
         <main className="layout">
           <div className={`filters-col${drawerOpen ? ' open' : ''}`}>
             <div className="drawer-head">
@@ -187,6 +204,10 @@ export default function App() {
               onResetHistory={st.resetHistory}
               wheelCount={wheel.length} historyCount={st.history.length}
             />
+            <div className="drawer-account">
+              <p className="hint">{email}</p>
+              <button type="button" className="btn small" onClick={onSignOut}>Déconnexion</button>
+            </div>
           </div>
           {drawerOpen && <div className="scrim" onClick={() => setDrawerOpen(false)} />}
 
@@ -242,4 +263,25 @@ export default function App() {
       </nav>
     </div>
   )
+}
+
+export default function App({ userId, email, onSignOut }: { userId: string; email: string; onSignOut: () => void }) {
+  const st = useAppState(userId)
+  if (st.loadError) {
+    return (
+      <main className="login">
+        <h1>PhilosophyMaxing</h1>
+        <div className="message" role="alert">
+          <p>Impossible de charger tes données : {st.loadError}</p>
+          <p className="hint">Vérifie que le schéma SQL a été appliqué dans Supabase, puis réessaie.</p>
+          <button type="button" className="btn small" onClick={() => void st.retryLoad()}>Réessayer</button>
+          <button type="button" className="btn small" onClick={onSignOut}>Déconnexion</button>
+        </div>
+      </main>
+    )
+  }
+  if (!st.ready) {
+    return <main className="login"><h1>PhilosophyMaxing</h1><p className="tagline" role="status">Chargement de ton carnet…</p></main>
+  }
+  return <Workspace st={st} email={email} onSignOut={onSignOut} />
 }
