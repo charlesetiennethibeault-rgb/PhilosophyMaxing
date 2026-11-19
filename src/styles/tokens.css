@@ -28,9 +28,18 @@
   --success: #2B6B49;
   --warn: #8A5A00;
 
+  /* Carnet : papier (voir design.md §12). Les SVG de carnet.css recopient ces couleurs. */
+  --sheet: #FBFBF8;
+  --rule: #BCCBE2;
+  --rule-fine: #E1E8F2;
+  --margin: #D77A7A;
+  --tape: #E6DDBF;
+  --highlight: #F3E58B;
+
   /* Typographie */
   --font-ui: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-write: 'Source Serif 4', Georgia, serif;
+  --font-hand: 'Shantell Sans Variable', 'Segoe Print', 'Comic Sans MS', cursive;
   --t-12: 0.75rem;
   --t-14: 0.875rem;
   --t-16: 1rem;

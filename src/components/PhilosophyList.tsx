@@ -35,7 +35,7 @@ export default function PhilosophyList({ philosophies, topics, notes, statuses, 
         <label htmlFor="q" className="sr-only">Rechercher dans le carnet</label>
         <input
           id="q" type="search" value={query} onChange={(e) => onQuery(e.target.value)} autoComplete="off" spellCheck={false}
-          placeholder="Un nom, un acteur, un mot de tes notes…"
+          placeholder="Un nom, un acteur, un mot…"
         />
       </div>
       <p className="meta" aria-live="polite">{hits.length}&nbsp;résultat{hits.length > 1 ? 's' : ''} sur&nbsp;{philosophies.length}</p>

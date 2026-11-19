@@ -30,11 +30,13 @@ export default function Carnet({ st, sub, section, ficheId, query, onQuery, emai
   if (ficheId) {
     if (!fiche) {
       return (
-        <main className="screen" id="main">
-          <div className="empty">
-            <h1>Cette philosophie n’existe plus</h1>
-            <p>Elle a peut-être été supprimée depuis Gérer.</p>
-            <a className="btn btn-secondary" href={href(['carnet'])}>Retour au carnet</a>
+        <main className="screen notebook" id="main">
+          <div className="sheet">
+            <div className="empty">
+              <h1 className="hand-title">Cette philosophie n’existe plus</h1>
+              <p>Elle a peut-être été supprimée depuis Gérer.</p>
+              <a className="btn btn-secondary" href={href(['carnet'])}>Retour au carnet</a>
+            </div>
           </div>
         </main>
       )
@@ -50,19 +52,21 @@ export default function Carnet({ st, sub, section, ficheId, query, onQuery, emai
     )
   }
   return (
-    <main className="screen carnet" id="main">
-      <h1>Carnet</h1>
-      <nav className="tabs" aria-label="Sections du carnet">
-        {SUBS.map((s) => (
-          <a key={s.id} href={href(s.path)} aria-current={sub === s.id ? 'page' : undefined}>{s.label}</a>
-        ))}
-      </nav>
-      {sub === 'philosophies' && (
-        <PhilosophyList philosophies={st.philosophies} topics={st.topics} notes={st.notes} statuses={st.statuses} query={query} onQuery={onQuery} />
-      )}
-      {sub === 'notes' && <NotesList notes={st.notes} philosophies={st.philosophies} topics={st.topics} />}
-      {sub === 'historique' && <HistoryList history={st.history} philosophies={st.philosophies} topics={st.topics} />}
-      {sub === 'gerer' && <Manage st={st} email={email} onSignOut={onSignOut} section={section} />}
+    <main className="screen carnet notebook" id="main">
+      <div className="sheet">
+        <h1 className="hand-title">Carnet</h1>
+        <nav className="tabs" aria-label="Sections du carnet">
+          {SUBS.map((s) => (
+            <a key={s.id} href={href(s.path)} aria-current={sub === s.id ? 'page' : undefined}>{s.label}</a>
+          ))}
+        </nav>
+        {sub === 'philosophies' && (
+          <PhilosophyList philosophies={st.philosophies} topics={st.topics} notes={st.notes} statuses={st.statuses} query={query} onQuery={onQuery} />
+        )}
+        {sub === 'notes' && <NotesList notes={st.notes} philosophies={st.philosophies} topics={st.topics} />}
+        {sub === 'historique' && <HistoryList history={st.history} philosophies={st.philosophies} topics={st.topics} />}
+        {sub === 'gerer' && <Manage st={st} email={email} onSignOut={onSignOut} section={section} />}
+      </div>
     </main>
   )
 }

@@ -88,7 +88,8 @@ export default function NoteView({ philosophy, topic, note, sync, onChange, onBa
   const set = (patch: Partial<Note>) => onChange({ ...note, ...patch })
 
   return (
-    <main className="screen noteview" id="main">
+    <main className="screen noteview notebook" id="main">
+      <div className="sheet">
       <div className="note-top">
         <button type="button" className="btn btn-ghost btn-sm" onClick={onBack}><ArrowLeft size={16} aria-hidden="true" />Retour</button>
         <SyncLine sync={sync} />
@@ -132,6 +133,7 @@ export default function NoteView({ philosophy, topic, note, sync, onChange, onBa
         <h3>Étiquettes</h3>
         <TagsEditor tags={note.tags} onChange={(tags) => set({ tags })} />
       </section>
+      </div>
     </main>
   )
 }
