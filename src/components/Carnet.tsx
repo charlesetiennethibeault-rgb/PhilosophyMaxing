@@ -20,9 +20,11 @@ interface Props {
   ficheId: string | null
   onFiche: (id: string | null) => void
   onOpenNote: (philosophyId: string, topicId: string) => void
+  email: string
+  onSignOut: () => void
 }
 
-export default function Carnet({ st, sub, onSub, ficheId, onFiche, onOpenNote }: Props) {
+export default function Carnet({ st, sub, onSub, ficheId, onFiche, onOpenNote, email, onSignOut }: Props) {
   const fiche = ficheId ? st.philosophies.find((p) => p.id === ficheId) : null
   if (fiche) {
     return (
@@ -50,7 +52,7 @@ export default function Carnet({ st, sub, onSub, ficheId, onFiche, onOpenNote }:
       {sub === 'historique' && (
         <HistoryList history={st.history} philosophies={st.philosophies} topics={st.topics} onOpenFiche={onFiche} onOpenNote={onOpenNote} />
       )}
-      {sub === 'gerer' && <Manage st={st} />}
+      {sub === 'gerer' && <Manage st={st} email={email} onSignOut={onSignOut} />}
     </main>
   )
 }

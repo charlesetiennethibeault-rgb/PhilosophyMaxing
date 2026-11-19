@@ -13,13 +13,14 @@ import './styles.css'
 import './phase2.css'
 import './phase3.css'
 import App from './App'
-import Login, { useSession } from './components/Login'
+import Login, { rememberEmail, useSession } from './components/Login'
 import { supabase } from './lib/supabase'
 
 function Root() {
   const { session, loading } = useSession()
   if (loading) return <main className="login"><h1>PhilosophyMaxing</h1></main>
   if (!session) return <Login />
+  if (session.user.email) rememberEmail(session.user.email)
   return (
     <App
       key={session.user.id}

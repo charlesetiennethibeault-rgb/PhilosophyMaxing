@@ -214,7 +214,7 @@ function Workspace({ st, email, onSignOut }: { st: AppState; email: string; onSi
           onBack={() => setNoteTarget(null)}
         />
       ) : tab === 'carnet' ? (
-        <Carnet st={st} sub={carnetSub} onSub={setCarnetSub} ficheId={ficheId} onFiche={setFicheId} onOpenNote={openNote} />
+        <Carnet st={st} sub={carnetSub} onSub={setCarnetSub} ficheId={ficheId} onFiche={setFicheId} onOpenNote={openNote} email={email} onSignOut={onSignOut} />
       ) : tab === 'comparer' ? (
         <Compare philosophies={st.philosophies} topics={st.topics} notes={st.notes} syntheses={st.syntheses} onOpenNote={openNote} />
       ) : tab === 'progression' ? (

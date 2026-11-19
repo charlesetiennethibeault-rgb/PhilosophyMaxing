@@ -1,4 +1,5 @@
 import { useMemo, useRef, useState } from 'react'
+import { supabase } from '../lib/supabase'
 import { downloadJson, buildBackup, parseBackup, type Backup } from '../lib/backup'
 import { useData } from '../lib/DataContext'
 import { REGIONS } from '../lib/seed'
@@ -6,13 +7,14 @@ import { move, normalize, slugify } from '../lib/tools'
 import type { AppState } from '../lib/appState'
 import type { Family, Philosophy, Theme, Topic } from '../lib/types'
 
-type Section = 'philosophies' | 'topics' | 'families' | 'themes' | 'backup'
+type Section = 'philosophies' | 'topics' | 'families' | 'themes' | 'backup' | 'account'
 const SECTIONS: { id: Section; label: string }[] = [
   { id: 'philosophies', label: 'Philosophies' },
   { id: 'topics', label: 'Sujets' },
   { id: 'families', label: 'Familles' },
   { id: 'themes', label: 'Thèmes' },
   { id: 'backup', label: 'Sauvegarde' },
+  { id: 'account', label: 'Compte' },
 ]
 
 function Arrows({ onUp, onDown, name }: { onUp: () => void; onDown: () => void; name: string }) {
@@ -312,7 +314,47 @@ function BackupSection({ st }: { st: AppState }) {
   )
 }
 
-export default function Manage({ st }: { st: AppState }) {
+const MIN_PASSWORD = 8
+
+function AccountSection({ email, onSignOut }: { email: string; onSignOut: () => void }) {
+  const [pw, setPw] = useState('')
+  const [pw2, setPw2] = useState('')
+  const [msg, setMsg] = useState<{ kind: 'ok' | 'error'; text: string } | null>(null)
+  const [busy, setBusy] = useState(false)
+
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setMsg(null)
+    if (pw.length < MIN_PASSWORD) return setMsg({ kind: 'error', text: `Le code secret doit faire au moins ${MIN_PASSWORD} caractères.` })
+    if (pw !== pw2) return setMsg({ kind: 'error', text: 'Les deux codes secrets ne sont pas identiques.' })
+    setBusy(true)
+    const { error } = await supabase.auth.updateUser({ password: pw })
+    setBusy(false)
+    if (error) setMsg({ kind: 'error', text: `Impossible de définir le code secret : ${error.message}` })
+    else { setMsg({ kind: 'ok', text: 'Code secret enregistré. Tu pourras entrer avec lui sur tous tes appareils.' }); setPw(''); setPw2('') }
+  }
+
+  return (
+    <section>
+      <h3>Code secret</h3>
+      <p>Connecté en tant que <strong>{email}</strong>. Définis un code secret pour entrer sans recevoir de courriel. Il remplace l’ancien s’il y en avait un.</p>
+      <form className="mform" onSubmit={submit}>
+        <input type="text" name="username" autoComplete="username" value={email} readOnly hidden />
+        <label>Nouveau code secret<input type="password" autoComplete="new-password" required minLength={MIN_PASSWORD} value={pw} onChange={(e) => setPw(e.target.value)} /></label>
+        <label>Confirmer le code secret<input type="password" autoComplete="new-password" required minLength={MIN_PASSWORD} value={pw2} onChange={(e) => setPw2(e.target.value)} /></label>
+        <p className="hint">Au moins {MIN_PASSWORD} caractères. Comme le site est public, évite un mot simple à deviner : une phrase courte fonctionne bien.</p>
+        <div className="mform-actions">
+          <button type="submit" className="btn primary" disabled={busy}>{busy ? 'Enregistrement…' : 'Enregistrer le code secret'}</button>
+        </div>
+      </form>
+      {msg && <p className={msg.kind === 'error' ? 'error' : 'notice'} role={msg.kind === 'error' ? 'alert' : 'status'}>{msg.text}</p>}
+      <h3>Session</h3>
+      <button type="button" className="btn" onClick={onSignOut}>Me déconnecter</button>
+    </section>
+  )
+}
+
+export default function Manage({ st, email, onSignOut }: { st: AppState; email: string; onSignOut: () => void }) {
   const [section, setSection] = useState<Section>('philosophies')
   const { families, themes } = useData()
   return (
@@ -339,6 +381,7 @@ export default function Manage({ st }: { st: AppState }) {
         />
       )}
       {section === 'backup' && <BackupSection st={st} />}
+      {section === 'account' && <AccountSection email={email} onSignOut={onSignOut} />}
     </div>
   )
 }
