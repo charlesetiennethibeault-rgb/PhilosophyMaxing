@@ -6,6 +6,7 @@ import TopicResult from './components/TopicResult'
 import { useAppState } from './lib/store'
 import { availableTopics, drawPhilosophy, drawTopic, emptyFilters, progressOf, wheelPhilosophies, type DrawContext } from './lib/draw'
 import { cellKey, type Topic } from './lib/types'
+import { RECORD_DRAWS } from './lib/config'
 import { familyById, familyIndex, OCHRE } from './lib/ui'
 
 type Tab = 'roue' | 'carnet' | 'comparer' | 'progression'
@@ -120,12 +121,12 @@ export default function App() {
       const p = wheel[index]
       if (!p) return
       setCurrentId(p.id); setTopicId(null); setSheetOpen(true)
-      st.addDraw({ type: 'philosophy', philosophy: p.id })
+      if (RECORD_DRAWS) st.addDraw({ type: 'philosophy', philosophy: p.id })
     } else if (current) {
       const t = topicItems[index]
       if (!t) return
       setTopicId(t.id); setSheetOpen(true)
-      st.addDraw({ type: 'topic', philosophy: current.id, topic: t.id })
+      if (RECORD_DRAWS) st.addDraw({ type: 'topic', philosophy: current.id, topic: t.id })
     }
   }
 
