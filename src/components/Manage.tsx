@@ -1,5 +1,7 @@
 import { useMemo, useRef, useState } from 'react'
+import { ChevronDown, ChevronUp, Plus, Star, Trash2, Pencil } from 'lucide-react'
 import { supabase } from '../lib/supabase'
+import { href } from '../lib/route'
 import { downloadJson, buildBackup, parseBackup, type Backup } from '../lib/backup'
 import { useData } from '../lib/DataContext'
 import { REGIONS } from '../lib/seed'
@@ -20,8 +22,8 @@ const SECTIONS: { id: Section; label: string }[] = [
 function Arrows({ onUp, onDown, name }: { onUp: () => void; onDown: () => void; name: string }) {
   return (
     <span className="arrows">
-      <button type="button" className="icon-btn sm" aria-label={`Monter ${name}`} onClick={onUp}>↑</button>
-      <button type="button" className="icon-btn sm" aria-label={`Descendre ${name}`} onClick={onDown}>↓</button>
+      <button type="button" className="icon-btn" aria-label={`Monter ${name}`} onClick={onUp}><ChevronUp size={20} aria-hidden="true" /></button>
+      <button type="button" className="icon-btn" aria-label={`Descendre ${name}`} onClick={onDown}><ChevronDown size={20} aria-hidden="true" /></button>
     </span>
   )
 }
@@ -51,14 +53,14 @@ function PhilosophyForm({ initial, families, onSave, onCancel }: {
         </select>
       </label>
       <label>Année de début (négative avant J.-C.)<input type="number" required value={p.startYear} onChange={(e) => set({ startYear: Number(e.target.value) })} /></label>
-      <label>Année de fin (si le courant est clos)<input type="number" value={p.endYear ?? ''} onChange={(e) => set({ endYear: e.target.value === '' ? null : Number(e.target.value) })} /></label>
+      <label>Année de fin (si le courant est clos)<input type="number" value={p.endYear ?? ''} onChange={(e) => set({ endYear: e.target.value === '' ? null : Number(e.target.value) })} /></label>
       <label>Libellé de dates<input value={p.dateLabel} placeholder="vers 300 av. J.-C." onChange={(e) => set({ dateLabel: e.target.value })} /></label>
       <label>Fondateur ou origine<input value={p.founder} onChange={(e) => set({ founder: e.target.value })} /></label>
       <label>Principaux acteurs (séparés par des virgules)<input value={actors} onChange={(e) => setActors(e.target.value)} /></label>
       <label>Description (une phrase)<textarea rows={3} value={p.description} onChange={(e) => set({ description: e.target.value })} /></label>
       <div className="mform-actions">
-        <button type="submit" className="btn primary">Enregistrer</button>
-        <button type="button" className="btn" onClick={onCancel}>Annuler</button>
+        <button type="submit" className="btn btn-primary">Enregistrer</button>
+        <button type="button" className="btn btn-secondary" onClick={onCancel}>Annuler</button>
       </div>
     </form>
   )
@@ -92,7 +94,7 @@ function PhilosophiesSection({ st }: { st: AppState }) {
     <section>
       <div className="manage-bar">
         <input type="search" aria-label="Filtrer les philosophies" placeholder="Filtrer par nom…" value={q} onChange={(e) => setQ(e.target.value)} />
-        <button type="button" className="btn primary" onClick={() => setEditing(blank())}>Ajouter une philosophie</button>
+        <button type="button" className="btn btn-primary" onClick={() => setEditing(blank())}><Plus size={16} aria-hidden="true" />Ajouter une philosophie</button>
       </div>
       <ul className="mlist">
         {shown.map((p) => (
@@ -100,11 +102,11 @@ function PhilosophiesSection({ st }: { st: AppState }) {
             <span className="swatch" style={{ background: family(p.family).color }} aria-hidden="true" />
             <span className="mname">{p.name}</span>
             <Arrows name={p.name} onUp={() => st.reorder('philosophies', move(sorted, p.id, -1))} onDown={() => st.reorder('philosophies', move(sorted, p.id, 1))} />
-            <button type="button" className="btn small" onClick={() => setEditing(p)}>Modifier</button>
+            <button type="button" className="btn btn-secondary btn-sm" onClick={() => setEditing(p)}><Pencil size={16} aria-hidden="true" />Modifier</button>
             <button
-              type="button" className="btn small danger"
-              onClick={() => { if (window.confirm(`Supprimer « ${p.name} » ? Ses sujets propres, ses notes et ses synthèses seront supprimés aussi. Cette action est définitive.`)) st.deletePhilosophy(p.id) }}
-            >Supprimer</button>
+              type="button" className="btn btn-danger btn-sm"
+              onClick={() => { if (window.confirm(`Supprimer « ${p.name} » ? Ses sujets propres, ses notes et ses synthèses seront supprimés aussi. Cette action est définitive.`)) st.deletePhilosophy(p.id) }}
+            ><Trash2 size={16} aria-hidden="true" />Supprimer</button>
           </li>
         ))}
       </ul>
@@ -125,10 +127,12 @@ function TopicForm({ initial, st, onSave, onCancel }: { initial: Topic; st: AppS
       <label>Nom court (sur la roue)<input value={t.short} maxLength={26} onChange={(e) => set({ short: e.target.value })} /></label>
       <label>Question de recherche<input value={t.question} placeholder="Que dit [philosophie] de … ?" onChange={(e) => set({ question: e.target.value })} /></label>
       {isNew && (
-        <fieldset className="statuses">
+        <fieldset className="seg-fieldset">
           <legend>Portée</legend>
+          <div className="seg-group">
           <label className={`seg${t.scope === 'common' ? ' on' : ''}`}><input type="radio" name="tscope" checked={t.scope === 'common'} onChange={() => set({ scope: 'common', philosophy: undefined, theme: themes[0]?.id })} />Global (rejoint la roue commune)</label>
           <label className={`seg${t.scope === 'own' ? ' on' : ''}`}><input type="radio" name="tscope" checked={t.scope === 'own'} onChange={() => set({ scope: 'own', theme: undefined, philosophy: st.philosophies[0]?.id })} />Propre à une philosophie</label>
+          </div>
         </fieldset>
       )}
       {t.scope === 'common' ? (
@@ -147,8 +151,8 @@ function TopicForm({ initial, st, onSave, onCancel }: { initial: Topic; st: AppS
         )
       )}
       <div className="mform-actions">
-        <button type="submit" className="btn primary">Enregistrer</button>
-        <button type="button" className="btn" onClick={onCancel}>Annuler</button>
+        <button type="submit" className="btn btn-primary">Enregistrer</button>
+        <button type="button" className="btn btn-secondary" onClick={onCancel}>Annuler</button>
       </div>
     </form>
   )
@@ -173,7 +177,7 @@ function TopicsSection({ st }: { st: AppState }) {
           st.saveTopic({
             ...t, id: unique, aVerifier: t.id ? t.aVerifier : false,
             order: t.id ? t.order : Math.max(0, ...scopeList.map((x) => x.order)) + 1,
-            question: t.question || (t.scope === 'common' ? `Que dit [philosophie] de ${t.name.toLowerCase()} ?` : `Que dit ${st.philosophies.find((p) => p.id === t.philosophy)?.name ?? ''} de « ${t.name} » ?`),
+            question: t.question || (t.scope === 'common' ? `Que dit [philosophie] de ${t.name.toLowerCase()} ?` : `Que dit ${st.philosophies.find((p) => p.id === t.philosophy)?.name ?? ''} de « ${t.name} » ?`),
           })
           setEditing(null)
         }}
@@ -193,13 +197,13 @@ function TopicsSection({ st }: { st: AppState }) {
           <input type="checkbox" checked={t.active} onChange={(e) => st.setTopicActive(t.id, e.target.checked)} aria-label={`Sujet ${t.name} actif`} />
         </label>
       )}
-      <span className="mname">{t.scope === 'own' && <span aria-hidden="true">★ </span>}{t.name}{t.scope === 'common' && <span className="plist-sub"> · {themeName(t.theme)}</span>}</span>
+      <span className="mname">{t.scope === 'own' && <Star size={16} aria-hidden="true" fill="currentColor" />}{t.name}{t.scope === 'common' && <span className="plist-sub"> · {themeName(t.theme)}</span>}</span>
       <Arrows name={t.name} onUp={() => st.reorder('topics', move(list, t.id, -1))} onDown={() => st.reorder('topics', move(list, t.id, 1))} />
-      <button type="button" className="btn small" onClick={() => setEditing(t)}>Modifier</button>
+      <button type="button" className="btn btn-secondary btn-sm" onClick={() => setEditing(t)}><Pencil size={16} aria-hidden="true" />Modifier</button>
       <button
-        type="button" className="btn small danger"
-        onClick={() => { if (window.confirm(`Supprimer le sujet « ${t.name} » ? Les notes liées seront supprimées aussi.`)) st.deleteTopic(t.id) }}
-      >Supprimer</button>
+        type="button" className="btn btn-danger btn-sm"
+        onClick={() => { if (window.confirm(`Supprimer le sujet « ${t.name} » ? Les notes liées seront supprimées aussi.`)) st.deleteTopic(t.id) }}
+      ><Trash2 size={16} aria-hidden="true" />Supprimer</button>
     </li>
   )
 
@@ -208,7 +212,7 @@ function TopicsSection({ st }: { st: AppState }) {
       <h3>Sujets communs</h3>
       <p className="hint">L’interrupteur retire un sujet de la roue pour toutes les philosophies, sans le supprimer.</p>
       <ul className="mlist">{common.map((t) => row(t, common))}</ul>
-      <button type="button" className="btn" onClick={() => setEditing(blank('common'))}>Ajouter un sujet global</button>
+      <button type="button" className="btn btn-secondary" onClick={() => setEditing(blank('common'))}>Ajouter un sujet global</button>
 
       <h3>Sujets propres</h3>
       <label className="inline-select">Philosophie
@@ -220,7 +224,7 @@ function TopicsSection({ st }: { st: AppState }) {
         {own.map((t) => row(t, own))}
         {own.length === 0 && <li className="md-empty">Aucun sujet propre pour cette philosophie.</li>}
       </ul>
-      <button type="button" className="btn" onClick={() => setEditing(blank('own'))}>Ajouter un sujet propre</button>
+      <button type="button" className="btn btn-secondary" onClick={() => setEditing(blank('own'))}>Ajouter un sujet propre</button>
     </section>
   )
 }
@@ -245,17 +249,17 @@ function NamedList<T extends { id: string; name: string; order: number }>({ item
               <span className="plist-sub">{n} utilisée{n > 1 ? 's' : ''}</span>
               <Arrows name={it.name} onUp={() => onReorder(move(sorted, it.id, -1) as T[])} onDown={() => onReorder(move(sorted, it.id, 1) as T[])} />
               <button
-                type="button" className="btn small danger" disabled={n > 0}
-                title={n > 0 ? `Impossible : encore utilisée. Déplace ou supprime d’abord ce qui l’utilise.` : undefined}
-                onClick={() => { if (window.confirm(`Supprimer « ${it.name} » ?`)) onDelete(it.id) }}
-              >Supprimer</button>
+                type="button" className="btn btn-danger btn-sm" disabled={n > 0}
+                title={n > 0 ? `Impossible : encore utilisée. Déplace ou supprime d’abord ce qui l’utilise.` : undefined}
+                onClick={() => { if (window.confirm(`Supprimer « ${it.name} » ?`)) onDelete(it.id) }}
+              ><Trash2 size={16} aria-hidden="true" />Supprimer</button>
             </li>
           )
         })}
       </ul>
       <form className="manage-bar" onSubmit={(e) => { e.preventDefault(); const v = name.trim(); if (v) { onSave(make(v, Math.max(0, ...items.map((i) => i.order)) + 1)); setName('') } }}>
         <input aria-label={`Nom de la nouvelle ${noun}`} placeholder={`Nouvelle ${noun}…`} value={name} onChange={(e) => setName(e.target.value)} />
-        <button type="submit" className="btn primary">Ajouter</button>
+        <button type="submit" className="btn btn-primary">Ajouter</button>
       </form>
     </section>
   )
@@ -283,12 +287,12 @@ function BackupSection({ st }: { st: AppState }) {
       <h3>Exporter</h3>
       <p>Télécharge toutes tes données (philosophies, sujets, notes, synthèses, historique, réglages) dans un fichier JSON de secours.</p>
       <button
-        type="button" className="btn primary"
+        type="button" className="btn btn-primary"
         onClick={() => downloadJson(`philosophymaxing-${new Date().toISOString().slice(0, 10)}.json`, buildBackup(st.exportData()))}
       >Exporter mes données (JSON)</button>
 
       <h3>Importer</h3>
-      <p>Choisis un fichier exporté depuis PhilosophyMaxing. Les éléments de même identifiant sont mis à jour ; rien n’est supprimé.</p>
+      <p>Choisis un fichier exporté depuis PhilosophyMaxing. Les éléments de même identifiant sont mis à jour ; rien n’est supprimé.</p>
       <input ref={fileRef} type="file" accept="application/json,.json" aria-label="Fichier de sauvegarde" onChange={(e) => void onFile(e.target.files?.[0])} />
       {pending && (
         <div className="message" role="alert">
@@ -298,7 +302,7 @@ function BackupSection({ st }: { st: AppState }) {
             Les éléments existants de même identifiant seront écrasés par ceux du fichier.
           </p>
           <button
-            type="button" className="btn primary" disabled={busy}
+            type="button" className="btn btn-primary" disabled={busy}
             onClick={async () => {
               setBusy(true)
               try { await st.importData(pending); setMsg({ kind: 'ok', text: 'Import terminé.' }); setPending(null) }
@@ -306,7 +310,7 @@ function BackupSection({ st }: { st: AppState }) {
               finally { setBusy(false) }
             }}
           >{busy ? 'Import…' : 'Importer et remplacer'}</button>
-          <button type="button" className="btn small" onClick={() => setPending(null)}>Annuler</button>
+          <button type="button" className="btn btn-secondary btn-sm" onClick={() => setPending(null)}>Annuler</button>
         </div>
       )}
       {msg && <p className={msg.kind === 'error' ? 'error' : 'notice'} role={msg.kind === 'error' ? 'alert' : 'status'}>{msg.text}</p>}
@@ -330,7 +334,7 @@ function AccountSection({ email, onSignOut }: { email: string; onSignOut: () => 
     setBusy(true)
     const { error } = await supabase.auth.updateUser({ password: pw })
     setBusy(false)
-    if (error) setMsg({ kind: 'error', text: `Impossible de définir le code secret : ${error.message}` })
+    if (error) setMsg({ kind: 'error', text: `Impossible de définir le code secret : ${error.message}` })
     else { setMsg({ kind: 'ok', text: 'Code secret enregistré. Tu pourras entrer avec lui sur tous tes appareils.' }); setPw(''); setPw2('') }
   }
 
@@ -342,28 +346,28 @@ function AccountSection({ email, onSignOut }: { email: string; onSignOut: () => 
         <input type="text" name="username" autoComplete="username" value={email} readOnly hidden />
         <label>Nouveau code secret<input type="password" autoComplete="new-password" required minLength={MIN_PASSWORD} value={pw} onChange={(e) => setPw(e.target.value)} /></label>
         <label>Confirmer le code secret<input type="password" autoComplete="new-password" required minLength={MIN_PASSWORD} value={pw2} onChange={(e) => setPw2(e.target.value)} /></label>
-        <p className="hint">Au moins {MIN_PASSWORD} caractères. Comme le site est public, évite un mot simple à deviner : une phrase courte fonctionne bien.</p>
+        <p className="hint">Au moins {MIN_PASSWORD} caractères. Comme le site est public, évite un mot simple à deviner : une phrase courte fonctionne bien.</p>
         <div className="mform-actions">
-          <button type="submit" className="btn primary" disabled={busy}>{busy ? 'Enregistrement…' : 'Enregistrer le code secret'}</button>
+          <button type="submit" className="btn btn-primary" disabled={busy}>{busy ? 'Enregistrement…' : 'Enregistrer le code secret'}</button>
         </div>
       </form>
       {msg && <p className={msg.kind === 'error' ? 'error' : 'notice'} role={msg.kind === 'error' ? 'alert' : 'status'}>{msg.text}</p>}
       <h3>Session</h3>
-      <button type="button" className="btn" onClick={onSignOut}>Me déconnecter</button>
+      <button type="button" className="btn btn-secondary" onClick={onSignOut}>Me déconnecter</button>
     </section>
   )
 }
 
-export default function Manage({ st, email, onSignOut }: { st: AppState; email: string; onSignOut: () => void }) {
-  const [section, setSection] = useState<Section>('philosophies')
+export default function Manage({ st, email, onSignOut, section: sectionParam }: { st: AppState; email: string; onSignOut: () => void; section?: string }) {
+  const section: Section = SECTIONS.find((x) => x.id === sectionParam)?.id ?? 'philosophies'
   const { families, themes } = useData()
   return (
     <div className="manage">
-      <div className="tabs manage-tabs" role="tablist" aria-label="Éléments à gérer">
-        {SECTIONS.map((s) => (
-          <button key={s.id} type="button" role="tab" aria-selected={section === s.id} className={section === s.id ? 'on' : ''} onClick={() => setSection(s.id)}>{s.label}</button>
+      <nav className="tabs subtabs" aria-label="Éléments à gérer">
+        {SECTIONS.map((x) => (
+          <a key={x.id} href={href(['carnet', 'gerer', x.id])} aria-current={section === x.id ? 'page' : undefined}>{x.label}</a>
         ))}
-      </div>
+      </nav>
       {section === 'philosophies' && <PhilosophiesSection st={st} />}
       {section === 'topics' && <TopicsSection st={st} />}
       {section === 'families' && (

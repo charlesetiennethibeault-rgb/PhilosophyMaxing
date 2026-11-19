@@ -1,4 +1,6 @@
 import { useMemo, useState } from 'react'
+import { Star } from 'lucide-react'
+import { href } from '../lib/route'
 import { normalize } from '../lib/tools'
 import type { Note, NoteStatus, Philosophy, Topic } from '../lib/types'
 
@@ -6,12 +8,11 @@ interface Props {
   notes: Record<string, Note>
   philosophies: Philosophy[]
   topics: Topic[]
-  onOpenNote: (philosophyId: string, topicId: string) => void
 }
 
 const LABEL: Record<NoteStatus, string> = { empty: 'vide', draft: 'brouillon', deep: 'approfondi' }
 
-export default function NotesList({ notes, philosophies, topics, onOpenNote }: Props) {
+export default function NotesList({ notes, philosophies, topics }: Props) {
   const [status, setStatus] = useState<'all' | NoteStatus>('all')
   const [favOnly, setFavOnly] = useState(false)
   const [tag, setTag] = useState('')
@@ -26,9 +27,19 @@ export default function NotesList({ notes, philosophies, topics, onOpenNote }: P
   const tName = (id: string) => topics.find((t) => t.id === id)?.name ?? id
   const excerpt = (n: Note) => n.research.replace(/[#*_>`|\-[\]()]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 140)
 
+  if (rows.length === 0) {
+    return (
+      <div className="empty">
+        <h2>Tes notes apparaîtront ici</h2>
+        <p>Chaque case (une philosophie et un sujet) a sa propre note. Tire une philosophie à la roue, puis choisis un sujet pour écrire la première.</p>
+        <a className="btn btn-primary" href={href(['roue'])}>Aller à la roue</a>
+      </div>
+    )
+  }
+
   return (
     <div className="nlist">
-      <div className="nlist-filters">
+      <div className="toolbar">
         <label>État
           <select value={status} onChange={(e) => setStatus(e.target.value as typeof status)}>
             <option value="all">Tous</option><option value="draft">Brouillon</option><option value="deep">Approfondi</option><option value="empty">Vide</option>
@@ -42,19 +53,28 @@ export default function NotesList({ notes, philosophies, topics, onOpenNote }: P
         </label>
         <label className="check"><input type="checkbox" checked={favOnly} onChange={(e) => setFavOnly(e.target.checked)} /><span>Favoris seulement</span></label>
       </div>
-      <p className="count" aria-live="polite">{shown.length} note{shown.length > 1 ? 's' : ''}</p>
-      <ul className="nlist-items">
+      <p className="meta" aria-live="polite">{shown.length}&nbsp;note{shown.length > 1 ? 's' : ''}</p>
+      <ul className="rows">
         {shown.map((n) => (
           <li key={`${n.philosophy}|${n.topic}`}>
-            <button type="button" className="nlist-item" onClick={() => onOpenNote(n.philosophy, n.topic)}>
-              <span className="nlist-title">{n.favorite && <span className="chip">★</span>} {pName(n.philosophy)} <span className="sep">·</span> {tName(n.topic)}</span>
-              <span className="plist-sub">{LABEL[n.status]}{n.tags.length > 0 && ` · ${n.tags.join(', ')}`}</span>
-              {excerpt(n) && <span className="excerpt">{excerpt(n)}</span>}
-            </button>
+            <a className="row-link" href={href(['note', n.philosophy, n.topic])}>
+              <span className="row-main">
+                <strong>{pName(n.philosophy)} · {tName(n.topic)}</strong>
+                <span className="meta">{LABEL[n.status]}{n.tags.length > 0 && ` · ${n.tags.join(', ')}`}</span>
+                {excerpt(n) && <span className="excerpt">{excerpt(n)}</span>}
+              </span>
+              <span className="row-side">{n.favorite && <Star size={16} aria-label="Favori" fill="currentColor" />}</span>
+            </a>
           </li>
         ))}
-        {shown.length === 0 && <li className="md-empty">Aucune note ne correspond. Tourne la roue ou ouvre une fiche pour en commencer une.</li>}
       </ul>
+      {shown.length === 0 && (
+        <div className="empty">
+          <h2>Aucune note ne correspond</h2>
+          <p>Aucune note n’a cet état, cette étiquette ou ce statut de favori.</p>
+          <button type="button" className="btn btn-secondary" onClick={() => { setStatus('all'); setTag(''); setFavOnly(false) }}>Effacer les filtres</button>
+        </div>
+      )}
     </div>
   )
 }

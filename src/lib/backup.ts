@@ -33,20 +33,20 @@ export function parseBackup(text: string): { ok: true; backup: Backup } | { ok: 
     return { ok: false, error: 'Cette sauvegarde vient d’une version plus récente de l’application.' }
   }
   const lists = ['families', 'themes', 'philosophies', 'topics', 'notes', 'syntheses', 'draws'] as const
-  for (const k of lists) if (!arr(raw[k])) return { ok: false, error: `Sauvegarde incomplète : « ${k} » est absent.` }
+  for (const k of lists) if (!arr(raw[k])) return { ok: false, error: `Sauvegarde incomplète : « ${k} » est absent.` }
 
   const fam = new Set((raw.families as Family[]).map((f) => f.id))
   const ph = new Set((raw.philosophies as Philosophy[]).map((p) => p.id))
   const th = new Set((raw.themes as Theme[]).map((t) => t.id))
   const tp = new Set((raw.topics as Topic[]).map((t) => t.id))
   if ((raw.philosophies as Philosophy[]).some((p) => !p.id || !p.name || !fam.has(p.family))) {
-    return { ok: false, error: 'Sauvegarde incohérente : une philosophie n’a pas de famille valide.' }
+    return { ok: false, error: 'Sauvegarde incohérente : une philosophie n’a pas de famille valide.' }
   }
   if ((raw.topics as Topic[]).some((t) => !t.id || (t.scope === 'own' ? !ph.has(t.philosophy ?? '') : t.theme && !th.has(t.theme)))) {
-    return { ok: false, error: 'Sauvegarde incohérente : un sujet pointe vers une philosophie ou un thème absent.' }
+    return { ok: false, error: 'Sauvegarde incohérente : un sujet pointe vers une philosophie ou un thème absent.' }
   }
   if ((raw.notes as Note[]).some((n) => !ph.has(n.philosophy) || !tp.has(n.topic))) {
-    return { ok: false, error: 'Sauvegarde incohérente : une note pointe vers une case absente.' }
+    return { ok: false, error: 'Sauvegarde incohérente : une note pointe vers une case absente.' }
   }
   return { ok: true, backup: raw as unknown as Backup }
 }

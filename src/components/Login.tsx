@@ -38,7 +38,7 @@ export default function Login() {
     if (error) {
       setState('error')
       setError(/invalid login/i.test(error.message)
-        ? 'Code secret incorrect (ou aucun code secret défini pour cette adresse : utilise le lien par courriel).'
+        ? 'Code secret incorrect. Si tu n’en as pas encore défini pour cette adresse, utilise le lien par courriel.'
         : error.message)
     } else {
       rememberEmail(email.trim())
@@ -59,9 +59,9 @@ export default function Login() {
       <input id="email" type="email" required autoComplete="username" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="toi@exemple.com" />
     </>
   ) : (
-    <p className="hint">
+    <p className="meta">
       Connexion en tant que <strong>{mask(email)}</strong>{' '}
-      <button type="button" className="link inline" onClick={() => { forgetEmail(); setChanging(true); setEmail('') }}>Changer d’adresse</button>
+      <button type="button" className="link-inline" onClick={() => { forgetEmail(); setChanging(true); setEmail('') }}>Changer d’adresse</button>
     </p>
   )
 
@@ -77,23 +77,23 @@ export default function Login() {
           {emailField}
           <label htmlFor="password">Code secret</label>
           <input id="password" type="password" required autoComplete="current-password" value={password} onChange={(e) => setPassword(e.target.value)} autoFocus={!changing} />
-          <button type="submit" className="btn primary big" disabled={state === 'sending'}>{state === 'sending' ? 'Connexion…' : 'Entrer'}</button>
+          <button type="submit" className="btn btn-primary btn-lg btn-block" disabled={state === 'sending'}>{state === 'sending' ? 'Ouverture…' : 'Ouvrir mon carnet'}</button>
           {state === 'error' && <p className="error" role="alert">{error}</p>}
-          <button type="button" className="link" onClick={() => setMode('link')}>Code oublié ou pas encore défini ? Recevoir un lien par courriel</button>
+          <button type="button" className="btn btn-ghost" onClick={() => setMode('link')}>Code oublié ou pas encore défini ? Recevoir un lien par courriel</button>
         </form>
       ) : state === 'sent' ? (
         <div className="message" role="status">
           <p><strong>Lien envoyé.</strong> Ouvre le courriel reçu sur cet appareil et clique sur le lien pour entrer.</p>
-          <button type="button" className="btn small" onClick={() => setMode('password')}>Retour au code secret</button>
+          <button type="button" className="btn btn-secondary btn-sm" onClick={() => setMode('password')}>Retour au code secret</button>
         </div>
       ) : (
         <form onSubmit={sendLink}>
           {emailField}
-          <button type="submit" className="btn primary big" disabled={state === 'sending'}>
+          <button type="submit" className="btn btn-primary btn-lg btn-block" disabled={state === 'sending'}>
             {state === 'sending' ? 'Envoi…' : 'Recevoir mon lien de connexion'}
           </button>
           {state === 'error' && <p className="error" role="alert">Envoi impossible : {error}</p>}
-          <button type="button" className="link" onClick={() => setMode('password')}>Retour au code secret</button>
+          <button type="button" className="btn btn-ghost" onClick={() => setMode('password')}>Retour au code secret</button>
         </form>
       )}
     </main>

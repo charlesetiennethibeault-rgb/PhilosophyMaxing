@@ -1,12 +1,12 @@
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef } from 'react'
 import { tick } from '../lib/audio'
 import type { NoteStatus } from '../lib/types'
+import { ON_BRAND, SURFACE, TEXT } from '../lib/ui'
 
 export interface WheelItem {
   id: string
   label: string
   color: string
-  pattern: number // 0 = uni, 1..8 = motifs discrets
   star?: boolean
   status?: NoteStatus
 }
@@ -30,39 +30,15 @@ interface Props {
 }
 
 const TAU = Math.PI * 2
-const INK = '#2b2118'
-const PAPER = '#f4ecd8'
-
-function makePattern(ctx: CanvasRenderingContext2D, kind: number): CanvasPattern | null {
-  if (kind === 0) return null
-  const c = document.createElement('canvas')
-  c.width = c.height = 12
-  const g = c.getContext('2d')!
-  g.strokeStyle = 'rgba(255,255,255,0.28)'
-  g.fillStyle = 'rgba(255,255,255,0.28)'
-  g.lineWidth = 1.2
-  const line = (x1: number, y1: number, x2: number, y2: number) => {
-    g.beginPath(); g.moveTo(x1, y1); g.lineTo(x2, y2); g.stroke()
-  }
-  switch (kind) {
-    case 1: line(0, 6, 12, 6); break // horizontales
-    case 2: line(0, 12, 12, 0); break // diagonale /
-    case 3: g.beginPath(); g.arc(6, 6, 1.4, 0, TAU); g.fill(); break // points
-    case 4: line(0, 12, 12, 0); line(0, 0, 12, 12); break // croisillons
-    case 5: line(6, 0, 6, 12); break // verticales
-    case 6: line(0, 0, 12, 12); break // diagonale \
-    case 7: g.fillRect(4, 4, 4, 4); break // carrés
-    case 8: g.beginPath(); g.moveTo(0, 8); g.quadraticCurveTo(3, 3, 6, 8); g.quadraticCurveTo(9, 13, 12, 8); g.stroke(); break // vagues
-  }
-  return ctx.createPattern(c, 'repeat')
-}
+const INK = TEXT
+const PAPER = SURFACE
 
 const fsNow = (g: CanvasRenderingContext2D) => parseFloat(/(\d+(?:\.\d+)?)px/.exec(g.font)![1])
 
 function textColorOn(hex: string): string {
   const n = parseInt(hex.slice(1), 16)
   const lum = (0.299 * (n >> 16) + 0.587 * ((n >> 8) & 255) + 0.114 * (n & 255)) / 255
-  return lum > 0.6 ? INK : '#fffaf0'
+  return lum > 0.55 ? INK : ON_BRAND
 }
 
 const Wheel = forwardRef<WheelHandle, Props>(function Wheel(props, ref) {
@@ -73,7 +49,6 @@ const Wheel = forwardRef<WheelHandle, Props>(function Wheel(props, ref) {
   const raf = useRef(0)
   const spinning = useRef(false)
   const lastIndex = useRef(-1)
-  const patterns = useRef<(CanvasPattern | null)[]>([])
   const pointerRef = useRef<HTMLDivElement>(null)
   const latest = useRef({ items, sound, onLive, onStop, onFlick, disabled, reducedMotion })
   latest.current = { items, sound, onLive, onStop, onFlick, disabled, reducedMotion }
@@ -96,7 +71,6 @@ const Wheel = forwardRef<WheelHandle, Props>(function Wheel(props, ref) {
     }
     g.setTransform(dpr, 0, 0, dpr, 0, 0)
     g.clearRect(0, 0, size, size)
-    if (!patterns.current.length) patterns.current = Array.from({ length: 9 }, (_, k) => makePattern(g, k))
 
     const list = latest.current.items
     const n = list.length
@@ -112,9 +86,7 @@ const Wheel = forwardRef<WheelHandle, Props>(function Wheel(props, ref) {
       const a1 = a0 + step
       g.beginPath(); g.moveTo(0, 0); g.arc(0, 0, r, a0, a1); g.closePath()
       g.fillStyle = it.color; g.fill()
-      const pat = patterns.current[it.pattern]
-      if (pat) { g.fillStyle = pat; g.fill() }
-      g.lineWidth = n > 40 ? 0.6 : 1.5
+      g.lineWidth = n > 40 ? 0.75 : 1.5
       g.strokeStyle = PAPER; g.stroke()
 
       if (showLabels) {
@@ -122,27 +94,39 @@ const Wheel = forwardRef<WheelHandle, Props>(function Wheel(props, ref) {
         g.rotate(a0 + step / 2)
         g.fillStyle = textColorOn(it.color)
         const fs = Math.max(10, Math.min(15, size / 28))
-        g.font = `600 ${fs}px "Source Serif 4", Georgia, serif`
+        g.font = `600 ${fs}px "IBM Plex Sans", system-ui, sans-serif`
         g.textAlign = 'right'; g.textBaseline = 'middle'
-        let label = (it.star ? '★ ' : '') + it.label
-        const maxW = r - 30 - size * 0.055 - 8
+        let label = it.label
+        const starRoom = it.star ? 16 : 0 // place de l'étoile dessinée avant le texte
+        const maxW = r - 30 - size * 0.055 - 8 - starRoom
         while (g.measureText(label).width > maxW && label.length > 4) {
           if (fsNow(g) > 9) g.font = g.font.replace(/(\d+(?:\.\d+)?)px/, (_, v) => `${Math.max(9, parseFloat(v) - 1)}px`)
           else label = label.slice(0, -2).trimEnd() + '…'
         }
         g.fillText(label, r - 30, 0)
+        if (it.star) {
+          // étoile à 5 branches (tracé), à gauche du texte
+          const cx = r - 30 - g.measureText(label).width - 9
+          g.beginPath()
+          for (let k = 0; k < 10; k++) {
+            const rad = k % 2 === 0 ? 6 : 2.6
+            const ang = -Math.PI / 2 + (k * Math.PI) / 5
+            g.lineTo(cx + Math.cos(ang) * rad, Math.sin(ang) * rad)
+          }
+          g.closePath(); g.fill()
+        }
         g.restore()
         // pastille d'état près du bord
         g.save()
         g.rotate(a0 + step / 2)
         const px = r - 14
         g.beginPath(); g.arc(px, 0, 6, 0, TAU)
-        g.fillStyle = it.status === 'deep' ? '#fffaf0' : 'rgba(255,250,240,0.18)'
+        g.fillStyle = it.status === 'deep' ? textColorOn(it.color) : 'transparent'
         g.fill()
-        g.lineWidth = 1.5; g.strokeStyle = '#fffaf0'; g.stroke()
+        g.lineWidth = 1.5; g.strokeStyle = textColorOn(it.color); g.stroke()
         if (it.status === 'draft') {
           g.beginPath(); g.arc(px, 0, 6, -Math.PI / 2, Math.PI / 2); g.closePath()
-          g.fillStyle = '#fffaf0'; g.fill()
+          g.fillStyle = textColorOn(it.color); g.fill()
         } else if (it.status === 'deep') {
           g.strokeStyle = it.color; g.lineWidth = 2
           g.beginPath(); g.moveTo(px - 3, 0); g.lineTo(px - 0.5, 3); g.lineTo(px + 3.5, -3); g.stroke()

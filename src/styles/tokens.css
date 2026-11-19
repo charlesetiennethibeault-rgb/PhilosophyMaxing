@@ -71,9 +71,3 @@
 }
 @media (max-width: 800px) { :root { --control-h: 44px; } }
 
-/* Alias transitoires pour l'ancien CSS : supprimés à la phase 3. */
-:root {
-  --paper: var(--bg); --paper-2: var(--surface-2); --card: var(--surface); --ink: var(--text); --ink-soft: var(--text-2);
-  --line: var(--border); --accent: var(--brand); --ochre: var(--own); --ochre-ink: var(--own-ink); --focus: var(--text);
-  --serif-title: var(--font-ui); --serif-body: var(--font-ui);
-}

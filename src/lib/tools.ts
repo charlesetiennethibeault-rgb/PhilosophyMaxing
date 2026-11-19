@@ -1,4 +1,5 @@
 import { ERAS, eraOf, topicsFor } from './draw'
+import { withArticle } from './ui'
 import { cellKey, type Draw, type Family, type Note, type NoteStatus, type Philosophy, type Synthesis, type Theme, type Topic } from './types'
 
 /** Minuscules sans accents, pour chercher « epicure » et trouver « Épicure ». */
@@ -94,7 +95,7 @@ export function shouldSuggestSynthesis(philosophyId: string, theme: Theme, topic
 }
 
 export const synthesisQuestion = (philosophyName: string, themeName: string) =>
-  `Que dit ${philosophyName.replace(/ \(.*\)$/, '')} de « ${themeName.toLowerCase()} », tous sujets confondus ?`
+  `Que dit ${withArticle(philosophyName)} de « ${themeName.toLowerCase()} », tous sujets confondus ?`
 
 /* ---------- réordonner ---------- */
 
