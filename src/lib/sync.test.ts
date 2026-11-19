@@ -57,6 +57,21 @@ describe('correspondance base ↔ application', () => {
   })
 })
 
+describe('textes personnels d’une philosophie', () => {
+  it('la ligne complète ne mentionne pas les trois textes (ils restent intacts, même avant la migration)', () => {
+    const p = { ...philosophies[0], synthesis: 'S', opinion: 'O', context: 'C' }
+    expect(philosophyToRow(p)).not.toHaveProperty('synthesis')
+    expect(philosophyToRow(p, true)).toMatchObject({ synthesis: 'S', opinion: 'O', context: 'C' })
+  })
+  it('un patch envoie seulement le texte modifié', () => {
+    expect(philosophyPatchToRow({ opinion: 'Ça résonne' })).toEqual({ opinion: 'Ça résonne' })
+  })
+  it('les colonnes absentes (avant migration) deviennent des textes vides', () => {
+    const row = philosophyToRow(philosophies[0]) as Record<string, unknown>
+    expect(philosophyFromRow(row)).toMatchObject({ synthesis: '', opinion: '', context: '' })
+  })
+})
+
 describe('file de synchronisation', () => {
   beforeEach(() => { vi.useFakeTimers(); calls.length = 0; failNext = 0 })
   afterEach(() => { vi.useRealTimers() })

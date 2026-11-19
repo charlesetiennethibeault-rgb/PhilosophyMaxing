@@ -75,7 +75,7 @@ function PhilosophiesSection({ st }: { st: AppState }) {
 
   const blank = (): Philosophy => ({
     id: '', name: '', family: families[0]?.id ?? '', region: REGIONS[0], startYear: 2000, endYear: null, dateLabel: '',
-    founder: '', actors: [], description: '', aVerifier: false, reserve: false, favorite: false, tags: [],
+    founder: '', actors: [], description: '', aVerifier: false, reserve: false, favorite: false, tags: [], synthesis: '', opinion: '', context: '',
     order: Math.max(0, ...st.philosophies.map((p) => p.order)) + 1,
   })
 

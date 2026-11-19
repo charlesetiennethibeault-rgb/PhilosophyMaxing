@@ -20,6 +20,7 @@ export function useAppState(userId: string) {
   const [families, setFamilies] = useState<Family[]>([])
   const [themes, setThemes] = useState<Theme[]>([])
   const [philosophies, setPhilosophies] = useState<Philosophy[]>([])
+  const [schemaReady, setSchemaReady] = useState(true)
   const [topics, setTopics] = useState<Topic[]>([])
   const [notes, setNotes] = useState<Record<string, Note>>({})
   const [syntheses, setSyntheses] = useState<Record<string, Synthesis>>({})
@@ -35,7 +36,7 @@ export function useAppState(userId: string) {
     const [fa, th, ph, tp, nt, sy, dr] = await Promise.all([
       loadFamilies(), loadThemes(), loadPhilosophies(), loadTopics(), loadNotes(), loadSyntheses(), loadDraws(),
     ])
-    setFamilies(fa); setThemes(th); setPhilosophies(ph); setTopics(tp); setHistory(dr)
+    setFamilies(fa); setThemes(th); setPhilosophies(ph.list); setSchemaReady(ph.schemaReady); setTopics(tp); setHistory(dr)
     setNotes(Object.fromEntries(nt.map((n) => [cellKey(n.philosophy, n.topic), n])))
     setSyntheses(Object.fromEntries(sy.map((s) => [`${s.philosophy}|${s.theme}`, s])))
   }, [])
@@ -78,9 +79,10 @@ export function useAppState(userId: string) {
 
   /* ----- fiches, réglages, tirages ----- */
 
-  const patchPhilosophy = useCallback((id: string, patch: Partial<Philosophy>) => {
+  /** `delay` plus long pour la frappe (les textes personnels), court pour un simple clic. */
+  const patchPhilosophy = useCallback((id: string, patch: Partial<Philosophy>, delay = 300) => {
     setPhilosophies((l) => l.map((p) => (p.id === id ? { ...p, ...patch } : p)))
-    queue.add({ kind: 'philosophy', key: `ph:${id}`, payload: { id, patch } }, 300)
+    queue.add({ kind: 'philosophy', key: `ph:${id}`, payload: { id, patch } }, delay)
   }, [queue])
 
   const saveSettingsLater = useCallback(() => {
@@ -208,7 +210,7 @@ export function useAppState(userId: string) {
 
   return {
     ready, loadError, retryLoad: boot, sync, refresh,
-    families, themes, philosophies, topics, notes, syntheses, statuses, history, filters, settings,
+    families, themes, philosophies, schemaReady, topics, notes, syntheses, statuses, history, filters, settings,
     patchPhilosophy, setFilters, setSettings, addDraw, resetHistory, setTopicActive, saveNote, saveSynthesis,
     savePhilosophy, deletePhilosophy, saveTopic, deleteTopic, saveFamily, deleteFamily, saveTheme, deleteTheme,
     reorder, importData, exportData,

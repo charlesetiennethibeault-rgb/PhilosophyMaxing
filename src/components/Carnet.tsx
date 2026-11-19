@@ -46,7 +46,9 @@ export default function Carnet({ st, sub, section, ficheId, query, onQuery, emai
       <Fiche
         philosophy={fiche} number={sorted.findIndex((p) => p.id === fiche.id) + 1} total={sorted.length}
         topics={st.topics} statuses={st.statuses} syntheses={st.syntheses}
+        sync={st.sync} schemaReady={st.schemaReady}
         onPatch={(patch) => st.patchPhilosophy(fiche.id, patch)}
+        onWrite={(patch) => st.patchPhilosophy(fiche.id, patch, 800)}
         onSynthesis={st.saveSynthesis}
       />
     )

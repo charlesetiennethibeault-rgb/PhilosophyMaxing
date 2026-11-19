@@ -7,7 +7,8 @@ import type { Family, Philosophy, Theme, Topic } from './types'
 
 export const families = familiesJson as Family[]
 export const themes = themesJson as Theme[]
-export const philosophies = philosophiesJson as Philosophy[]
+export const philosophies: Philosophy[] = (philosophiesJson as unknown as Omit<Philosophy, 'synthesis' | 'opinion' | 'context'>[])
+  .map((p) => ({ ...p, synthesis: '', opinion: '', context: '' }))
 export const commonTopics = topicsJson as Topic[]
 export const ownTopics = ownTopicsJson as Topic[]
 export const allTopics: Topic[] = [...commonTopics, ...ownTopics]

@@ -19,6 +19,10 @@ export interface Philosophy {
   favorite: boolean
   tags: string[]
   order: number
+  /** Mes textes (Markdown) : synthèse de la philosophie, ce que j'en pense, contexte historique. */
+  synthesis: string
+  opinion: string
+  context: string
 }
 
 export interface Topic {

@@ -27,6 +27,13 @@ describe('recherche', () => {
     expect(r[0].notes).toEqual([n])
     expect(searchPhilosophies('urgence', philosophies, [n])).toHaveLength(1)
   })
+  it('trouve dans mes écrits sur la philosophie (synthèse, avis, contexte)', () => {
+    const list = philosophies.map((p) => (p.id === 'stoicisme' ? { ...p, context: 'Né à Athènes sous les portiques', opinion: 'Ça me calme' } : p))
+    const r = searchPhilosophies('portiques', list, [])
+    expect(r.map((h) => h.philosophy.id)).toEqual(['stoicisme'])
+    expect(r[0].matchedIn).toContain('mes écrits')
+    expect(searchPhilosophies('calme', list, [])).toHaveLength(1)
+  })
   it('une recherche vide renvoie tout', () => {
     expect(searchPhilosophies('  ', philosophies, [])).toHaveLength(87)
   })

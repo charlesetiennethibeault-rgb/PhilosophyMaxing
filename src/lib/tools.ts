@@ -15,7 +15,7 @@ export function slugify(name: string, taken: Iterable<string> = []): string {
 
 /* ---------- recherche ---------- */
 
-export interface SearchHit { philosophy: Philosophy; notes: Note[]; matchedIn: ('nom' | 'acteur' | 'fiche' | 'notes')[] }
+export interface SearchHit { philosophy: Philosophy; notes: Note[]; matchedIn: ('nom' | 'acteur' | 'fiche' | 'mes écrits' | 'notes')[] }
 
 const noteText = (n: Note) =>
   normalize([n.research, n.reaction, n.tags.join(' '), n.sources.map((s) => `${s.title} ${s.url}`).join(' ')].join(' '))
@@ -32,15 +32,17 @@ export function searchPhilosophies(query: string, list: Philosophy[], notes: Not
     const name = normalize(p.name)
     const actors = normalize(p.actors.join(' '))
     const sheet = normalize(`${p.founder} ${p.description} ${p.region} ${p.dateLabel} ${p.tags.join(' ')}`)
+    const writings = normalize(`${p.synthesis} ${p.opinion} ${p.context}`)
     const mine = byPhil.get(p.id) ?? []
     // chaque mot doit être trouvé quelque part dans la philosophie ou dans l'une de ses notes
     const matchedNotes = mine.filter((n) => terms.some((t) => noteText(n).includes(t)))
-    const ok = terms.every((t) => name.includes(t) || actors.includes(t) || sheet.includes(t) || mine.some((n) => noteText(n).includes(t)))
+    const ok = terms.every((t) => name.includes(t) || actors.includes(t) || sheet.includes(t) || writings.includes(t) || mine.some((n) => noteText(n).includes(t)))
     if (!ok) continue
     const matchedIn: SearchHit['matchedIn'] = []
     if (terms.some((t) => name.includes(t))) matchedIn.push('nom')
     if (terms.some((t) => actors.includes(t))) matchedIn.push('acteur')
     if (terms.some((t) => sheet.includes(t))) matchedIn.push('fiche')
+    if (terms.some((t) => writings.includes(t))) matchedIn.push('mes écrits')
     if (matchedNotes.length) matchedIn.push('notes')
     hits.push({ philosophy: p, notes: matchedNotes, matchedIn })
   }

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { ArrowLeft, Check, CircleAlert, CircleCheck, CircleDashed, Contrast, ExternalLink, Plus, Star, Trash2, X } from 'lucide-react'
 import MdField from './MdField'
+import SyncLine from './SyncLine'
 import { useData } from '../lib/DataContext'
 import { frQuestion, ownLabel } from '../lib/ui'
 import type { SyncStatus } from '../lib/sync'
@@ -23,12 +24,6 @@ const STATUS: Record<NoteStatus, { label: string; Icon: typeof Contrast }> = {
 const SOURCE_TYPES: { id: SourceType; label: string }[] = [
   { id: 'livre', label: 'Livre' }, { id: 'article', label: 'Article' }, { id: 'video', label: 'Vidéo' },
 ]
-
-function SyncLine({ sync }: { sync: SyncStatus }) {
-  if (sync === 'saved') return <p className="sync ok" role="status"><Check size={16} aria-hidden="true" />Enregistré</p>
-  if (sync === 'pending') return <p className="sync" role="status">Enregistrement…</p>
-  return <p className="sync warn" role="status"><CircleAlert size={16} aria-hidden="true" />Hors ligne : ton texte est gardé sur cet appareil et sera renvoyé</p>
-}
 
 function SourcesEditor({ sources, onChange }: { sources: Source[]; onChange: (s: Source[]) => void }) {
   const set = (i: number, patch: Partial<Source>) => onChange(sources.map((s, j) => (j === i ? { ...s, ...patch } : s)))

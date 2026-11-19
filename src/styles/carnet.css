@@ -235,3 +235,9 @@ main.notebook::after { /* élastique */
   .notebook .result { rotate: -0.4deg; }
   .notebook .seg, .notebook .seg-group > button { padding: 0 var(--s-3); }
 }
+
+/* Mes écrits sur la philosophie : trois feuillets en tête de fiche */
+.notebook .writings { gap: var(--s-5); }
+.notebook .writings-head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--s-3); flex-wrap: wrap; }
+.notebook .writings .mdfield { display: flex; flex-direction: column; }
+.notebook code { background: color-mix(in oklab, var(--highlight) 70%, transparent); padding: 0 var(--s-1); border-radius: 2px; }

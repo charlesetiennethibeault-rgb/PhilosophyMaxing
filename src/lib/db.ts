@@ -13,14 +13,20 @@ export const philosophyFromRow = (r: Row): Philosophy => ({
   founder: r.founder, actors: r.actors ?? [], description: r.description,
   aVerifier: r.a_verifier, reserve: r.reserve, favorite: r.favorite,
   tags: r.tags ?? [], order: r.sort_order,
+  synthesis: r.synthesis ?? '', opinion: r.opinion ?? '', context: r.context ?? '',
 })
 
-export const philosophyToRow = (p: Philosophy): Row => ({
+/**
+ * Ligne complète d'une philosophie. Les trois textes personnels n'y sont pas, sauf `withWritings` :
+ * un upsert qui ne les mentionne pas laisse intacts ceux déjà écrits (et marche même avant la migration 0002).
+ */
+export const philosophyToRow = (p: Philosophy, withWritings = false): Row => ({
   id: p.id, name: p.name, family_id: p.family, region: p.region,
   start_year: p.startYear, end_year: p.endYear, date_label: p.dateLabel,
   founder: p.founder, actors: p.actors, description: p.description,
   a_verifier: p.aVerifier, reserve: p.reserve, favorite: p.favorite,
   tags: p.tags, sort_order: p.order,
+  ...(withWritings ? { synthesis: p.synthesis, opinion: p.opinion, context: p.context } : {}),
 })
 
 /** Traduit un patch partiel d'application vers les colonnes de la base. */
@@ -29,6 +35,7 @@ export function philosophyPatchToRow(patch: Partial<Philosophy>): Row {
     name: 'name', family: 'family_id', region: 'region', startYear: 'start_year', endYear: 'end_year',
     dateLabel: 'date_label', founder: 'founder', actors: 'actors', description: 'description',
     aVerifier: 'a_verifier', reserve: 'reserve', favorite: 'favorite', tags: 'tags', order: 'sort_order',
+    synthesis: 'synthesis', opinion: 'opinion', context: 'context',
   }
   return Object.fromEntries(Object.entries(patch).map(([k, v]) => [map[k], v]))
 }
@@ -101,9 +108,10 @@ export async function loadPrefs(): Promise<Prefs> {
   return prefsFromRow(res.data)
 }
 
-export async function loadPhilosophies(): Promise<Philosophy[]> {
+/** `schemaReady` : faux tant que la migration 0002 (colonnes des textes personnels) n'est pas appliquée. */
+export async function loadPhilosophies(): Promise<{ list: Philosophy[]; schemaReady: boolean }> {
   const rows = check<Row[]>(await supabase.from('philosophies').select('*').order('sort_order').range(0, 999))
-  return rows.map(philosophyFromRow)
+  return { list: rows.map(philosophyFromRow), schemaReady: rows.length === 0 || 'synthesis' in rows[0] }
 }
 export async function loadTopics(): Promise<Topic[]> {
   const rows = check<Row[]>(await supabase.from('topics').select('*').order('sort_order').range(0, 4999))
@@ -145,7 +153,7 @@ export async function seedIfNeeded(userId: string, prefs: Prefs): Promise<void> 
   const steps: [string, Row[]][] = [
     ['families', families.map((f) => ({ id: f.id, name: f.name, color: f.color, sort_order: f.order }))],
     ['themes', themes.map((t) => ({ id: t.id, name: t.name, sort_order: t.order }))],
-    ['philosophies', seedPhilosophies.map(philosophyToRow)],
+    ['philosophies', seedPhilosophies.map((p) => philosophyToRow(p))],
     ['topics', seedTopics.map(topicToRow)],
   ]
   for (const [table, rows] of steps) {
@@ -169,7 +177,7 @@ export async function importBackup(userId: string, b: import('./backup').Backup)
   const steps: [string, Row[], string][] = [
     ['families', b.families.map(familyToRow), 'user_id,id'],
     ['themes', b.themes.map(themeToRow), 'user_id,id'],
-    ['philosophies', b.philosophies.map(philosophyToRow), 'user_id,id'],
+    ['philosophies', b.philosophies.map((p) => philosophyToRow(p, true)), 'user_id,id'],
     ['topics', b.topics.map(topicToRow), 'user_id,id'],
     ['notes', b.notes.map(noteToRow), 'user_id,philosophy_id,topic_id'],
     ['theme_syntheses', b.syntheses.map(synthesisToRow), 'user_id,philosophy_id,theme_id'],
