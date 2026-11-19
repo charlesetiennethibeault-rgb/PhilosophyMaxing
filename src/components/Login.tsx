@@ -22,80 +22,52 @@ export function useSession() {
   return { session, loading }
 }
 
+/** Connexion par courriel et code secret seulement : aucun courriel n'est envoyé. */
 export default function Login() {
   const saved = rememberedEmail()
-  const [mode, setMode] = useState<'password' | 'link'>('password')
   const [email, setEmail] = useState(saved)
   const [changing, setChanging] = useState(!saved)
   const [password, setPassword] = useState('')
-  const [state, setState] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle')
+  const [state, setState] = useState<'idle' | 'sending' | 'error'>('idle')
   const [error, setError] = useState('')
 
-  const signInWithPassword = async (e: React.FormEvent) => {
+  useEffect(() => { if (state === 'error') setState('idle') }, [password, email]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault()
     setState('sending'); setError('')
     const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password })
     if (error) {
       setState('error')
-      setError(/invalid login/i.test(error.message)
-        ? 'Code secret incorrect. Si tu n’en as pas encore défini pour cette adresse, utilise le lien par courriel.'
-        : error.message)
+      setError(/invalid login/i.test(error.message) ? 'Courriel ou code secret incorrect.' : error.message)
     } else {
       rememberEmail(email.trim())
     }
   }
 
-  const sendLink = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setState('sending'); setError('')
-    const redirect = window.location.href.split('#')[0].split('?')[0]
-    const { error } = await supabase.auth.signInWithOtp({ email: email.trim(), options: { emailRedirectTo: redirect } })
-    if (error) { setState('error'); setError(error.message) } else setState('sent')
-  }
-
-  const emailField = changing ? (
-    <>
-      <label htmlFor="email">Adresse courriel</label>
-      <input id="email" type="email" required autoComplete="username" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="toi@exemple.com" />
-    </>
-  ) : (
-    <p className="meta">
-      Connexion en tant que <strong>{mask(email)}</strong>{' '}
-      <button type="button" className="link-inline" onClick={() => { forgetEmail(); setChanging(true); setEmail('') }}>Changer d’adresse</button>
-    </p>
-  )
-
-  useEffect(() => { setState('idle'); setError('') }, [mode])
-
   return (
-    <main className="login">
+    <main className="login" id="main">
       <h1>PhilosophyMaxing</h1>
       <p className="tagline">Mon carnet de recherche sur 87 philosophies.</p>
 
-      {mode === 'password' ? (
-        <form onSubmit={signInWithPassword}>
-          {emailField}
-          <label htmlFor="password">Code secret</label>
-          <input id="password" type="password" required autoComplete="current-password" value={password} onChange={(e) => setPassword(e.target.value)} autoFocus={!changing} />
-          <button type="submit" className="btn btn-primary btn-lg btn-block" disabled={state === 'sending'}>{state === 'sending' ? 'Ouverture…' : 'Ouvrir mon carnet'}</button>
-          {state === 'error' && <p className="error" role="alert">{error}</p>}
-          <button type="button" className="btn btn-ghost" onClick={() => setMode('link')}>Code oublié ou pas encore défini ? Recevoir un lien par courriel</button>
-        </form>
-      ) : state === 'sent' ? (
-        <div className="message" role="status">
-          <p><strong>Lien envoyé.</strong> Ouvre le courriel reçu sur cet appareil et clique sur le lien pour entrer.</p>
-          <button type="button" className="btn btn-secondary btn-sm" onClick={() => setMode('password')}>Retour au code secret</button>
-        </div>
-      ) : (
-        <form onSubmit={sendLink}>
-          {emailField}
-          <button type="submit" className="btn btn-primary btn-lg btn-block" disabled={state === 'sending'}>
-            {state === 'sending' ? 'Envoi…' : 'Recevoir mon lien de connexion'}
-          </button>
-          {state === 'error' && <p className="error" role="alert">Envoi impossible : {error}</p>}
-          <button type="button" className="btn btn-ghost" onClick={() => setMode('password')}>Retour au code secret</button>
-        </form>
-      )}
+      <form onSubmit={submit}>
+        {changing ? (
+          <>
+            <label htmlFor="email">Adresse courriel</label>
+            <input id="email" type="email" required autoComplete="username" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="toi@exemple.com" />
+          </>
+        ) : (
+          <p className="meta">
+            Connexion en tant que <strong>{mask(email)}</strong>
+            <button type="button" className="link-inline" onClick={() => { forgetEmail(); setChanging(true); setEmail('') }}>Changer d’adresse</button>
+          </p>
+        )}
+        <label htmlFor="password">Code secret</label>
+        <input id="password" type="password" required autoComplete="current-password" value={password} onChange={(e) => setPassword(e.target.value)} autoFocus={!changing} />
+        <button type="submit" className="btn btn-primary btn-lg btn-block" disabled={state === 'sending'}>{state === 'sending' ? 'Ouverture…' : 'Ouvrir mon carnet'}</button>
+        {state === 'error' && <p className="error" role="alert">{error}</p>}
+        {changing && <p className="meta">Sur cet appareil, l’adresse n’est demandée qu’une seule fois : ensuite, seul le code secret suffit.</p>}
+      </form>
     </main>
   )
 }
