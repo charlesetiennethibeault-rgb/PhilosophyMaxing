@@ -122,3 +122,18 @@ select, textarea, input[type='search'], input[type='number'] { font: inherit; co
   .plist-item { flex-wrap: wrap; }
   .plist-side { justify-content: flex-start; width: 100%; }
 }
+
+/* Phase 4 : animations (désactivées si le système demande de réduire les animations) */
+@keyframes card-in { from { opacity: 0; transform: translateY(14px) scale(0.98); } to { opacity: 1; transform: none; } }
+@keyframes pointer-tick { 0% { transform: translateX(-50%) rotate(0); } 35% { transform: translateX(-50%) rotate(-14deg); } 100% { transform: translateX(-50%) rotate(0); } }
+.card { animation: card-in 0.35s ease-out; }
+.wheel-pointer { transform-origin: 50% 20%; }
+.wheel-pointer.tick { animation: pointer-tick 0.12s ease-out; }
+.sound-top { font-size: 0.85rem; }
+.sound-top[aria-pressed='false'] { color: var(--ink-soft); border-color: var(--line); }
+@media (max-width: 800px) { .sound-top { display: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .card, .wheel-pointer.tick { animation: none !important; }
+}
+.skip-link { position: absolute; left: 8px; top: -60px; z-index: 100; background: var(--accent); color: #fffaf0; padding: 10px 16px; border-radius: 4px; }
+.skip-link:focus { top: 8px; }

@@ -1,9 +1,43 @@
 import { defineConfig } from 'vitest/config'
 import react from '@vitejs/plugin-react'
+import { VitePWA } from 'vite-plugin-pwa'
 
-// Le chemin de base sera réglé pour GitHub Pages en phase 4 (variable VITE_BASE).
+// VITE_BASE est réglé par le workflow GitHub Pages (« /PhilosophyMaxing/ »).
+const base = process.env.VITE_BASE ?? '/'
+
 export default defineConfig({
-  base: process.env.VITE_BASE ?? './',
-  plugins: [react()],
-  test: { environment: 'node' },
+  base,
+  plugins: [
+    react(),
+    VitePWA({
+      registerType: 'autoUpdate',
+      includeAssets: ['icon.svg', 'icons/apple-touch-icon.png'],
+      manifest: {
+        name: 'PhilosophyMaxing',
+        short_name: 'PhilosophyMaxing',
+        description: 'Mon carnet de recherche sur 87 philosophies : une roue, mes notes.',
+        lang: 'fr',
+        start_url: base,
+        scope: base,
+        display: 'standalone',
+        background_color: '#f4ecd8',
+        theme_color: '#f4ecd8',
+        icons: [
+          { src: 'icons/icon-192.png', sizes: '192x192', type: 'image/png' },
+          { src: 'icons/icon-512.png', sizes: '512x512', type: 'image/png' },
+          { src: 'icons/maskable-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
+        ],
+      },
+      workbox: {
+        globPatterns: ['**/*.{js,css,html,svg,png,woff2}'],
+        navigateFallback: `${base}index.html`,
+        // Les données vivent dans Supabase : jamais mises en cache par le service worker.
+        navigateFallbackDenylist: [/^\/auth\//],
+        runtimeCaching: [
+          { urlPattern: ({ url }) => url.hostname.endsWith('.supabase.co'), handler: 'NetworkOnly' },
+        ],
+      },
+    }),
+  ],
+  test: { environment: 'node', exclude: ['node_modules', 'dist'] },
 })

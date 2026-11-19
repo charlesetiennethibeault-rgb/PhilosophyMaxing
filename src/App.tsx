@@ -13,6 +13,7 @@ import { availableTopics, drawPhilosophy, drawTopic, emptyFilters, progressOf, w
 import { cellKey, emptyNote, type Topic } from './lib/types'
 import { RECORD_DRAWS } from './lib/config'
 import { OCHRE } from './lib/ui'
+import { chime } from './lib/audio'
 
 type Tab = 'roue' | 'carnet' | 'comparer' | 'progression'
 const TABS: { id: Tab; label: string }[] = [
@@ -89,7 +90,7 @@ function Workspace({ st, email, onSignOut }: { st: AppState; email: string; onSi
     () => topicItems.map((t, i) => ({
       id: t.id,
       label: t.short,
-      color: t.scope === 'own' ? OCHRE : shade(family(current?.family ?? '').color, i % 2 ? 0.18 : 0),
+      color: t.scope === 'own' ? OCHRE : shade(family(current?.family ?? '').color, i % 2 ? 0.3 : 0.18),
       pattern: 0,
       star: t.scope === 'own',
       status: st.statuses[cellKey(current?.id ?? '', t.id)] ?? 'empty',
@@ -138,6 +139,7 @@ function Workspace({ st, email, onSignOut }: { st: AppState; email: string; onSi
 
   const onStop = (index: number) => {
     setSpinning(false)
+    if (st.settings.sound) chime()
     if (mode === 'philosophies') {
       const p = wheel[index]
       if (!p) return
@@ -166,6 +168,7 @@ function Workspace({ st, email, onSignOut }: { st: AppState; email: string; onSi
     <aside className={`side${sheetOpen ? ' open' : ''}`} aria-live="polite">
       {current ? (
         <PhilosophyCard
+          key={current.id}
           philosophy={current} progress={progress}
           onPatch={(patch) => st.patchPhilosophy(current.id, patch)}
           onTopicWheel={mode === 'philosophies' ? goTopics : undefined}
@@ -182,9 +185,17 @@ function Workspace({ st, email, onSignOut }: { st: AppState; email: string; onSi
 
   return (
     <div className="app">
+      <a
+        className="skip-link" href="#main"
+        onClick={(e) => { e.preventDefault(); const m = document.querySelector('main'); m?.setAttribute('tabindex', '-1'); (m as HTMLElement | null)?.focus() }}
+      >Aller au contenu</a>
       <header className="topbar">
         <h1>PhilosophyMaxing</h1>
         <div className="topbar-right">
+          <button
+            type="button" className="btn small sound-top" aria-pressed={st.settings.sound}
+            onClick={() => st.setSettings({ sound: !st.settings.sound })}
+          >{st.settings.sound ? 'Son activé' : 'Son coupé'}</button>
           <span className={`sync-pill sync-${st.sync}`} role="status" title={email}>{SYNC_SHORT[st.sync]}</span>
           <button type="button" className="btn small signout-top" onClick={onSignOut}>Déconnexion</button>
           {tab === 'roue' && !noteTarget && (

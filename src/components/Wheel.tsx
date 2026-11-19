@@ -74,8 +74,9 @@ const Wheel = forwardRef<WheelHandle, Props>(function Wheel(props, ref) {
   const spinning = useRef(false)
   const lastIndex = useRef(-1)
   const patterns = useRef<(CanvasPattern | null)[]>([])
-  const latest = useRef({ items, sound, onLive, onStop, onFlick, disabled })
-  latest.current = { items, sound, onLive, onStop, onFlick, disabled }
+  const pointerRef = useRef<HTMLDivElement>(null)
+  const latest = useRef({ items, sound, onLive, onStop, onFlick, disabled, reducedMotion })
+  latest.current = { items, sound, onLive, onStop, onFlick, disabled, reducedMotion }
 
   const indexAtPointer = useCallback(() => {
     const n = latest.current.items.length
@@ -174,6 +175,10 @@ const Wheel = forwardRef<WheelHandle, Props>(function Wheel(props, ref) {
       lastIndex.current = i
       latest.current.onLive(i)
       if (spinning.current && latest.current.sound) tick()
+      const el = pointerRef.current
+      if (spinning.current && el && !latest.current.reducedMotion) {
+        el.classList.remove('tick'); void el.offsetWidth; el.classList.add('tick') // petite secousse du pointeur
+      }
     }
   }, [indexAtPointer])
 
@@ -254,7 +259,7 @@ const Wheel = forwardRef<WheelHandle, Props>(function Wheel(props, ref) {
 
   return (
     <div className="wheel-box" ref={boxRef}>
-      <div className="wheel-pointer" aria-hidden="true" />
+      <div className="wheel-pointer" ref={pointerRef} aria-hidden="true" />
       <canvas
         ref={canvasRef}
         className="wheel-canvas"
