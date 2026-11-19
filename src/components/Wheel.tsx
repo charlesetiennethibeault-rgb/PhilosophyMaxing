@@ -1,15 +1,9 @@
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef } from 'react'
 import { tick } from '../lib/audio'
-import type { NoteStatus } from '../lib/types'
-import { ON_BRAND, SURFACE, TEXT } from '../lib/ui'
+import { renderWheelBitmap, type WheelItem } from '../lib/wheelRender'
+import type { WheelEra } from '../lib/wheelEras'
 
-export interface WheelItem {
-  id: string
-  label: string
-  color: string
-  star?: boolean
-  status?: NoteStatus
-}
+export type { WheelItem }
 
 export interface WheelHandle {
   spinTo: (index: number, power?: number) => void
@@ -18,6 +12,8 @@ export interface WheelHandle {
 
 interface Props {
   items: WheelItem[]
+  /** La roue de la période : meule de pierre, roue de bois, charrette, rayons de fer, pneu… */
+  era: WheelEra
   showLabels?: boolean
   sound: boolean
   reducedMotion: boolean
@@ -30,19 +26,9 @@ interface Props {
 }
 
 const TAU = Math.PI * 2
-const INK = TEXT
-const PAPER = SURFACE
-
-const fsNow = (g: CanvasRenderingContext2D) => parseFloat(/(\d+(?:\.\d+)?)px/.exec(g.font)![1])
-
-function textColorOn(hex: string): string {
-  const n = parseInt(hex.slice(1), 16)
-  const lum = (0.299 * (n >> 16) + 0.587 * ((n >> 8) & 255) + 0.114 * (n & 255)) / 255
-  return lum > 0.55 ? INK : ON_BRAND
-}
 
 const Wheel = forwardRef<WheelHandle, Props>(function Wheel(props, ref) {
-  const { items, showLabels, sound, reducedMotion, disabled, ariaLabel, onLive, onStop, onFlick } = props
+  const { items, era, showLabels, sound, reducedMotion, disabled, ariaLabel, onLive, onStop, onFlick } = props
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const boxRef = useRef<HTMLDivElement>(null)
   const angle = useRef(0)
@@ -50,8 +36,9 @@ const Wheel = forwardRef<WheelHandle, Props>(function Wheel(props, ref) {
   const spinning = useRef(false)
   const lastIndex = useRef(-1)
   const pointerRef = useRef<HTMLDivElement>(null)
-  const latest = useRef({ items, sound, onLive, onStop, onFlick, disabled, reducedMotion })
-  latest.current = { items, sound, onLive, onStop, onFlick, disabled, reducedMotion }
+  const bitmap = useRef<{ key: string; canvas: HTMLCanvasElement } | null>(null)
+  const latest = useRef({ items, era, sound, onLive, onStop, onFlick, disabled, reducedMotion })
+  latest.current = { items, era, sound, onLive, onStop, onFlick, disabled, reducedMotion }
 
   const indexAtPointer = useCallback(() => {
     const n = latest.current.items.length
@@ -60,86 +47,28 @@ const Wheel = forwardRef<WheelHandle, Props>(function Wheel(props, ref) {
     return Math.min(n - 1, Math.floor(a / (TAU / n)))
   }, [])
 
+  /** La roue est dessinée une fois (matière, rayons, jante) puis seulement tournée à chaque image. */
   const draw = useCallback(() => {
     const canvas = canvasRef.current
     if (!canvas) return
     const g = canvas.getContext('2d')!
     const dpr = window.devicePixelRatio || 1
     const size = canvas.clientWidth
-    if (canvas.width !== Math.round(size * dpr)) {
-      canvas.width = canvas.height = Math.round(size * dpr)
-    }
+    if (!size) return
+    if (canvas.width !== Math.round(size * dpr)) canvas.width = canvas.height = Math.round(size * dpr)
     g.setTransform(dpr, 0, 0, dpr, 0, 0)
     g.clearRect(0, 0, size, size)
 
-    const list = latest.current.items
-    const n = list.length
-    const cx = size / 2
-    const r = size / 2 - 6
-    const step = TAU / Math.max(n, 1)
-
+    const { items: list, era: e } = latest.current
+    const key = `${e}|${Math.round(size * dpr)}|${showLabels ? 1 : 0}|${list.map((i) => `${i.id}:${i.color}:${i.status ?? ''}:${i.star ? 1 : 0}:${i.label}`).join(',')}`
+    if (bitmap.current?.key !== key) {
+      bitmap.current = { key, canvas: renderWheelBitmap({ era: e, items: list, size, dpr, showLabels: !!showLabels }) }
+    }
     g.save()
-    g.translate(cx, cx)
+    g.translate(size / 2, size / 2)
     g.rotate(angle.current)
-    list.forEach((it, i) => {
-      const a0 = i * step
-      const a1 = a0 + step
-      g.beginPath(); g.moveTo(0, 0); g.arc(0, 0, r, a0, a1); g.closePath()
-      g.fillStyle = it.color; g.fill()
-      g.lineWidth = n > 40 ? 0.75 : 1.5
-      g.strokeStyle = PAPER; g.stroke()
-
-      if (showLabels) {
-        g.save()
-        g.rotate(a0 + step / 2)
-        g.fillStyle = textColorOn(it.color)
-        const fs = Math.max(10, Math.min(15, size / 28))
-        g.font = `600 ${fs}px "IBM Plex Sans", system-ui, sans-serif`
-        g.textAlign = 'right'; g.textBaseline = 'middle'
-        let label = it.label
-        const starRoom = it.star ? 16 : 0 // place de l'étoile dessinée avant le texte
-        const maxW = r - 30 - size * 0.055 - 8 - starRoom
-        while (g.measureText(label).width > maxW && label.length > 4) {
-          if (fsNow(g) > 9) g.font = g.font.replace(/(\d+(?:\.\d+)?)px/, (_, v) => `${Math.max(9, parseFloat(v) - 1)}px`)
-          else label = label.slice(0, -2).trimEnd() + '…'
-        }
-        g.fillText(label, r - 30, 0)
-        if (it.star) {
-          // étoile à 5 branches (tracé), à gauche du texte
-          const cx = r - 30 - g.measureText(label).width - 9
-          g.beginPath()
-          for (let k = 0; k < 10; k++) {
-            const rad = k % 2 === 0 ? 6 : 2.6
-            const ang = -Math.PI / 2 + (k * Math.PI) / 5
-            g.lineTo(cx + Math.cos(ang) * rad, Math.sin(ang) * rad)
-          }
-          g.closePath(); g.fill()
-        }
-        g.restore()
-        // pastille d'état près du bord
-        g.save()
-        g.rotate(a0 + step / 2)
-        const px = r - 14
-        g.beginPath(); g.arc(px, 0, 6, 0, TAU)
-        g.fillStyle = it.status === 'deep' ? textColorOn(it.color) : 'transparent'
-        g.fill()
-        g.lineWidth = 1.5; g.strokeStyle = textColorOn(it.color); g.stroke()
-        if (it.status === 'draft') {
-          g.beginPath(); g.arc(px, 0, 6, -Math.PI / 2, Math.PI / 2); g.closePath()
-          g.fillStyle = textColorOn(it.color); g.fill()
-        } else if (it.status === 'deep') {
-          g.strokeStyle = it.color; g.lineWidth = 2
-          g.beginPath(); g.moveTo(px - 3, 0); g.lineTo(px - 0.5, 3); g.lineTo(px + 3.5, -3); g.stroke()
-        }
-        g.restore()
-      }
-    })
+    g.drawImage(bitmap.current.canvas, -size / 2, -size / 2, size, size)
     g.restore()
-
-    // bord et moyeu
-    g.beginPath(); g.arc(cx, cx, r, 0, TAU); g.lineWidth = 3; g.strokeStyle = INK; g.stroke()
-    g.beginPath(); g.arc(cx, cx, size * 0.055, 0, TAU)
-    g.fillStyle = PAPER; g.fill(); g.lineWidth = 2; g.stroke()
   }, [showLabels])
 
   useEffect(() => {
@@ -149,7 +78,7 @@ const Wheel = forwardRef<WheelHandle, Props>(function Wheel(props, ref) {
     const ro = new ResizeObserver(draw)
     ro.observe(box)
     return () => ro.disconnect()
-  }, [draw, items])
+  }, [draw, items, era])
 
   useEffect(() => () => cancelAnimationFrame(raf.current), [])
 
@@ -166,7 +95,7 @@ const Wheel = forwardRef<WheelHandle, Props>(function Wheel(props, ref) {
     }
   }, [indexAtPointer])
 
-  useEffect(() => { notifyLive(); draw() }, [items, notifyLive, draw])
+  useEffect(() => { notifyLive(); draw() }, [items, era, notifyLive, draw])
 
   useImperativeHandle(ref, () => ({
     isSpinning: () => spinning.current,

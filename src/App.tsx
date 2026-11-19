@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { BookOpen, ChartNoAxesColumn, CircleAlert, Check, Columns2, LogOut, SlidersHorizontal, Target, UserRound, Volume2, VolumeX, X } from 'lucide-react'
 import Wheel, { type WheelHandle, type WheelItem } from './components/Wheel'
+import EraStrip from './components/EraStrip'
 import FiltersPanel from './components/FiltersPanel'
 import PhilosophyCard from './components/PhilosophyCard'
 import NoteView from './components/NoteView'
@@ -10,7 +11,8 @@ import Progress from './components/Progress'
 import { DataProvider, useData } from './lib/DataContext'
 import { useAppState } from './lib/store'
 import type { AppState } from './lib/appState'
-import { availableTopics, drawPhilosophy, drawTopic, emptyFilters, progressOf, wheelPhilosophies, type DrawContext } from './lib/draw'
+import { availableTopics, drawPhilosophy, drawTopic, emptyFilters, eraOf, progressOf, wheelPhilosophies, type DrawContext } from './lib/draw'
+import { WHEEL_ERAS, erasForWheelEra, orderForWheel, wheelEraForFilters, wheelEraInfo, wheelEraOf, type WheelEra } from './lib/wheelEras'
 import { cellKey, emptyNote, type Topic } from './lib/types'
 import { RECORD_DRAWS } from './lib/config'
 import { OWN, aplatColor } from './lib/ui'
@@ -101,7 +103,14 @@ function Workspace({ st, email, onSignOut }: { st: AppState; email: string; onSi
     [st.philosophies, st.topics, st.filters, st.settings, st.history, st.statuses],
   )
 
-  const wheel = useMemo(() => wheelPhilosophies(ctx), [ctx])
+  // La roue évolue avec le temps : la période filtrée détermine la roue (meule, bois, charrette, fer, pneu).
+  const wheelEra = wheelEraForFilters(st.filters.eras)
+  const wheel = useMemo(() => orderForWheel(wheelPhilosophies(ctx), wheelEra), [ctx, wheelEra])
+  const eraCounts = useMemo(() => {
+    const out = {} as Record<WheelEra, number>
+    for (const w of WHEEL_ERAS) out[w.id] = wheelPhilosophies({ ...ctx, filters: { ...ctx.filters, eras: erasForWheelEra(w.id) } }).length
+    return out
+  }, [ctx])
   const sortedAll = useMemo(() => [...st.philosophies].sort((a, b) => a.order - b.order), [st.philosophies])
   const current = st.philosophies.find((p) => p.id === currentId) ?? null
   const currentNumber = current ? sortedAll.findIndex((p) => p.id === current.id) + 1 : 0
@@ -121,6 +130,8 @@ function Workspace({ st, email, onSignOut }: { st: AppState; email: string; onSi
     [topicItems, current, st.statuses, family],
   )
   const items = mode === 'philosophies' ? phItems : tpItems
+  // Sur la roue des sujets, on garde la roue de la période de la philosophie tirée.
+  const displayEra: WheelEra = mode === 'philosophies' ? wheelEra : current ? wheelEraOf(eraOf(current.startYear)) : 'all'
 
   useEffect(() => { setLive(''); setMessage(null) }, [mode, wheel.length])
 
@@ -296,15 +307,19 @@ function Workspace({ st, email, onSignOut }: { st: AppState; email: string; onSi
           {drawerOpen && <div className="scrim" onClick={() => setDrawerOpen(false)} />}
 
           <section className="center" aria-label="Roue">
+            {mode === 'philosophies' && (
+              <EraStrip value={wheelEra} counts={eraCounts} onChange={(w) => st.setFilters({ ...st.filters, eras: erasForWheelEra(w) })} />
+            )}
             <p className="stage-label" aria-live="off">{spinning || live ? live || '…' : hint}</p>
             <Wheel
               ref={wheelRef}
               items={items}
+              era={displayEra}
               showLabels={mode === 'topics'}
               sound={st.settings.sound}
               reducedMotion={reduced}
               disabled={spinning}
-              ariaLabel={mode === 'philosophies' ? 'Roue des philosophies : appuyer pour tourner' : 'Roue des sujets : appuyer pour tourner'}
+              ariaLabel={mode === 'philosophies' ? `Roue des philosophies (${wheelEraInfo(displayEra).object}) : appuyer pour tourner` : `Roue des sujets (${wheelEraInfo(displayEra).object}) : appuyer pour tourner`}
               onLive={(i) => setLive(items[i]?.label ?? '')}
               onStop={onStop}
               onFlick={spin}

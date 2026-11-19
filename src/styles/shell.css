@@ -22,7 +22,7 @@
 .drawer-head, .drawer-account, .scrim { display: none; }
 .center { display: flex; flex-direction: column; align-items: center; gap: var(--s-4); padding: var(--s-5); min-width: 0; }
 .stage-label { min-height: 28px; font-size: var(--t-20); font-weight: 600; line-height: 1.4; text-align: center; max-width: 100%; overflow-wrap: anywhere; }
-.wheel-box { position: relative; width: min(100%, 640px, calc(100dvh - 260px)); min-width: 280px; aspect-ratio: 1; margin-top: var(--s-3); }
+.wheel-box { position: relative; width: min(100%, 640px, calc(100dvh - 340px)); min-width: 280px; aspect-ratio: 1; margin-top: var(--s-3); }
 .wheel-canvas { width: 100%; height: 100%; display: block; touch-action: none; cursor: grab; border-radius: 50%; }
 .wheel-pointer { position: absolute; left: 50%; top: -12px; transform: translateX(-50%); z-index: 2; width: 0; height: 0; border-left: 12px solid transparent; border-right: 12px solid transparent; border-top: 24px solid var(--text); transform-origin: 50% 20%; }
 .controls { display: flex; gap: var(--s-3); flex-wrap: wrap; justify-content: center; }
@@ -122,3 +122,18 @@
   .sync-status span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
   .topbar-right { gap: var(--s-1); }
 }
+
+/* Frise des roues : de la meule de pierre à la jante moderne */
+.era-strip { display: flex; gap: var(--s-2); justify-content: safe center; max-width: 100%; overflow-x: auto; padding: var(--s-1) var(--s-1) var(--s-2); }
+.era-item {
+  flex: none; display: flex; flex-direction: column; align-items: center; gap: var(--s-1); min-width: 76px; min-height: 44px; padding: var(--s-2);
+  background: transparent; border: 1px solid transparent; border-radius: var(--r-card); color: var(--text-2);
+  transition: transform var(--d-press) var(--ease);
+}
+.era-item:hover { background: var(--surface-2); color: var(--text); }
+.era-item:active { transform: scale(0.97); }
+.era-item.on { background: var(--surface); border-color: var(--border); color: var(--text); box-shadow: inset 0 -2px 0 var(--brand); }
+.era-name { font-size: var(--t-12); line-height: 1.2; font-weight: 600; white-space: nowrap; }
+.era-count { font-size: var(--t-12); line-height: 1.2; font-variant-numeric: tabular-nums; color: var(--text-2); }
+.era-thumb { display: block; }
+@media (max-width: 800px) { .era-item { min-width: 68px; } }
