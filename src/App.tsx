@@ -12,7 +12,7 @@ import { DataProvider, useData } from './lib/DataContext'
 import { useAppState } from './lib/store'
 import type { AppState } from './lib/appState'
 import { availableTopics, drawPhilosophy, drawTopic, emptyFilters, eraOf, progressOf, wheelPhilosophies, type DrawContext } from './lib/draw'
-import { WHEEL_ERAS, erasForWheelEra, orderForWheel, wheelEraForFilters, wheelEraInfo, wheelEraOf, type WheelEra } from './lib/wheelEras'
+import { WHEEL_ERAS, eraSelection, erasForWheelEra, orderForWheel, wheelEraForFilters, wheelEraInfo, wheelEraOf, type WheelEra } from './lib/wheelEras'
 import { cellKey, emptyNote, type Topic } from './lib/types'
 import { RECORD_DRAWS } from './lib/config'
 import { OWN, aplatColor } from './lib/ui'
@@ -297,7 +297,7 @@ function Workspace({ st, email, onSignOut }: { st: AppState; email: string; onSi
               filters={st.filters} settings={st.settings}
               onFilters={st.setFilters} onSettings={st.setSettings}
               onResetHistory={st.resetHistory}
-              wheelCount={wheel.length} historyCount={st.history.length}
+              wheelCount={wheel.length} historyCount={st.history.length} hideEra
             />
             <div className="drawer-account">
               <p className="meta">{email}</p>
@@ -308,7 +308,7 @@ function Workspace({ st, email, onSignOut }: { st: AppState; email: string; onSi
 
           <section className="center" aria-label="Roue">
             {mode === 'philosophies' && (
-              <EraStrip value={wheelEra} counts={eraCounts} onChange={(w) => st.setFilters({ ...st.filters, eras: erasForWheelEra(w) })} />
+              <EraStrip value={eraSelection(st.filters.eras)} counts={eraCounts} onChange={(w) => st.setFilters({ ...st.filters, eras: erasForWheelEra(w) })} />
             )}
             <p className="stage-label" aria-live="off">{spinning || live ? live || '…' : hint}</p>
             <Wheel

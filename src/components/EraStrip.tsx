@@ -1,11 +1,24 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { demoItems, renderWheelBitmap } from '../lib/wheelRender'
 import { WHEEL_ERAS, type WheelEra } from '../lib/wheelEras'
 
 /** Nombre de parts de la mini-roue (assez pour qu'on reconnaisse la matière et les rayons). */
 const THUMB_PARTS: Record<WheelEra, number> = { all: 12, antiquite: 6, 'moyen-age': 6, moderne: 8, xixe: 10, xxe: 5 }
 
-function EraThumb({ era, size = 56 }: { era: WheelEra; size?: number }) {
+/** Taille des mini-roues : grandes sur ordinateur, un peu plus petites sur téléphone. */
+function useThumbSize() {
+  const query = '(max-width: 800px)'
+  const [small, setSmall] = useState(() => window.matchMedia(query).matches)
+  useEffect(() => {
+    const m = window.matchMedia(query)
+    const on = () => setSmall(m.matches)
+    m.addEventListener('change', on)
+    return () => m.removeEventListener('change', on)
+  }, [])
+  return small ? 64 : 80
+}
+
+function EraThumb({ era, size }: { era: WheelEra; size: number }) {
   const ref = useRef<HTMLCanvasElement>(null)
   useEffect(() => {
     const canvas = ref.current
@@ -20,45 +33,53 @@ function EraThumb({ era, size = 56 }: { era: WheelEra; size?: number }) {
 }
 
 interface Props {
-  value: WheelEra
+  /** Roue choisie ; `null` si les filtres ne correspondent à aucune roue de la frise. */
+  value: WheelEra | null
   /** Philosophies sur chaque roue, selon les autres filtres. */
   counts: Record<WheelEra, number>
   onChange: (era: WheelEra) => void
 }
 
 /**
- * La frise des roues : de la meule de pierre à la jante moderne, comme alignées sur un muret.
+ * « Choisir son époque » : la frise des roues, de la meule de pierre à la jante moderne.
  * Choisir une roue, c'est choisir la période : la grande roue ne contient que ses philosophies.
  */
 export default function EraStrip({ value, counts, onChange }: Props) {
+  const size = useThumbSize()
   const move = (dir: 1 | -1) => {
-    const i = WHEEL_ERAS.findIndex((e) => e.id === value)
+    const i = value ? WHEEL_ERAS.findIndex((e) => e.id === value) : dir === 1 ? -1 : 0
     const next = WHEEL_ERAS[(i + dir + WHEEL_ERAS.length) % WHEEL_ERAS.length]
     onChange(next.id)
     // le focus suit la sélection
     requestAnimationFrame(() => document.querySelector<HTMLElement>(`[data-era="${next.id}"]`)?.focus())
   }
   return (
-    <div
-      className="era-strip" role="radiogroup" aria-label="Roue de la période"
-      onKeyDown={(e) => {
-        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { e.preventDefault(); move(1) }
-        if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); move(-1) }
-      }}
-    >
-      {WHEEL_ERAS.map((e) => (
-        <button
-          key={e.id} type="button" role="radio" data-era={e.id}
-          aria-checked={value === e.id} tabIndex={value === e.id ? 0 : -1}
-          aria-label={`${e.label} : ${e.object}, ${counts[e.id]} philosophie${counts[e.id] > 1 ? 's' : ''}`}
-          className={`era-item${value === e.id ? ' on' : ''}`}
-          onClick={() => onChange(e.id)}
-        >
-          <EraThumb era={e.id} />
-          <span className="era-name">{e.short}</span>
-          <span className="era-count">{counts[e.id]}</span>
-        </button>
-      ))}
-    </div>
+    <section className="era-picker" aria-labelledby="era-title">
+      <div className="era-head">
+        <h2 id="era-title" className="era-title">Choisir son époque</h2>
+        <p className="era-sub">De la meule de pierre à la jante moderne : chaque période a sa roue.</p>
+      </div>
+      <div
+        className="era-strip" role="radiogroup" aria-labelledby="era-title"
+        onKeyDown={(e) => {
+          if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { e.preventDefault(); move(1) }
+          if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); move(-1) }
+        }}
+      >
+        {WHEEL_ERAS.map((e, i) => (
+          <button
+            key={e.id} type="button" role="radio" data-era={e.id}
+            aria-checked={value === e.id} tabIndex={value === e.id || (value === null && i === 0) ? 0 : -1}
+            aria-label={`${e.label} : ${e.object}, ${counts[e.id]} philosophie${counts[e.id] > 1 ? 's' : ''}`}
+            className={`era-item${value === e.id ? ' on' : ''}`}
+            onClick={() => onChange(e.id)}
+          >
+            <EraThumb era={e.id} size={size} />
+            <span className="era-name">{e.short}</span>
+            <span className="era-count">{counts[e.id]}</span>
+          </button>
+        ))}
+      </div>
+    </section>
   )
 }

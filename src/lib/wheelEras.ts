@@ -43,6 +43,15 @@ export function wheelEraForFilters(eras: EraId[]): WheelEra {
   return set.size === 1 ? [...set][0] : 'all'
 }
 
+/**
+ * Roue de la frise réellement choisie : seulement si les époques filtrées correspondent exactement à une roue.
+ * Une combinaison que la frise ne propose pas (ex. Antiquité + Moderne) ne coche aucune roue.
+ */
+export function eraSelection(eras: EraId[]): WheelEra | null {
+  const key = (l: EraId[]) => [...new Set(l)].sort().join('|')
+  return WHEEL_ERAS.find((w) => key(erasForWheelEra(w.id)) === key(eras))?.id ?? null
+}
+
 /** Époques de filtre à appliquer quand on choisit une roue dans la frise. */
 export const erasForWheelEra = (id: WheelEra): EraId[] => [...wheelEraInfo(id).eras]
 

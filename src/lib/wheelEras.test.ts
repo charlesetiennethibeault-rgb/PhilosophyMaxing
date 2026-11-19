@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { eraOf } from './draw'
 import { philosophies } from './seed'
-import { WHEEL_ERAS, erasForWheelEra, orderForWheel, wheelEraForFilters, wheelEraOf } from './wheelEras'
+import { WHEEL_ERAS, eraSelection, erasForWheelEra, orderForWheel, wheelEraForFilters, wheelEraOf } from './wheelEras'
 
 describe('roues par période', () => {
   it('le XXIe prend la roue du XXe, les autres gardent la leur', () => {
@@ -45,5 +45,13 @@ describe('roues par période', () => {
     const ordered = orderForWheel(shuffled, 'antiquite')
     for (let i = 1; i < ordered.length; i++) expect(ordered[i].startYear).toBeGreaterThanOrEqual(ordered[i - 1].startYear)
     expect(orderForWheel(shuffled, 'all')).toBe(shuffled)
+  })
+
+  it('la frise ne coche une roue que si les époques filtrées lui correspondent exactement', () => {
+    expect(eraSelection([])).toBe('all')
+    expect(eraSelection(['moderne'])).toBe('moderne')
+    expect(eraSelection(['xxie', 'xxe'])).toBe('xxe')
+    expect(eraSelection(['xxe'])).toBeNull() // XXe seul : la frise propose XXe + XXIe ensemble
+    expect(eraSelection(['antiquite', 'moderne'])).toBeNull() // combinaison absente de la frise
   })
 })

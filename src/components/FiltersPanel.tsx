@@ -13,6 +13,8 @@ interface Props {
   onResetHistory?: () => void
   wheelCount: number
   historyCount?: number
+  /** Masque le groupe « Époque » (sur la page de la roue, l'époque se choisit avec la frise). */
+  hideEra?: boolean
 }
 
 function toggle<T>(list: T[], v: T): T[] {
@@ -48,6 +50,13 @@ export default function FiltersPanel(p: Props) {
         )}
       </p>
 
+      {p.hideEra && f.yearRange && (
+        <p className="meta year-note">
+          Plage d’années active : {f.yearRange[0]} à {f.yearRange[1]}
+          <button type="button" className="btn btn-ghost btn-sm" onClick={() => set({ yearRange: null })}>Retirer</button>
+        </p>
+      )}
+
       <Group title="Familles" count={f.families.length} defaultOpen>
         {families.map((fam, i) => (
           <label key={fam.id} className="check">
@@ -58,6 +67,7 @@ export default function FiltersPanel(p: Props) {
         ))}
       </Group>
 
+      {!p.hideEra && (
       <Group title="Époque" count={f.eras.length + (f.yearRange ? 1 : 0)}>
         {ERAS.map((e) => (
           <label key={e.id} className="check">
@@ -82,6 +92,7 @@ export default function FiltersPanel(p: Props) {
           </div>
         )}
       </Group>
+      )}
 
       <Group title="Région" count={f.regions.length}>
         {REGIONS.map((r) => (
