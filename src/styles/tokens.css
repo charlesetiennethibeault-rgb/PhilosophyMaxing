@@ -1,0 +1,79 @@
+/* Tokens : source = design.md. Ne pas ajouter de valeur ici sans la décrire dans design.md. */
+:root {
+  color-scheme: light;
+
+  /* Neutres teintés (teinte 250) */
+  --bg: #F1F3F5;
+  --surface: #FAFBFC;
+  --surface-2: #E7EAEE;
+  --border: #D3D9E0;
+  --control-border: #7B8795;
+  --text: #1B2530;
+  --text-2: #4F5B68;
+  --text-3: #6B7785;
+
+  /* Marque : actions principales et élément actif */
+  --brand: #C0451A;
+  --brand-hover: #A93C15;
+  --brand-press: #923312;
+  --on-brand: #FBFCFD;
+
+  /* Sujet propre */
+  --own: #C9962B;
+  --own-bg: #F5EBD0;
+  --own-ink: #5E4300;
+
+  /* États réels (toujours avec un mot) */
+  --danger: #A4243B;
+  --success: #2B6B49;
+  --warn: #8A5A00;
+
+  /* Typographie */
+  --font-ui: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-write: 'Source Serif 4', Georgia, serif;
+  --t-12: 0.75rem;
+  --t-14: 0.875rem;
+  --t-16: 1rem;
+  --t-20: 1.25rem;
+  --t-28: 1.75rem;
+  --t-40: 2.5rem;
+
+  /* Espacement (base 4 px) */
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 24px;
+  --s-6: 32px;
+  --s-7: 48px;
+  --s-8: 64px;
+
+  /* Rayons par type */
+  --r-control: 4px;
+  --r-card: 6px;
+  --r-sheet: 10px;
+  --r-tag: 999px;
+
+  /* Ombres : deux couches, teintées vers la teinte 250 */
+  --shadow-1: 0 1px 1px oklch(26% 0.025 251 / 0.06), 0 1px 3px oklch(26% 0.025 251 / 0.1);
+  --shadow-2: 0 2px 4px oklch(26% 0.025 251 / 0.08), 0 8px 24px oklch(26% 0.025 251 / 0.14);
+  --shadow-3: 0 4px 8px oklch(26% 0.025 251 / 0.1), 0 16px 48px oklch(26% 0.025 251 / 0.18);
+
+  /* Mouvement */
+  --ease: cubic-bezier(0.23, 1, 0.32, 1);
+  --d-press: 120ms;
+  --d-std: 200ms;
+  --d-max: 300ms;
+
+  /* Mesures */
+  --control-h: 40px;
+  --nav-h: 56px;
+}
+@media (max-width: 800px) { :root { --control-h: 44px; } }
+
+/* Alias transitoires pour l'ancien CSS : supprimés à la phase 3. */
+:root {
+  --paper: var(--bg); --paper-2: var(--surface-2); --card: var(--surface); --ink: var(--text); --ink-soft: var(--text-2);
+  --line: var(--border); --accent: var(--brand); --ochre: var(--own); --ochre-ink: var(--own-ink); --focus: var(--text);
+  --serif-title: var(--font-ui); --serif-body: var(--font-ui);
+}
