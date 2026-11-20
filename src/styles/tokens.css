@@ -18,9 +18,9 @@
   --brand-press: #902F18;
   --on-brand: #FBF3E2;
 
-  /* Or de laurier et de bronze : élément actif, filets, ornements */
-  --gold: #D4AF5F;
-  --gold-dim: #8F7435;
+  /* Travertin et pierre : élément actif, titres, filets, ornements (plus d'or) */
+  --travertine: #E0D2B4;
+  --stone-line: #7A6A52;
 
   /* Marbre des colonnes (ornement, toujours estompé) */
   --marble: #E8DFCB;

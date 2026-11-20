@@ -7,7 +7,7 @@ Source de vérité visuelle. Toute valeur utilisée dans l'interface vient d'ici
 - **Pour qui** : une seule personne, chercheuse ou chercheur autodidacte, qui explore 87 philosophies. Usage régulier, sessions longues d'écriture, sur ordinateur et téléphone.
 - **Tâche principale** : tourner la roue, puis écrire sa propre note sur la case tirée.
 - **Sentiment** : *atelier de chercheur*. Concret, précis, calme, au service du travail.
-- **Direction** : « Rome en pierre sombre » (voir §15) : bruns d'ombre, parchemin, rouge pompéien et or, colonnes, frise de grecques, arcades. Remplace l'ancien « Carnet de labo » gris-bleu ; reste : le catalogue numéroté et **l'aplat de couleur de la famille** sur la carte de résultat uniquement.
+- **Direction** : « Rome en pierre sombre » (voir §15) : bruns d'ombre, parchemin, rouge pompéien et pierre claire, colonnes, frise de grecques, arcades. Remplace l'ancien « Carnet de labo » gris-bleu ; reste : le catalogue numéroté et **l'aplat de couleur de la famille** sur la carte de résultat uniquement.
 - **Évoque** : précis, posé, concret.
 - **N'évoque pas** : ludique, criard. (Décoré et « d'époque » sont voulus depuis §15.)
 - **Mode** : sombre seulement (`color-scheme: dark`), décision de l'utilisateur ; un seul thème. Le Carnet (§12) garde son papier kraft clair.
@@ -188,23 +188,23 @@ Demande : « mode sombre avec beaucoup de brun, du beige, quelque chose d'ancien
 | `--text-3` | `#8A785F` | éléments désactivés seulement |
 | `--brand` / `-hover` / `-press` | `#A8391F` / `#BC452A` / `#902F18` | rouge pompéien : actions principales |
 | `--on-brand` | `#FBF3E2` | texte sur `--brand` et sur les aplats |
-| `--gold` | `#D4AF5F` | or de laurier : élément actif, titres d'écran, marque, repère de la roue |
-| `--gold-dim` | `#8F7435` | or de bronze : filets, cadres, frise |
+| `--travertine` | `#E0D2B4` | travertin clair : élément actif, titres d'écran, marque, repère de la roue |
+| `--stone-line` | `#7A6A52` | brun de pierre : filets, cadres, frise, médaillons |
 | `--marble` | `#E8DFCB` | colonnes (toujours estompées à 22 %) |
 | `--own` / `--own-bg` / `--own-ink` | `#D4A64A` / `#3D2F17` / `#F0D9A0` | sujet propre |
 | `--danger` / `--success` / `--warn` | `#F0958F` / `#8FD0A4` / `#E7B866` | états réels, toujours avec un mot |
 
 Ombres : mêmes niveaux et mêmes couches, teintées de brun (`oklch(8% 0.02 60 / …)`, 30–60 %).
 
-**Typographie** : ajout de **Cinzel** (600, 700), capitales gravées de type inscription romaine, pour la marque, les onglets de navigation, `h1`, `h2`, le nom sur la carte de résultat, « Choisir son époque » et l'étiquette de la roue. Le reste ne change pas (Plex Sans pour l'interface, Source Serif pour les mots de l'utilisateur, Shantell Sans pour le Carnet). Titres d'écran (`h1`) en `--gold`.
+**Typographie** : ajout de **Cinzel** (600, 700), capitales gravées de type inscription romaine, pour la marque, les onglets de navigation, `h1`, `h2`, le nom sur la carte de résultat, « Choisir son époque » et l'étiquette de la roue. Le reste ne change pas (Plex Sans pour l'interface, Source Serif pour les mots de l'utilisateur, Shantell Sans pour le Carnet). Titres d'écran (`h1`) en `--travertine`.
 
-**Ornements** (motifs SVG dans `src/styles/roman.css`, jamais de dégradé) :
+**Ornements** (motifs SVG dans `src/styles/roman.css`, jamais de dégradé, **plus d'or** : tout est en travertin, marbre et brun de pierre) :
 - grain de pierre fin sur tout le fond ;
-- **frise de grecques** (méandre, 12 px) sous l'en-tête, avec filet or de bronze de 2 px ;
+- **colonnes de marbre ioniques** (chapiteau à volutes, fût cannelé, base) de chaque côté de l'écran dès 900 px : 40 px de large, 56 px dès 1 400 px, à 45 % d'opacité ; le contenu est décalé pour qu'aucune colonne ne le recouvre ;
+- **frise de grecques** (méandre, 12 px) sous l'en-tête, filet de pierre de 2 px ;
 - **temple** (fronton + 4 colonnes) devant le nom de l'application ;
-- **colonnes de marbre ioniques** de chaque côté de l'écran, à partir de 1 400 px, derrière le contenu, sauf sur la roue (pleine largeur) ;
-- **filet à losange** sous chaque titre d'écran ;
-- **cadres doubles** (bordure or de bronze + filet intérieur) sur cartes, messages et « Choisir son époque » ;
-- **portique d'arcades** au pied des écrans hors Carnet (masqué sur téléphone) ;
-- or `--gold` pour tout élément actif (onglet, navigation du bas, époque choisie).
-Le Carnet (§12) ne reçoit ni cadres ni capitales : il garde son papier et son écriture à la main.
+- **frise des dieux** au pied des écrans : sept médaillons au trait, Jupiter (foudre), Minerve (hibou), Mars (casque), Apollon (lyre), Mercure (caducée), Neptune (trident), Vénus (coquille) ;
+- **portique d'arcades** sous la frise des dieux (masqué sur téléphone) ;
+- **filet à losange** sous chaque titre d'écran ; **cadres doubles** sur cartes, messages et « Choisir son époque » ;
+- élément actif (onglet, navigation du bas, époque choisie) en `--travertine`.
+Le Carnet (§12) ne reçoit ni cadres, ni colonnes de contenu, ni capitales : il garde son papier et son écriture à la main.
