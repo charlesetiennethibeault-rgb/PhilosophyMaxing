@@ -1,4 +1,5 @@
 /** Aides visuelles. Les valeurs viennent de design.md et de src/styles/tokens.css. */
+import { getLang, t } from '../i18n'
 
 const luminance = (hex: string) => {
   const n = parseInt(hex.slice(1), 16)
@@ -30,8 +31,9 @@ export function aplatColor(hex: string, extra = 0): string {
   return mix(hex, TEXT, Math.min(0.95, t + extra))
 }
 
-/** Écrit « Propre au stoïcisme » avec l'article voulu. */
-export function ownLabel(philosophyName: string): string {
+/** Écrit « Propre au stoïcisme » avec l'article voulu (en anglais : « Specific to Stoicism »). */
+export function ownLabel(philosophyName: string, ref?: string): string {
+  if (getLang() === 'en') return t('entry.own', { ref: ref ?? philosophyName })
   const n = philosophyName.replace(/ \(.*\)$/, '')
   // Les noms de courants en « -isme » prennent l'article ; les autres (noms propres, traditions) restent tels quels.
   if (/^\S+[iï]sme$/i.test(n.split(' ')[0])) {
@@ -41,8 +43,9 @@ export function ownLabel(philosophyName: string): string {
   return `Propre à ${n}`
 }
 
-/** « le stoïcisme », « l'épicurisme » ; les noms propres et traditions restent tels quels. */
-export function withArticle(philosophyName: string): string {
+/** « le stoïcisme », « l'épicurisme » ; les noms propres et traditions restent tels quels. En anglais : « the Stoics », « Stoicism ». */
+export function withArticle(philosophyName: string, ref?: string): string {
+  if (getLang() === 'en') return ref ?? philosophyName
   const n = philosophyName.replace(/ \(.*\)$/, '')
   if (/^\S+[iï]sme$/i.test(n.split(' ')[0])) {
     const lower = n.charAt(0).toLowerCase() + n.slice(1)
@@ -51,8 +54,16 @@ export function withArticle(philosophyName: string): string {
   return n
 }
 
-/** Question de recherche lisible : remplace [philosophie] et corrige « de le » en « du », « de les » en « des ». */
-export function frQuestion(question: string, philosophyName: string): string {
+/**
+ * Question de recherche lisible.
+ * Français : remplace [philosophie] et corrige « de le » en « du », « de les » en « des ».
+ * Anglais : remplace [philosophy] et accorde le verbe (« What does Stoicism… », « What do the Sophists… »).
+ */
+export function frQuestion(question: string, philosophyName: string, ref?: string, plural?: boolean): string {
+  if (question.includes('[philosophy]')) {
+    const r = ref ?? philosophyName
+    return question.replace(/\bdoes \[philosophy\]/, plural ? `do ${r}` : `does ${r}`).replace('[philosophy]', r)
+  }
   return question
     .replace('[philosophie]', withArticle(philosophyName))
     .replace(/\bde le /g, 'du ')
@@ -60,8 +71,8 @@ export function frQuestion(question: string, philosophyName: string): string {
     .replace(/ \?$/, ' ?')
 }
 
-/** Numéro de catalogue « N° 042 / 087 ». */
+/** Numéro de catalogue « N° 042 / 087 » (en anglais « No. 042 / 087 »). */
 export const catalogNumber = (index: number, total: number) =>
-  `N° ${String(index).padStart(3, '0')} / ${String(total).padStart(3, '0')}`
+  t('catalog.number', { n: String(index).padStart(3, '0'), total: String(total).padStart(3, '0') })
 
 export const nb = ' '

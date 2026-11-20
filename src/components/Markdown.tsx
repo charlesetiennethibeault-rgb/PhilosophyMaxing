@@ -1,9 +1,11 @@
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
+import { useLang } from '../i18n'
 
 /** Aperçu Markdown : titres, listes, gras, liens, tableaux. Le HTML brut n'est pas interprété. */
 export default function Markdown({ text }: { text: string }) {
-  if (!text.trim()) return <p className="md-empty">Rien à afficher pour l’instant.</p>
+  const { t } = useLang()
+  if (!text.trim()) return <p className="md-empty">{t('md.empty')}</p>
   return (
     <div className="md">
       <ReactMarkdown

@@ -23,6 +23,9 @@ export interface Philosophy {
   synthesis: string
   opinion: string
   context: string
+  /** Affichage seulement (jamais enregistré) : comment en parler en anglais (« the Stoics »), et si c'est un pluriel. */
+  ref?: string
+  plural?: boolean
 }
 
 export interface Topic {

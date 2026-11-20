@@ -2,6 +2,7 @@ import type { ReactNode } from 'react'
 import FamilyMark from './FamilyMark'
 import { ERAS, emptyFilters } from '../lib/draw'
 import { REGIONS } from '../lib/seed'
+import { regionLabel, useLang } from '../i18n'
 import { useData } from '../lib/DataContext'
 import type { DrawSettings, EraId, Filters } from '../lib/types'
 
@@ -34,6 +35,7 @@ function Group({ title, count, defaultOpen, children }: { title: string; count?:
 }
 
 export default function FiltersPanel(p: Props) {
+  const { t, tRich } = useLang()
   const { families } = useData()
   const { filters: f } = p
   const s = p.settings
@@ -44,20 +46,20 @@ export default function FiltersPanel(p: Props) {
   return (
     <div className="filters">
       <p className="fsummary" aria-live="polite">
-        <span><strong>{p.wheelCount}</strong> philosophie{p.wheelCount > 1 ? 's' : ''} sur la roue</span>
+        <span>{tRich('filters.summary', { count: p.wheelCount }, { b: (c) => <strong>{c}</strong> })}</span>
         {active > 0 && (
-          <button type="button" className="btn btn-ghost btn-sm" onClick={() => p.onFilters(emptyFilters)}>Effacer les filtres</button>
+          <button type="button" className="btn btn-ghost btn-sm" onClick={() => p.onFilters(emptyFilters)}>{t('common.clearFilters')}</button>
         )}
       </p>
 
       {p.hideEra && f.yearRange && (
         <p className="meta year-note">
-          Plage d’années active : {f.yearRange[0]} à {f.yearRange[1]}
-          <button type="button" className="btn btn-ghost btn-sm" onClick={() => set({ yearRange: null })}>Retirer</button>
+          {t('filters.yearActive', { from: f.yearRange[0], to: f.yearRange[1] })}
+          <button type="button" className="btn btn-ghost btn-sm" onClick={() => set({ yearRange: null })}>{t('common.remove')}</button>
         </p>
       )}
 
-      <Group title="Familles" count={f.families.length} defaultOpen>
+      <Group title={t('filters.families')} count={f.families.length} defaultOpen>
         {families.map((fam, i) => (
           <label key={fam.id} className="check">
             <input type="checkbox" checked={f.families.includes(fam.id)} onChange={() => set({ families: toggle(f.families, fam.id) })} />
@@ -68,24 +70,24 @@ export default function FiltersPanel(p: Props) {
       </Group>
 
       {!p.hideEra && (
-      <Group title="Époque" count={f.eras.length + (f.yearRange ? 1 : 0)}>
+      <Group title={t('filters.era')} count={f.eras.length + (f.yearRange ? 1 : 0)}>
         {ERAS.map((e) => (
           <label key={e.id} className="check">
             <input type="checkbox" checked={f.eras.includes(e.id as EraId)} onChange={() => set({ eras: toggle(f.eras, e.id as EraId) })} />
-            <span>{e.label}</span>
+            <span>{t(`eraFilter.${e.id}`)}</span>
           </label>
         ))}
         <label className="check">
           <input type="checkbox" checked={!!f.yearRange} onChange={(e) => set({ yearRange: e.target.checked ? [-600, 2000] : null })} />
-          <span>Choisir une plage d’années</span>
+          <span>{t('filters.chooseYears')}</span>
         </label>
         {f.yearRange && (
           <div className="range">
-            <label>De <strong>{range[0]}</strong>
+            <label>{t('common.from')} <strong>{range[0]}</strong>
               <input type="range" min={-3000} max={2020} step={10} value={range[0]}
                 onChange={(e) => set({ yearRange: [Math.min(+e.target.value, range[1]), range[1]] })} />
             </label>
-            <label>À <strong>{range[1]}</strong>
+            <label>{t('common.to')} <strong>{range[1]}</strong>
               <input type="range" min={-3000} max={2020} step={10} value={range[1]}
                 onChange={(e) => set({ yearRange: [range[0], Math.max(+e.target.value, range[0])] })} />
             </label>
@@ -94,48 +96,48 @@ export default function FiltersPanel(p: Props) {
       </Group>
       )}
 
-      <Group title="Région" count={f.regions.length}>
+      <Group title={t('filters.region')} count={f.regions.length}>
         {REGIONS.map((r) => (
           <label key={r} className="check">
             <input type="checkbox" checked={f.regions.includes(r)} onChange={() => set({ regions: toggle(f.regions, r) })} />
-            <span>{r}</span>
+            <span>{regionLabel(r)}</span>
           </label>
         ))}
       </Group>
 
-      <Group title="Fiches" count={(f.favoritesOnly ? 1 : 0) + (f.toVerifyOnly ? 1 : 0)}>
+      <Group title={t('filters.entries')} count={(f.favoritesOnly ? 1 : 0) + (f.toVerifyOnly ? 1 : 0)}>
         <label className="check">
           <input type="checkbox" checked={f.favoritesOnly} onChange={(e) => set({ favoritesOnly: e.target.checked })} />
-          <span>Favoris seulement</span>
+          <span>{t('common.favoritesOnly')}</span>
         </label>
         <label className="check">
           <input type="checkbox" checked={f.toVerifyOnly} onChange={(e) => set({ toVerifyOnly: e.target.checked })} />
-          <span>Fiches à vérifier seulement</span>
+          <span>{t('filters.toVerifyOnly')}</span>
         </label>
       </Group>
 
       {s && p.onSettings && p.onResetHistory && (
-        <Group title="Tirage" defaultOpen>
+        <Group title={t('filters.draw')} defaultOpen>
           <label className="check">
             <input type="checkbox" checked={s.noRepeat} onChange={(e) => p.onSettings?.({ noRepeat: e.target.checked })} />
-            <span>Ne pas retomber sur une case déjà tirée</span>
+            <span>{t('filters.noRepeat')}</span>
           </label>
           <label className="check">
             <input type="checkbox" checked={s.onlyRemaining} onChange={(e) => p.onSettings?.({ onlyRemaining: e.target.checked })} />
-            <span>Seulement ce qui reste à faire (hors approfondi)</span>
+            <span>{t('filters.onlyRemaining')}</span>
           </label>
           <label className="check">
             <input type="checkbox" checked={s.discovery} onChange={(e) => p.onSettings?.({ discovery: e.target.checked })} />
-            <span>Mode découverte : favoriser ce que j’ai le moins creusé</span>
+            <span>{t('filters.discovery')}</span>
           </label>
           <label className="check">
             <input type="checkbox" checked={s.sound} onChange={(e) => p.onSettings?.({ sound: e.target.checked })} />
-            <span>Son de la roue</span>
+            <span>{t('filters.sound')}</span>
           </label>
           <button
             type="button" className="btn btn-danger btn-sm" disabled={!p.historyCount}
-            onClick={() => { if (window.confirm('Réinitialiser tout l’historique des tirages ? Tes notes ne sont pas touchées.')) p.onResetHistory?.() }}
-          >Réinitialiser l’historique ({p.historyCount ?? 0})</button>
+            onClick={() => { if (window.confirm(t('filters.resetConfirm'))) p.onResetHistory?.() }}
+          >{t('filters.resetHistory', { count: p.historyCount ?? 0 })}</button>
         </Group>
       )}
     </div>

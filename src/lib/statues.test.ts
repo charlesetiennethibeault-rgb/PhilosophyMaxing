@@ -52,6 +52,6 @@ describe('statues du créateur', () => {
   it('la légende dit clairement ce qu’on voit', () => {
     expect(statueCaption({ philosophy: 'x', who: 'Platon', symbolic: false, material: 'marbre', file: 'x.jpg', page: '', author: '', license: '' })).toBe('Statue de Platon')
     expect(statueCaption({ philosophy: 'x', who: 'Kant', symbolic: false, material: 'bronze', file: 'x.jpg', page: '', author: '', license: '' })).toBe('Statue en bronze de Kant')
-    expect(statueCaption({ philosophy: 'x', who: 'Ma’ât', symbolic: true, material: 'pierre', file: 'x.jpg', page: '', author: '', license: '' })).toBe('Figure symbolique : Ma’ât')
+    expect(statueCaption({ philosophy: 'x', who: 'Ma’ât', symbolic: true, material: 'pierre', file: 'x.jpg', page: '', author: '', license: '' })).toBe('Figure symbolique\u00A0: Ma’ât')
   })
 })

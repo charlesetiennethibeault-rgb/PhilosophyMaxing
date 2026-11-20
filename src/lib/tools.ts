@@ -1,4 +1,5 @@
 import { ERAS, eraOf, topicsFor } from './draw'
+import { getLang, t } from '../i18n'
 import { withArticle } from './ui'
 import { cellKey, type Draw, type Family, type Note, type NoteStatus, type Philosophy, type Synthesis, type Theme, type Topic } from './types'
 
@@ -96,8 +97,10 @@ export function shouldSuggestSynthesis(philosophyId: string, theme: Theme, topic
   return themeReady(philosophyId, theme.id, topics, statuses) && !(s && s.body.trim())
 }
 
-export const synthesisQuestion = (philosophyName: string, themeName: string) =>
-  `Que dit ${withArticle(philosophyName)} de « ${themeName.toLowerCase()} », tous sujets confondus ?`
+export const synthesisQuestion = (philosophyName: string, themeName: string, ref?: string, plural?: boolean) =>
+  t(plural && getLang() === 'en' ? 'entry.themeQuestionPlural' : 'entry.themeQuestion', {
+    ref: withArticle(philosophyName, ref), theme: themeName.toLowerCase(),
+  })
 
 /* ---------- réordonner ---------- */
 

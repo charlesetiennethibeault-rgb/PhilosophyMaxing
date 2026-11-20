@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { BookOpen, ChartNoAxesColumn, CircleAlert, Check, Columns2, LogOut, SlidersHorizontal, Target, UserRound, Volume2, VolumeX, X } from 'lucide-react'
+import { BookOpen, ChartNoAxesColumn, CircleAlert, Check, Columns2, Languages, LogOut, SlidersHorizontal, Target, UserRound, Volume2, VolumeX, X } from 'lucide-react'
 import Wheel, { type WheelHandle, type WheelItem } from './components/Wheel'
 import EraStrip from './components/EraStrip'
 import FiltersPanel from './components/FiltersPanel'
@@ -12,7 +12,7 @@ import { DataProvider, useData } from './lib/DataContext'
 import { useAppState } from './lib/store'
 import type { AppState } from './lib/appState'
 import { availableTopics, drawPhilosophy, drawTopic, emptyFilters, eraOf, progressOf, wheelPhilosophies, type DrawContext } from './lib/draw'
-import { WHEEL_ERAS, eraSelection, erasForWheelEra, orderForWheel, wheelEraForFilters, wheelEraInfo, wheelEraOf, type WheelEra } from './lib/wheelEras'
+import { WHEEL_ERAS, eraSelection, erasForWheelEra, orderForWheel, wheelEraForFilters, wheelEraOf, type WheelEra } from './lib/wheelEras'
 import { cellKey, emptyNote, type Topic } from './lib/types'
 import { RECORD_DRAWS } from './lib/config'
 import { OWN, aplatColor } from './lib/ui'
@@ -20,13 +20,15 @@ import Monuments from './components/Monuments'
 import { chime } from './lib/audio'
 import { href, useRoute } from './lib/route'
 import { useLoadingIndicator } from './lib/loading'
+import { useLang, type MsgKey } from './i18n'
+import { localizeFamily, localizePhilosophy, localizeTheme, localizeTopic } from './i18n/content'
 
-const NAV = [
-  { id: 'roue', label: 'Roue', Icon: Target },
-  { id: 'carnet', label: 'Carnet', Icon: BookOpen },
-  { id: 'comparer', label: 'Comparer', Icon: Columns2 },
-  { id: 'progression', label: 'Progression', Icon: ChartNoAxesColumn },
-] as const
+const NAV: { id: 'roue' | 'carnet' | 'comparer' | 'progression'; label: MsgKey; Icon: typeof Target }[] = [
+  { id: 'roue', label: 'nav.roue', Icon: Target },
+  { id: 'carnet', label: 'nav.carnet', Icon: BookOpen },
+  { id: 'comparer', label: 'nav.comparer', Icon: Columns2 },
+  { id: 'progression', label: 'nav.progression', Icon: ChartNoAxesColumn },
+]
 
 function useReducedMotion() {
   const [r, setR] = useState(() => window.matchMedia('(prefers-reduced-motion: reduce)').matches)
@@ -40,14 +42,28 @@ function useReducedMotion() {
 }
 
 function SyncStatus({ sync }: { sync: AppState['sync'] }) {
-  if (sync === 'saved') return <span className="sync-status ok" role="status"><Check size={16} aria-hidden="true" /><span>Synchronisé</span></span>
-  if (sync === 'pending') return <span className="sync-status" role="status"><span>Envoi…</span></span>
-  return <span className="sync-status warn" role="status"><CircleAlert size={16} aria-hidden="true" /><span>Hors ligne</span></span>
+  const { t } = useLang()
+  if (sync === 'saved') return <span className="sync-status ok" role="status"><Check size={16} aria-hidden="true" /><span>{t('sync.synced')}</span></span>
+  if (sync === 'pending') return <span className="sync-status" role="status"><span>{t('sync.sending')}</span></span>
+  return <span className="sync-status warn" role="status"><CircleAlert size={16} aria-hidden="true" /><span>{t('sync.offline')}</span></span>
 }
 
-const TITLES: Record<string, string> = { roue: 'Roue', carnet: 'Carnet', note: 'Note', comparer: 'Comparer', progression: 'Progression' }
+/** Bascule français / anglais (le choix est gardé sur l'appareil). */
+function LanguageToggle() {
+  const { lang, setLang, t } = useLang()
+  const target = lang === 'fr' ? 'en' : 'fr'
+  return (
+    <button
+      type="button" className="icon-btn" lang={lang}
+      aria-label={t('lang.switchTo')} title={target === 'en' ? 'English' : 'Français'}
+      onClick={() => setLang(target)}
+    ><Languages size={20} aria-hidden="true" /></button>
+  )
+}
 
-function Workspace({ st, email, onSignOut }: { st: AppState; email: string; onSignOut: () => void }) {
+/** `st` : données traduites pour l'affichage. `raw` : données telles qu'enregistrées (pour Gérer seulement). */
+function Workspace({ st, raw, email, onSignOut }: { st: AppState; raw: AppState; email: string; onSignOut: () => void }) {
+  const { t, lang } = useLang()
   const reduced = useReducedMotion()
   const wheelRef = useRef<WheelHandle>(null)
   const { family } = useData()
@@ -62,14 +78,16 @@ function Workspace({ st, email, onSignOut }: { st: AppState; email: string; onSi
   const [topicItems, setTopicItems] = useState<Topic[]>([])
   const [live, setLive] = useState('')
   const [spinning, setSpinning] = useState(false)
-  const [message, setMessage] = useState<null | { text: string; action?: { label: string; run: () => void } }>(null)
+  const [message, setMessage] = useState<null | { text: MsgKey; action?: { label: MsgKey; run: () => void } }>(null)
   const [sheetOpen, setSheetOpen] = useState(false)
   const [drawerOpen, setDrawerOpen] = useState(false)
 
   // Titre de page, et focus sur le contenu à chaque changement d'écran (clavier et lecteurs d'écran).
   const first = useRef(true)
   useEffect(() => {
-    document.title = `${TITLES[view]} · PhilosophyMaxing`
+    document.title = `${t(`nav.${view}`)} · ${t('app.name')}`
+  }, [view, lang, t])
+  useEffect(() => {
     if (first.current) { first.current = false; return }
     const m = document.querySelector('main') as HTMLElement | null
     m?.setAttribute('tabindex', '-1')
@@ -121,12 +139,12 @@ function Workspace({ st, email, onSignOut }: { st: AppState; email: string; onSi
     [wheel, family],
   )
   const tpItems: WheelItem[] = useMemo(
-    () => topicItems.map((t, i) => ({
-      id: t.id,
-      label: t.short,
-      color: t.scope === 'own' ? OWN : aplatColor(family(current?.family ?? '').color, i % 2 ? 0.14 : 0),
-      star: t.scope === 'own',
-      status: st.statuses[cellKey(current?.id ?? '', t.id)] ?? 'empty',
+    () => topicItems.map((x, i) => ({
+      id: x.id,
+      label: x.short,
+      color: x.scope === 'own' ? OWN : aplatColor(family(current?.family ?? '').color, i % 2 ? 0.14 : 0),
+      star: x.scope === 'own',
+      status: st.statuses[cellKey(current?.id ?? '', x.id)] ?? 'empty',
     })),
     [topicItems, current, st.statuses, family],
   )
@@ -136,10 +154,10 @@ function Workspace({ st, email, onSignOut }: { st: AppState; email: string; onSi
 
   useEffect(() => { setLive(''); setMessage(null) }, [mode, wheel.length])
 
-  const exhaustedAction = (text: string, kind: 'no-match' | 'exhausted') =>
+  const exhaustedAction = (text: MsgKey, kind: 'no-match' | 'exhausted') =>
     setMessage(kind === 'no-match'
-      ? { text, action: { label: 'Effacer les filtres', run: () => st.setFilters(emptyFilters) } }
-      : { text, action: { label: 'Autoriser les cases déjà tirées', run: () => st.setSettings({ noRepeat: false, onlyRemaining: false }) } })
+      ? { text, action: { label: 'common.clearFilters', run: () => st.setFilters(emptyFilters) } }
+      : { text, action: { label: 'wheel.allowDrawn', run: () => st.setSettings({ noRepeat: false, onlyRemaining: false }) } })
 
   const spin = useCallback((power = 0.6) => {
     if (wheelRef.current?.isSpinning()) return
@@ -147,12 +165,7 @@ function Workspace({ st, email, onSignOut }: { st: AppState; email: string; onSi
     if (mode === 'philosophies') {
       const r = drawPhilosophy(ctx)
       if (!r.ok) {
-        exhaustedAction(
-          r.reason === 'no-match'
-            ? 'Aucune philosophie ne correspond à ces filtres. Retire un filtre pour élargir la roue.'
-            : 'Toutes les cases ont déjà été tirées avec ces réglages. Autorise les cases déjà tirées pour continuer, ou réinitialise l’historique.',
-          r.reason,
-        )
+        exhaustedAction(r.reason === 'no-match' ? 'wheel.noMatch' : 'wheel.exhausted', r.reason)
         return
       }
       setSpinning(true); setSheetOpen(false)
@@ -160,7 +173,7 @@ function Workspace({ st, email, onSignOut }: { st: AppState; email: string; onSi
     } else if (current) {
       const r = drawTopic(current.id, ctx)
       if (!r.ok) {
-        exhaustedAction('Tous les sujets de cette philosophie ont déjà été tirés. Autorise les cases déjà tirées pour continuer, ou réinitialise l’historique.', 'exhausted')
+        exhaustedAction('wheel.topicsExhausted', 'exhausted')
         return
       }
       setTopicItems(r.wheel)
@@ -180,11 +193,11 @@ function Workspace({ st, email, onSignOut }: { st: AppState; email: string; onSi
       setCurrentId(p.id); setSheetOpen(true)
       if (RECORD_DRAWS) st.addDraw({ type: 'philosophy', philosophy: p.id })
     } else if (current) {
-      const t = topicItems[index]
-      if (!t) return
+      const x = topicItems[index]
+      if (!x) return
       setSheetOpen(false)
-      if (RECORD_DRAWS) st.addDraw({ type: 'topic', philosophy: current.id, topic: t.id })
-      navigate(href(['note', current.id, t.id]))
+      if (RECORD_DRAWS) st.addDraw({ type: 'topic', philosophy: current.id, topic: x.id })
+      navigate(href(['note', current.id, x.id]))
     }
   }
 
@@ -192,18 +205,18 @@ function Workspace({ st, email, onSignOut }: { st: AppState; email: string; onSi
     if (!current) return
     const list = availableTopics(current.id, ctx)
     setTopicItems(list); setMode('topics'); setSheetOpen(false)
-    if (list.length === 0) exhaustedAction('Tous les sujets de cette philosophie ont déjà été tirés. Autorise les cases déjà tirées pour continuer.', 'exhausted')
+    if (list.length === 0) exhaustedAction('wheel.topicsExhaustedShort', 'exhausted')
   }
   const backToPhilosophies = () => { setMode('philosophies'); setSheetOpen(false) }
 
-  const hint = mode === 'philosophies' ? `${wheel.length} philosophie${wheel.length > 1 ? 's' : ''} sur la roue` : `Sujets de ${current?.name ?? ''}`
+  const hint = mode === 'philosophies' ? t('wheel.hintPhilosophies', { count: wheel.length }) : t('wheel.hintTopics', { name: current?.name ?? '' })
   const progress = current ? progressOf(current.id, st.topics, st.statuses) : { deep: 0, total: 0 }
 
   const noteP = view === 'note' ? st.philosophies.find((p) => p.id === route.segments[1]) : undefined
-  const noteT = view === 'note' ? st.topics.find((t) => t.id === route.segments[2]) : undefined
+  const noteT = view === 'note' ? st.topics.find((x) => x.id === route.segments[2]) : undefined
 
   const side = (
-    <aside className={`side${sheetOpen ? ' open' : ''}`} aria-label="Philosophie tirée" aria-live="polite">
+    <aside className={`side${sheetOpen ? ' open' : ''}`} aria-label={t('wheel.drawnAside')} aria-live="polite">
       {current ? (
         <PhilosophyCard
           key={current.id}
@@ -214,14 +227,15 @@ function Workspace({ st, email, onSignOut }: { st: AppState; email: string; onSi
         />
       ) : (
         <div className="empty empty-side">
-          <h2>Aucune philosophie tirée</h2>
-          <p>Appuie sur « Tirer une philosophie » : sa fiche s’affiche ici, avec ses dates, son fondateur et ses principaux acteurs. Tu choisis ensuite un sujet à explorer.</p>
+          <h2>{t('wheel.noneTitle')}</h2>
+          <p>{t('wheel.noneText')}</p>
         </div>
       )}
     </aside>
   )
 
   const noteMissing = view === 'note' && (!noteP || !noteT)
+  const wheelObject = t(`era.${displayEra}.object`)
 
   return (
     <div className="app">
@@ -235,26 +249,27 @@ function Workspace({ st, email, onSignOut }: { st: AppState; email: string; onSi
       <a
         className="skip-link" href="#main"
         onClick={(e) => { e.preventDefault(); const m = document.querySelector('main') as HTMLElement | null; m?.setAttribute('tabindex', '-1'); m?.focus() }}
-      >Aller au contenu</a>
+      >{t('common.skipToContent')}</a>
 
       <header className="topbar">
-        <a className="brand" href={href(['roue'])}>PhilosophyMaxing</a>
-        <nav className="topnav" aria-label="Navigation principale">
+        <a className="brand" href={href(['roue'])}>{t('app.name')}</a>
+        <nav className="topnav" aria-label={t('nav.main')}>
           {NAV.map(({ id, label }) => (
-            <a key={id} href={href([id])} aria-current={view === id || (view === 'note' && id === 'carnet') ? 'page' : undefined}>{label}</a>
+            <a key={id} href={href([id])} aria-current={view === id || (view === 'note' && id === 'carnet') ? 'page' : undefined}>{t(label)}</a>
           ))}
         </nav>
         <div className="topbar-right">
           <SyncStatus sync={st.sync} />
+          <LanguageToggle />
           <button
             type="button" className="icon-btn" aria-pressed={st.settings.sound}
-            aria-label={st.settings.sound ? 'Couper le son de la roue' : 'Activer le son de la roue'}
+            aria-label={st.settings.sound ? t('sound.mute') : t('sound.unmute')}
             onClick={() => st.setSettings({ sound: !st.settings.sound })}
           >{st.settings.sound ? <Volume2 size={20} aria-hidden="true" /> : <VolumeX size={20} aria-hidden="true" />}</button>
-          <a className="icon-btn desktop-only" href={href(['carnet', 'gerer', 'compte'])} aria-label="Compte" title={email}><UserRound size={20} aria-hidden="true" /></a>
+          <a className="icon-btn desktop-only" href={href(['carnet', 'gerer', 'compte'])} aria-label={t('nav.account')} title={email}><UserRound size={20} aria-hidden="true" /></a>
           {view === 'roue' && (
             <button type="button" className="btn btn-secondary btn-sm filters-toggle" onClick={() => setDrawerOpen(true)}>
-              <SlidersHorizontal size={16} aria-hidden="true" />Filtres
+              <SlidersHorizontal size={16} aria-hidden="true" />{t('nav.filters')}
             </button>
           )}
         </div>
@@ -263,9 +278,9 @@ function Workspace({ st, email, onSignOut }: { st: AppState; email: string; onSi
       {noteMissing ? (
         <main className="screen" id="main">
           <div className="empty">
-            <h1>Cette note est introuvable</h1>
-            <p>La philosophie ou le sujet n’existe plus : il a peut-être été supprimé depuis Gérer.</p>
-            <a className="btn btn-secondary" href={href(['roue'])}>Retour à la roue</a>
+            <h1>{t('wheel.noteMissingTitle')}</h1>
+            <p>{t('wheel.noteMissingText')}</p>
+            <a className="btn btn-secondary" href={href(['roue'])}>{t('common.backToWheel')}</a>
           </div>
         </main>
       ) : view === 'note' && noteP && noteT ? (
@@ -279,7 +294,7 @@ function Workspace({ st, email, onSignOut }: { st: AppState; email: string; onSi
         />
       ) : view === 'carnet' ? (
         <Carnet
-          st={st} sub={carnetSub} section={route.segments[2]} ficheId={ficheId}
+          st={st} raw={raw} sub={carnetSub} section={route.segments[2]} ficheId={ficheId}
           query={route.params.get('q') ?? ''} onQuery={(q) => setParams({ q: q || undefined })}
           email={email} onSignOut={onSignOut}
         />
@@ -289,10 +304,10 @@ function Workspace({ st, email, onSignOut }: { st: AppState; email: string; onSi
         <Progress philosophies={st.philosophies} topics={st.topics} statuses={st.statuses} />
       ) : (
         <main className="screen layout" id="main">
-          <div className={`filters-col${drawerOpen ? ' open' : ''}`} role={drawerOpen ? 'dialog' : undefined} aria-label="Filtres et réglages">
+          <div className={`filters-col${drawerOpen ? ' open' : ''}`} role={drawerOpen ? 'dialog' : undefined} aria-label={t('filters.dialog')}>
             <div className="drawer-head">
-              <h2>Filtres et réglages</h2>
-              <button type="button" className="icon-btn" aria-label="Fermer les filtres" onClick={() => setDrawerOpen(false)}><X size={20} aria-hidden="true" /></button>
+              <h2>{t('filters.dialog')}</h2>
+              <button type="button" className="icon-btn" aria-label={t('filters.close')} onClick={() => setDrawerOpen(false)}><X size={20} aria-hidden="true" /></button>
             </div>
             <FiltersPanel
               filters={st.filters} settings={st.settings}
@@ -302,12 +317,12 @@ function Workspace({ st, email, onSignOut }: { st: AppState; email: string; onSi
             />
             <div className="drawer-account">
               <p className="meta">{email}</p>
-              <button type="button" className="btn btn-secondary btn-sm" onClick={onSignOut}><LogOut size={16} aria-hidden="true" />Me déconnecter</button>
+              <button type="button" className="btn btn-secondary btn-sm" onClick={onSignOut}><LogOut size={16} aria-hidden="true" />{t('common.signOut')}</button>
             </div>
           </div>
           {drawerOpen && <div className="scrim" onClick={() => setDrawerOpen(false)} />}
 
-          <section className="center" aria-label="Roue">
+          <section className="center" aria-label={t('wheel.section')}>
             {mode === 'philosophies' && (
               <EraStrip value={eraSelection(st.filters.eras)} counts={eraCounts} onChange={(w) => st.setFilters({ ...st.filters, eras: erasForWheelEra(w) })} />
             )}
@@ -320,7 +335,7 @@ function Workspace({ st, email, onSignOut }: { st: AppState; email: string; onSi
               sound={st.settings.sound}
               reducedMotion={reduced}
               disabled={spinning}
-              ariaLabel={mode === 'philosophies' ? `Roue des philosophies (${wheelEraInfo(displayEra).object}) : appuyer pour tourner` : `Roue des sujets (${wheelEraInfo(displayEra).object}) : appuyer pour tourner`}
+              ariaLabel={t(mode === 'philosophies' ? 'wheel.ariaPhilosophies' : 'wheel.ariaTopics', { object: wheelObject })}
               onLive={(i) => setLive(items[i]?.label ?? '')}
               onStop={onStop}
               onFlick={spin}
@@ -330,21 +345,21 @@ function Workspace({ st, email, onSignOut }: { st: AppState; email: string; onSi
                 type="button" disabled={spinning} onClick={() => spin(0.6)}
                 className={`btn btn-lg ${mode === 'topics' || !current ? 'btn-primary' : 'btn-secondary'}`}
               >
-                {mode === 'philosophies' ? (current ? 'Tirer une autre philosophie' : 'Tirer une philosophie') : 'Tirer un sujet'}
+                {mode === 'philosophies' ? (current ? t('wheel.drawAnother') : t('wheel.drawPhilosophy')) : t('wheel.drawTopic')}
               </button>
-              {mode === 'topics' && <button type="button" className="btn btn-secondary btn-lg" onClick={backToPhilosophies}>Changer de philosophie</button>}
+              {mode === 'topics' && <button type="button" className="btn btn-secondary btn-lg" onClick={backToPhilosophies}>{t('wheel.changePhilosophy')}</button>}
             </div>
             {message && (
               <div className="message" role="alert">
-                <p>{message.text}</p>
+                <p>{t(message.text)}</p>
                 <div className="message-actions">
-                  {message.action && <button type="button" className="btn btn-secondary btn-sm" onClick={() => { message.action!.run(); setMessage(null) }}>{message.action.label}</button>}
-                  <button type="button" className="btn btn-ghost btn-sm" onClick={() => { if (window.confirm('Réinitialiser tout l’historique des tirages ?')) { st.resetHistory(); setMessage(null) } }}>Réinitialiser l’historique</button>
+                  {message.action && <button type="button" className="btn btn-secondary btn-sm" onClick={() => { message.action!.run(); setMessage(null) }}>{t(message.action.label)}</button>}
+                  <button type="button" className="btn btn-ghost btn-sm" onClick={() => { if (window.confirm(t('wheel.resetConfirm'))) { st.resetHistory(); setMessage(null) } }}>{t('wheel.resetHistory')}</button>
                 </div>
               </div>
             )}
             {current && !sheetOpen && (
-              <button type="button" className="btn btn-ghost btn-sm show-card" onClick={() => setSheetOpen(true)}>Voir la fiche : {current.name}</button>
+              <button type="button" className="btn btn-ghost btn-sm show-card" onClick={() => setSheetOpen(true)}>{t('wheel.viewEntry', { name: current.name })}</button>
             )}
           </section>
 
@@ -354,10 +369,10 @@ function Workspace({ st, email, onSignOut }: { st: AppState; email: string; onSi
 
       <Monuments />
 
-      <nav className="bottom-nav" aria-label="Navigation principale (téléphone)">
+      <nav className="bottom-nav" aria-label={t('nav.mainPhone')}>
         {NAV.map(({ id, label, Icon }) => (
           <a key={id} href={href([id])} aria-current={view === id || (view === 'note' && id === 'carnet') ? 'page' : undefined}>
-            <Icon size={20} aria-hidden="true" /><span>{label}</span>
+            <Icon size={20} aria-hidden="true" /><span>{t(label)}</span>
           </a>
         ))}
       </nav>
@@ -366,34 +381,43 @@ function Workspace({ st, email, onSignOut }: { st: AppState; email: string; onSi
 }
 
 function AppSkeleton() {
+  const { t } = useLang()
   return (
     <div className="app" aria-busy="true">
-      <header className="topbar"><span className="brand">PhilosophyMaxing</span></header>
+      <header className="topbar"><span className="brand">{t('app.name')}</span></header>
       <main className="screen layout skeleton-layout" id="main">
         <div className="filters-col"><div className="sk sk-line w60" /><div className="sk sk-line" /><div className="sk sk-line" /><div className="sk sk-line w80" /><div className="sk sk-line" /></div>
         <section className="center"><div className="sk sk-line w40 center-line" /><div className="sk sk-wheel" /><div className="sk sk-btn" /></section>
         <aside className="side"><div className="sk sk-head" /><div className="sk sk-line" /><div className="sk sk-line w80" /><div className="sk sk-line w60" /></aside>
       </main>
-      <p className="sr-only" role="status">Chargement de ton carnet…</p>
+      <p className="sr-only" role="status">{t('load.notebook')}</p>
     </div>
   )
 }
 
 export default function App({ userId, email, onSignOut }: { userId: string; email: string; onSignOut: () => void }) {
+  const { t, lang } = useLang()
   const st = useAppState(userId)
   const showSkeleton = useLoadingIndicator(!st.ready && !st.loadError)
+
+  // Textes traduits pour l'affichage. Les données enregistrées (`st`) ne sont jamais modifiées.
+  const philosophies = useMemo(() => st.philosophies.map((p) => localizePhilosophy(p, lang)), [st.philosophies, lang])
+  const topics = useMemo(() => st.topics.map((x) => localizeTopic(x, lang)), [st.topics, lang])
+  const families = useMemo(() => st.families.map((f) => localizeFamily(f, lang)), [st.families, lang])
+  const themes = useMemo(() => st.themes.map((x) => localizeTheme(x, lang)), [st.themes, lang])
+  const view: AppState = { ...st, philosophies, topics, families, themes }
 
   if (st.loadError) {
     return (
       <main className="login" id="main">
-        <h1>PhilosophyMaxing</h1>
+        <h1>{t('app.name')}</h1>
         <div className="message" role="alert">
-          <p><strong>Ton carnet n’a pas pu se charger.</strong></p>
+          <p><strong>{t('load.failedTitle')}</strong></p>
           <p>{st.loadError}</p>
-          <p className="meta">Vérifie ta connexion. Si le problème persiste, vérifie que le schéma SQL a été appliqué dans Supabase.</p>
+          <p className="meta">{t('load.failedHint')}</p>
           <div className="message-actions">
-            <button type="button" className="btn btn-primary btn-sm" onClick={() => void st.retryLoad()}>Réessayer</button>
-            <button type="button" className="btn btn-secondary btn-sm" onClick={onSignOut}>Me déconnecter</button>
+            <button type="button" className="btn btn-primary btn-sm" onClick={() => void st.retryLoad()}>{t('common.retry')}</button>
+            <button type="button" className="btn btn-secondary btn-sm" onClick={onSignOut}>{t('common.signOut')}</button>
           </div>
         </div>
       </main>
@@ -401,8 +425,8 @@ export default function App({ userId, email, onSignOut }: { userId: string; emai
   }
   if (!st.ready) return showSkeleton ? <AppSkeleton /> : <div className="app" aria-busy="true" />
   return (
-    <DataProvider families={st.families} themes={st.themes}>
-      <Workspace st={st} email={email} onSignOut={onSignOut} />
+    <DataProvider families={view.families} themes={view.themes}>
+      <Workspace st={view} raw={st} email={email} onSignOut={onSignOut} />
     </DataProvider>
   )
 }

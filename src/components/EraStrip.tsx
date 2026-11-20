@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { useLang } from '../i18n'
 import { demoItems, renderWheelBitmap } from '../lib/wheelRender'
 import { WHEEL_ERAS, type WheelEra } from '../lib/wheelEras'
 
@@ -45,6 +46,7 @@ interface Props {
  * Choisir une roue, c'est choisir la période : la grande roue ne contient que ses philosophies.
  */
 export default function EraStrip({ value, counts, onChange }: Props) {
+  const { t } = useLang()
   const size = useThumbSize()
   const move = (dir: 1 | -1) => {
     const i = value ? WHEEL_ERAS.findIndex((e) => e.id === value) : dir === 1 ? -1 : 0
@@ -56,8 +58,8 @@ export default function EraStrip({ value, counts, onChange }: Props) {
   return (
     <section className="era-picker" aria-labelledby="era-title">
       <div className="era-head">
-        <h2 id="era-title" className="era-title">Choisir son époque</h2>
-        <p className="era-sub">De la meule de pierre à la jante moderne : chaque période a sa roue.</p>
+        <h2 id="era-title" className="era-title">{t('era.title')}</h2>
+        <p className="era-sub">{t('era.sub')}</p>
       </div>
       <div
         className="era-strip" role="radiogroup" aria-labelledby="era-title"
@@ -70,12 +72,12 @@ export default function EraStrip({ value, counts, onChange }: Props) {
           <button
             key={e.id} type="button" role="radio" data-era={e.id}
             aria-checked={value === e.id} tabIndex={value === e.id || (value === null && i === 0) ? 0 : -1}
-            aria-label={`${e.label} : ${e.object}, ${counts[e.id]} philosophie${counts[e.id] > 1 ? 's' : ''}`}
+            aria-label={t('era.aria', { label: t(`era.${e.id}.label`), object: t(`era.${e.id}.object`), count: counts[e.id] })}
             className={`era-item${value === e.id ? ' on' : ''}`}
             onClick={() => onChange(e.id)}
           >
             <EraThumb era={e.id} size={size} />
-            <span className="era-name">{e.short}</span>
+            <span className="era-name">{t(`era.${e.id}.short`)}</span>
             <span className="era-count">{counts[e.id]}</span>
           </button>
         ))}

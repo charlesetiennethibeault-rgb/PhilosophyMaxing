@@ -27,10 +27,12 @@ import './styles/carnet.css'
 import App from './App'
 import Login, { rememberEmail, useSession } from './components/Login'
 import { supabase } from './lib/supabase'
+import { LangProvider, useLang } from './i18n'
 
 function Root() {
   const { session, loading } = useSession()
-  if (loading) return <main className="login"><h1>PhilosophyMaxing</h1></main>
+  const { t } = useLang()
+  if (loading) return <main className="login"><h1>{t('app.name')}</h1></main>
   if (!session) return <Login />
   if (session.user.email) rememberEmail(session.user.email)
   return (
@@ -45,7 +47,9 @@ function Root() {
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <Root />
+    <LangProvider>
+      <Root />
+    </LangProvider>
   </StrictMode>,
 )
 

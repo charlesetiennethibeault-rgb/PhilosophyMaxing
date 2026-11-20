@@ -6,6 +6,7 @@ import SyncLine from './SyncLine'
 import type { SyncStatus } from '../lib/sync'
 import { useData } from '../lib/DataContext'
 import { topicsFor } from '../lib/draw'
+import { useLang } from '../i18n'
 import { shouldSuggestSynthesis, synthesisQuestion, themeTopics } from '../lib/tools'
 import { href } from '../lib/route'
 import { cellKey, emptySynthesis, type NoteStatus, type Philosophy, type Synthesis, type Topic } from '../lib/types'
@@ -27,63 +28,60 @@ interface Props {
   onSynthesis: (s: Synthesis) => void
 }
 
-const LABEL: Record<NoteStatus, string> = { empty: 'vide', draft: 'brouillon', deep: 'approfondi' }
-
-function TopicLink({ philosophyId, t, status }: { philosophyId: string; t: Topic; status: NoteStatus }) {
+function TopicLink({ philosophyId, t: topic, status }: { philosophyId: string; t: Topic; status: NoteStatus }) {
+  const { t } = useLang()
   return (
     <li>
-      <a className={`topic-link${t.scope === 'own' ? ' own' : ''}`} href={href(['note', philosophyId, t.id])}>
+      <a className={`topic-link${topic.scope === 'own' ? ' own' : ''}`} href={href(['note', philosophyId, topic.id])}>
         <HandCheck status={status} />
-        <span className="topic-name">{t.scope === 'own' && <HandStar size={16} />}{t.name}</span>
-        <span className="topic-state">{LABEL[status]}</span>
+        <span className="topic-name">{topic.scope === 'own' && <HandStar size={16} />}{topic.name}</span>
+        <span className="topic-state">{t(`status.${status}`)}</span>
       </a>
     </li>
   )
 }
 
 export default function Fiche({ philosophy: p, number, total, topics, statuses, syntheses, sync, schemaReady, onPatch, onWrite, onSynthesis }: Props) {
+  const { t, tRich } = useLang()
   const { themes } = useData()
   const all = topicsFor(p.id, topics)
-  const deep = all.filter((t) => statuses[cellKey(p.id, t.id)] === 'deep').length
-  const own = all.filter((t) => t.scope === 'own')
+  const deep = all.filter((x) => statuses[cellKey(p.id, x.id)] === 'deep').length
+  const own = all.filter((x) => x.scope === 'own')
 
   return (
     <main className="screen fiche notebook" id="main">
       <div className="sheet">
-        <a className="btn btn-ghost btn-sm back" href={href(['carnet'])}><ArrowLeft size={16} aria-hidden="true" />Carnet</a>
+        <a className="btn btn-ghost btn-sm back" href={href(['carnet'])}><ArrowLeft size={16} aria-hidden="true" />{t('entry.back')}</a>
         <div className="fiche-grid">
           <PhilosophyCard variant="plain" philosophy={p} number={number} total={total} progress={{ deep, total: all.length }} onPatch={onPatch} />
 
           <div className="fiche-body">
             <section className="theme-block writings" aria-labelledby="writings-h">
               <div className="writings-head">
-                <h2 id="writings-h">Mes écrits sur {withArticle(p.name)}</h2>
+                <h2 id="writings-h">{t('entry.writingsOn', { ref: withArticle(p.name, p.ref) })}</h2>
                 {schemaReady && <SyncLine sync={sync} />}
               </div>
               {schemaReady ? (
                 <>
                   <MdField
-                    id="w-synthesis" label="Synthèse de la philosophie"
-                    hint={'En quelques lignes : l’idée centrale, ses arguments, ses limites.'}
+                    id="w-synthesis" label={t('entry.synthesis')}
+                    hint={t('entry.synthesisHint')}
                     value={p.synthesis} onChange={(synthesis) => onWrite({ synthesis })}
                   />
                   <MdField
-                    id="w-opinion" label="Ce que j’en pense"
-                    hint={'Est-ce que ça résonne avec moi ? Qu’est-ce que j’en garde, qu’est-ce que je rejette ?'}
+                    id="w-opinion" label={t('entry.opinion')}
+                    hint={t('entry.opinionHint')}
                     value={p.opinion} onChange={(opinion) => onWrite({ opinion })}
                   />
                   <MdField
-                    id="w-context" label="Contexte historique"
-                    hint={'Époque, lieu, événements, influences : qui l’a précédée, qui l’a suivie.'}
+                    id="w-context" label={t('entry.context')}
+                    hint={t('entry.contextHint')}
                     value={p.context} onChange={(context) => onWrite({ context })}
                   />
                 </>
               ) : (
                 <p className="notice" role="alert">
-                  <span>
-                    Pour écrire ces trois textes, la base doit d’abord recevoir trois nouvelles colonnes : applique la migration{' '}
-                    <code>supabase/migrations/0002_philosophy_writings.sql</code> dans l’éditeur SQL de Supabase, puis recharge la page.
-                  </span>
+                  <span>{tRich('entry.migration', undefined, { code: (c) => <code>{c}</code> })}</span>
                 </p>
               )}
             </section>
@@ -97,15 +95,15 @@ export default function Fiche({ philosophy: p, number, total, topics, statuses, 
                 <section key={theme.id} className="theme-block" aria-labelledby={`th-${theme.id}`}>
                   <h2 id={`th-${theme.id}`}>{theme.name}</h2>
                   <ul className="topic-list">
-                    {list.map((t) => <TopicLink key={t.id} philosophyId={p.id} t={t} status={statuses[cellKey(p.id, t.id)] ?? 'empty'} />)}
+                    {list.map((x) => <TopicLink key={x.id} philosophyId={p.id} t={x} status={statuses[cellKey(p.id, x.id)] ?? 'empty'} />)}
                   </ul>
                   {suggest && (
-                    <p className="notice" role="status">Tous les sujets de ce thème sont au moins en brouillon : c’est le bon moment pour écrire ta synthèse.</p>
+                    <p className="notice" role="status">{t('entry.suggestSynthesis')}</p>
                   )}
                   <MdField
                     id={`synth-${theme.id}`}
-                    label="Synthèse du thème"
-                    hint={synthesisQuestion(p.name, theme.name)}
+                    label={t('entry.themeSynthesis')}
+                    hint={synthesisQuestion(p.name, theme.name, p.ref, p.plural)}
                     value={s.body}
                     onChange={(body) => onSynthesis({ ...s, body, status: body.trim() ? (s.status === 'deep' ? 'deep' : 'draft') : 'empty' })}
                   />
@@ -115,9 +113,9 @@ export default function Fiche({ philosophy: p, number, total, topics, statuses, 
 
             {own.length > 0 && (
               <section className="theme-block own-block" aria-labelledby="own-h">
-                <h2 id="own-h"><HandStar size={20} />{ownLabel(p.name)}</h2>
+                <h2 id="own-h"><HandStar size={20} />{ownLabel(p.name, p.ref)}</h2>
                 <ul className="topic-list">
-                  {own.map((t) => <TopicLink key={t.id} philosophyId={p.id} t={t} status={statuses[cellKey(p.id, t.id)] ?? 'empty'} />)}
+                  {own.map((x) => <TopicLink key={x.id} philosophyId={p.id} t={x} status={statuses[cellKey(p.id, x.id)] ?? 'empty'} />)}
                 </ul>
               </section>
             )}

@@ -3,19 +3,23 @@ import HistoryList from './HistoryList'
 import Manage from './Manage'
 import NotesList from './NotesList'
 import PhilosophyList from './PhilosophyList'
+import { useLang, type MsgKey } from '../i18n'
 import { href } from '../lib/route'
 import type { AppState } from '../lib/appState'
 
 export type CarnetSub = 'philosophies' | 'notes' | 'historique' | 'gerer'
-const SUBS: { id: CarnetSub; label: string; path: string[] }[] = [
-  { id: 'philosophies', label: 'Philosophies', path: ['carnet'] },
-  { id: 'notes', label: 'Mes notes', path: ['carnet', 'notes'] },
-  { id: 'historique', label: 'Historique', path: ['carnet', 'historique'] },
-  { id: 'gerer', label: 'Gérer', path: ['carnet', 'gerer'] },
+const SUBS: { id: CarnetSub; label: MsgKey; path: string[] }[] = [
+  { id: 'philosophies', label: 'carnet.philosophies', path: ['carnet'] },
+  { id: 'notes', label: 'carnet.notes', path: ['carnet', 'notes'] },
+  { id: 'historique', label: 'carnet.history', path: ['carnet', 'historique'] },
+  { id: 'gerer', label: 'carnet.manage', path: ['carnet', 'gerer'] },
 ]
 
 interface Props {
+  /** État pour l'affichage : textes traduits selon la langue. */
   st: AppState
+  /** État tel qu'enregistré : seul « Gérer » s'en sert, pour ne jamais réécrire une traduction dans les données. */
+  raw: AppState
   sub: CarnetSub
   section?: string
   ficheId: string | null
@@ -25,7 +29,8 @@ interface Props {
   onSignOut: () => void
 }
 
-export default function Carnet({ st, sub, section, ficheId, query, onQuery, email, onSignOut }: Props) {
+export default function Carnet({ st, raw, sub, section, ficheId, query, onQuery, email, onSignOut }: Props) {
+  const { t } = useLang()
   const fiche = ficheId ? st.philosophies.find((p) => p.id === ficheId) : null
   if (ficheId) {
     if (!fiche) {
@@ -33,9 +38,9 @@ export default function Carnet({ st, sub, section, ficheId, query, onQuery, emai
         <main className="screen notebook" id="main">
           <div className="sheet">
             <div className="empty">
-              <h1 className="hand-title">Cette philosophie n’existe plus</h1>
-              <p>Elle a peut-être été supprimée depuis Gérer.</p>
-              <a className="btn btn-secondary" href={href(['carnet'])}>Retour au carnet</a>
+              <h1 className="hand-title">{t('entry.notFoundTitle')}</h1>
+              <p>{t('entry.notFoundText')}</p>
+              <a className="btn btn-secondary" href={href(['carnet'])}>{t('entry.backToNotebook')}</a>
             </div>
           </div>
         </main>
@@ -56,10 +61,10 @@ export default function Carnet({ st, sub, section, ficheId, query, onQuery, emai
   return (
     <main className="screen carnet notebook" id="main">
       <div className="sheet">
-        <h1 className="hand-title">Carnet</h1>
-        <nav className="tabs" aria-label="Sections du carnet">
+        <h1 className="hand-title">{t('nav.carnet')}</h1>
+        <nav className="tabs" aria-label={t('carnet.tabs')}>
           {SUBS.map((s) => (
-            <a key={s.id} href={href(s.path)} aria-current={sub === s.id ? 'page' : undefined}>{s.label}</a>
+            <a key={s.id} href={href(s.path)} aria-current={sub === s.id ? 'page' : undefined}>{t(s.label)}</a>
           ))}
         </nav>
         {sub === 'philosophies' && (
@@ -67,7 +72,7 @@ export default function Carnet({ st, sub, section, ficheId, query, onQuery, emai
         )}
         {sub === 'notes' && <NotesList notes={st.notes} philosophies={st.philosophies} topics={st.topics} />}
         {sub === 'historique' && <HistoryList history={st.history} philosophies={st.philosophies} topics={st.topics} />}
-        {sub === 'gerer' && <Manage st={st} email={email} onSignOut={onSignOut} section={section} />}
+        {sub === 'gerer' && <Manage st={raw} view={st} email={email} onSignOut={onSignOut} section={section} />}
       </div>
     </main>
   )

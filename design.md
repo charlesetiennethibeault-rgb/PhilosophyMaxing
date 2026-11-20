@@ -205,3 +205,15 @@ Demande : le site doit ressembler à une relique, une ancienne carte, une page d
 - cadres doubles à l'encre sur cartes et messages ; filet à losange rouge sous chaque titre d'écran.
 
 Le Carnet (§12) ne reçoit ni cadres ni capitales : il garde son papier et son écriture à la main.
+
+## 16. Langues : français et anglais (décision de l'utilisateur)
+
+Demande : pouvoir mettre l'application en anglais, avec des traductions justes et les bons termes. Aucun nouveau style : tout réutilise les composants des §8 et §12.
+
+- **Choix** : bouton-icône (Lucide `Languages`, 20 px, aria-label « Passer en anglais » / « Switch to French ») dans la barre du haut, entre l'état de synchronisation et le son ; sélecteur « Langue » dans Carnet → Gérer → Compte ; deux liens « Français · English » sous le formulaire de connexion (chaque langue écrite dans sa langue). Le choix est gardé sur l'appareil (`localStorage`, clé `pm.lang`), jamais dans Supabase. Français par défaut.
+- **Textes de l'interface** : `src/i18n/messages.ts`, le français et l'anglais côte à côte pour chaque message. Un test vérifie que les deux langues existent, avec les mêmes `{variables}` et balises.
+- **Contenu fourni** (philosophies, sujets, familles, thèmes, régions, légendes des statues) : `src/i18n/content-en.ts`, par identifiant. Un texte n'est remplacé que s'il est encore identique à celui d'origine ; ce que l'utilisateur a modifié ou créé reste tel quel. Les données enregistrées ne sont jamais traduites ni réécrites : la traduction ne sert qu'à l'affichage, et les formulaires de Gérer montrent le texte enregistré.
+- **Jamais traduit** : les notes, synthèses, étiquettes, sources et tous les textes de l'utilisateur.
+- **Typographie** : en français, espace insécable avant `: ; ? !` et dans les « guillemets » (appliquée automatiquement) ; en anglais, “guillemets anglais”, aucune espace avant la ponctuation, « No. 042 / 087 » à la place de « N° 042 / 087 ».
+- **Vocabulaire anglais** : tirage = *draw* ; case (philosophie + sujet) = *pairing* ; fiche = *entry* ; approfondi = *in depth* ; code secret = *passcode* ; Carnet = *Notebook* ; sujet propre = *specific topic* ; en réserve = *set aside*.
+- **Hors périmètre** : le nom de l'app, le manifeste PWA et la description de la page (`index.html`) restent en français.
