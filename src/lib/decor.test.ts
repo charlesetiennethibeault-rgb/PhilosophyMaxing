@@ -5,19 +5,15 @@ import decor from './decor.json'
 
 const dir = join(__dirname, '..', '..', 'public', 'decor')
 
-describe('gravures du décor', () => {
-  it('chaque gravure existe, est légère et a une licence libre et une page Commons', () => {
-    expect(decor.monuments.length).toBeGreaterThanOrEqual(6)
-    for (const m of decor.monuments) {
-      expect(existsSync(join(dir, m.file)), m.file).toBe(true)
-      expect(statSync(join(dir, m.file)).size, m.file).toBeLessThan(200_000)
-      expect(m.license).toMatch(/^(CC0|Public domain)/)
-      expect(m.page).toMatch(/^https:\/\/commons\.wikimedia\.org\/wiki\/File(:|%3A)/)
+describe('décor : carte et colonnes', () => {
+  it('les images existent, sont légères et ont un crédit libre avec page Commons', () => {
+    for (const f of ['carte-peutinger.jpg', 'pilier-haut.jpg', 'pilier-fut.jpg', 'pilier-pied.jpg']) {
+      expect(existsSync(join(dir, f)), f).toBe(true)
+      expect(statSync(join(dir, f)).size, f).toBeLessThan(200_000)
     }
-  })
-  it('la carte et les colonnes sont présentes avec leur crédit', () => {
-    for (const f of ['carte-peutinger.jpg', 'pilier-haut.jpg', 'pilier-fut.jpg', 'pilier-pied.jpg']) expect(existsSync(join(dir, f)), f).toBe(true)
-    expect(decor.carte.license).toMatch(/^(CC0|Public domain)/)
-    expect(decor.pilier.license).toMatch(/^(CC0|Public domain)/)
+    for (const c of [decor.carte, decor.pilier]) {
+      expect(c.license).toMatch(/^(CC0|Public domain)/)
+      expect(c.page).toMatch(/^https:\/\/commons\.wikimedia\.org\/wiki\/File(:|%3A)/)
+    }
   })
 })

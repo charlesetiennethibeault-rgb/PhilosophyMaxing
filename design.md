@@ -199,8 +199,9 @@ Demande : le site doit ressembler à une relique, une ancienne carte, une page d
 
 **Images réelles** (toutes du domaine public ou CC0, Wikimedia Commons ; `public/decor/`, source et licences dans `src/lib/decor.json`, recherche reproductible dans `scripts/decor/`) :
 - **Table de Peutinger** (carte routière romaine) : bande de 44 px sous le bandeau de cuir de l'en-tête ;
-- **colonnes** : trois découpes (chapiteau corinthien, fût, base) d'une gravure du Panthéon de Piranesi, de chaque côté de l'écran dès 900 px (56 px de large, 64 px dès 1 400 px), fondues dans le papier par `mix-blend-mode: multiply` ; le contenu est décalé, rien n'est recouvert ;
-- **frise de monuments** au pied de chaque écran : sept gravures de Piranesi (Panthéon, Colisée, Temple d'Antonin et Faustine, Arc de Constantin, Colonne Trajane, Arc de Titus, Forum romain), 168 px de large (136 px sur téléphone), cadre double, légende en Cinzel, liens vers Commons ; ligne de crédit dessous ;
+- **colonnes** : trois découpes (chapiteau corinthien, fût, base) d'une gravure du Panthéon de Piranesi, de chaque côté de la page dès 900 px (56 px de large, 64 px dès 1 400 px), fondues dans le papier par `mix-blend-mode: multiply` ; le contenu est décalé, rien n'est recouvert ;
+- **colonnes dans le fond** : elles font partie de la page (`position: absolute` dans `.app`) et défilent avec elle, du chapiteau en haut à la base en bas ; elles ne suivent pas l'écran ;
+- une seule ligne de crédit au pied de la page (plus de vignettes de monuments, retirées à la demande de l'utilisateur) ;
 - cadres doubles à l'encre sur cartes et messages ; filet à losange rouge sous chaque titre d'écran.
 
 Le Carnet (§12) ne reçoit ni cadres ni capitales : il garde son papier et son écriture à la main.
