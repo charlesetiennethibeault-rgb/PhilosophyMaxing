@@ -1,0 +1,54 @@
+{
+ "monuments": [
+  {
+   "file": "mon-pantheon.jpg",
+   "label": "Panthéon",
+   "license": "CC0",
+   "page": "https://commons.wikimedia.org/wiki/File%3AThe_Pantheon_exterior_(Veduta_del_Pantheon_d'Agrippa_oggi_Chiesa_di_S._Maria_ad_Martyres)_MET_DP828229.jpg"
+  },
+  {
+   "file": "mon-colisee.jpg",
+   "label": "Colisée",
+   "license": "CC0",
+   "page": "https://commons.wikimedia.org/wiki/File%3AColosseum_te_Rome_Veduta_dell'Anfiteatro_Flavio%2C_detto_il_Colosseo_(titel_op_object)_Gezichten_op_Rome_(serietitel)_Vedute_di_Roma_disegnate_ed_incise_da_Giambattista_Piranesi_architetto_Ve(nez)iano_(serietitel)%2C_RP-P-1941-615.jpg"
+  },
+  {
+   "file": "mon-antonin-faustine.jpg",
+   "label": "Temple d’Antonin et Faustine",
+   "license": "CC0",
+   "page": "https://commons.wikimedia.org/wiki/File%3ATempel_van_Antoninus_en_Faustina_te_Rome_Veduta_del_Tempio_di_Antonino_e_Faustina_in_Campo_Vaccino_(titel_op_object)_Gezichten_op_Rome_(serietitel)_Vedute_di_Roma_disegnate_ed_incise_da_Giambattista_Piranesi_architett%2C_RP-P-1938-1869.jpg"
+  },
+  {
+   "file": "mon-constantin.jpg",
+   "label": "Arc de Constantin",
+   "license": "Public domain",
+   "page": "https://commons.wikimedia.org/wiki/File%3APiranesi-17025.jpg"
+  },
+  {
+   "file": "mon-trajan.jpg",
+   "label": "Colonne Trajane",
+   "license": "Public domain",
+   "page": "https://commons.wikimedia.org/wiki/File%3APiranesi-16033.jpg"
+  },
+  {
+   "file": "mon-titus.jpg",
+   "label": "Arc de Titus",
+   "license": "CC0",
+   "page": "https://commons.wikimedia.org/wiki/File%3AGiovanni_Battista_Piranesi%2C_Arco_di_Tito%2C_1748%2C_NGA_125664.jpg"
+  },
+  {
+   "file": "mon-campo-vaccino.jpg",
+   "label": "Forum romain",
+   "license": "Public domain",
+   "page": "https://commons.wikimedia.org/wiki/File%3AGiovanni_Battista_Piranesi%2C_Forum_Romanum%2C_eller_Campo_Vaccino%2C_Antoninus'_og_Faustina's_tempel_til_venstre%2C_templet_for_Castor_og_Pollux_til_h%C3%B8jre_og_Colosseum_i_det_fjerne%2C_1772%2C_KKSgb9860-100%2C_Statens_Museum_for_Kunst.jpg"
+  }
+ ],
+ "carte": {
+  "license": "Public domain",
+  "page": "https://commons.wikimedia.org/wiki/File%3APeutinger_Map_All_11_Parts_Combined_Full_Image_Edges_Trimmed_Perfect_Rectangle.png"
+ },
+ "pilier": {
+  "license": "CC0",
+  "page": "https://commons.wikimedia.org/wiki/File%3AThe_Pantheon_exterior_(Veduta_del_Pantheon_d'Agrippa_oggi_Chiesa_di_S._Maria_ad_Martyres)_MET_DP828229.jpg"
+ }
+}

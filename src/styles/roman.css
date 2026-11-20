@@ -1,82 +1,111 @@
-/* Rome en pierre sombre (design.md §15) : colonnes, frise de grecques, arcades, cadres doubles, capitales gravées.
-   Les motifs SVG recopient les couleurs des tokens : travertin #E0D2B4, pierre #7A6A52, marbre #E8DFCB, brun #1C1510.
+/* Parchemin romain (design.md §15) : vieux papier brûlé aux bords, plié, bordé comme une carte ancienne ;
+   vraies gravures de Piranesi (domaine public) et carte routière romaine ; colonnes tirées d'une gravure du Panthéon.
+   Les motifs SVG recopient les couleurs des tokens : encre #2B1C12, trait #8A6A44, rouge #8E2F2B, parchemin #F0E1BC.
    Chargé avant carnet.css : le Carnet (.notebook) garde son propre papier. */
 
 :root {
-  --meander: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12'%3E%3Cpath d='M0 11.5H12M11.5 11.5V.5H2.5V8.5H8.5V4.5H5.5' fill='none' stroke='%237A6A52' stroke-width='1.2'/%3E%3C/svg%3E");
-  --arcade: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='24'%3E%3Cpath d='M0 1.5H40M2 24V13A18 11 0 0 1 38 13V24' fill='none' stroke='%237A6A52' stroke-width='1.4'/%3E%3Cpath d='M20 1.5V4.5' stroke='%237A6A52' stroke-width='1.4'/%3E%3C/svg%3E");
-  --divider: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='12'%3E%3Cpath d='M14 6H212' stroke='%237A6A52' stroke-width='1.2'/%3E%3Cpath d='M6 1L11 6L6 11L1 6Z' fill='%23E0D2B4'/%3E%3Ccircle cx='216' cy='6' r='2' fill='%237A6A52'/%3E%3C/svg%3E");
-  --temple: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'%3E%3Cg fill='none' stroke='%23E0D2B4' stroke-width='1.6' stroke-linejoin='round'%3E%3Cpath d='M2 10L14 3L26 10Z'/%3E%3Cpath d='M5 12.5V21M10.5 12.5V21M17.5 12.5V21M23 12.5V21'/%3E%3Cpath d='M2 24.5H26M3.5 21.5H24.5'/%3E%3C/g%3E%3C/svg%3E");
-  --col-capital: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='40'%3E%3Cg fill='%23E8DFCB'%3E%3Crect x='3' y='2' width='50' height='7' rx='1'/%3E%3Crect x='10' y='9' width='36' height='31'/%3E%3Ccircle cx='11' cy='22' r='9'/%3E%3Ccircle cx='45' cy='22' r='9'/%3E%3C/g%3E%3Cg fill='none' stroke='%231C1510' stroke-width='1.3' stroke-opacity='.55'%3E%3Ccircle cx='11' cy='22' r='5.5'/%3E%3Ccircle cx='11' cy='22' r='2'/%3E%3Ccircle cx='45' cy='22' r='5.5'/%3E%3Ccircle cx='45' cy='22' r='2'/%3E%3Cpath d='M20 18Q28 28 36 18'/%3E%3C/g%3E%3C/svg%3E");
-  --col-shaft: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='8'%3E%3Crect x='10' width='36' height='8' fill='%23E8DFCB'/%3E%3Cg stroke='%231C1510' stroke-opacity='.4' stroke-width='1.2'%3E%3Cpath d='M16 0V8M22 0V8M28 0V8M34 0V8M40 0V8'/%3E%3C/g%3E%3C/svg%3E");
-  --col-base: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='30'%3E%3Cg fill='%23E8DFCB'%3E%3Crect x='8' y='0' width='40' height='6'/%3E%3Crect x='4' y='7' width='48' height='8' rx='3'/%3E%3Crect x='0' y='17' width='56' height='13'/%3E%3C/g%3E%3C/svg%3E");
-  --pantheon: url("data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20width=%22448%22%20height=%2252%22%20viewBox=%220%200%20448%2052%22%3E%3Cg%20transform=%22translate(8%204)%22%3E%3Ccircle%20cx=%2224%22%20cy=%2224%22%20r=%2222.5%22%20fill=%22none%22%20stroke=%22%237A6A52%22%20stroke-width=%221.4%22/%3E%3Cpath%20d=%22M27%208L15%2027H23L19%2041L33%2020H25Z%22%20fill=%22%23E0D2B4%22/%3E%3C/g%3E%3Cg%20transform=%22translate(72%204)%22%3E%3Ccircle%20cx=%2224%22%20cy=%2224%22%20r=%2222.5%22%20fill=%22none%22%20stroke=%22%237A6A52%22%20stroke-width=%221.4%22/%3E%3Cellipse%20cx=%2224%22%20cy=%2228%22%20rx=%229%22%20ry=%2212%22%20fill=%22none%22%20stroke=%22%23E0D2B4%22%20stroke-width=%221.6%22/%3E%3Ccircle%20cx=%2220%22%20cy=%2223%22%20r=%223%22%20fill=%22none%22%20stroke=%22%23E0D2B4%22%20stroke-width=%221.6%22/%3E%3Ccircle%20cx=%2228%22%20cy=%2223%22%20r=%223%22%20fill=%22none%22%20stroke=%22%23E0D2B4%22%20stroke-width=%221.6%22/%3E%3Cpath%20d=%22M24%2026L22%2030H26ZM16%2013L19%2019M32%2013L29%2019%22%20fill=%22none%22%20stroke=%22%23E0D2B4%22%20stroke-width=%221.6%22%20stroke-linejoin=%22round%22/%3E%3C/g%3E%3Cg%20transform=%22translate(136%204)%22%3E%3Ccircle%20cx=%2224%22%20cy=%2224%22%20r=%2222.5%22%20fill=%22none%22%20stroke=%22%237A6A52%22%20stroke-width=%221.4%22/%3E%3Cpath%20d=%22M10%2030Q10%2014%2024%2014Q38%2014%2038%2030V35H10ZM14%2029H34M24%2014V8Q31%208%2033%2012%22%20fill=%22none%22%20stroke=%22%23E0D2B4%22%20stroke-width=%221.6%22%20stroke-linejoin=%22round%22/%3E%3C/g%3E%3Cg%20transform=%22translate(200%204)%22%3E%3Ccircle%20cx=%2224%22%20cy=%2224%22%20r=%2222.5%22%20fill=%22none%22%20stroke=%22%237A6A52%22%20stroke-width=%221.4%22/%3E%3Cpath%20d=%22M14%2010Q10%2026%2018%2034Q24%2040%2030%2034Q38%2026%2034%2010M14%2010Q24%2018%2034%2010M20%2014V36M24%2016V38M28%2014V36%22%20fill=%22none%22%20stroke=%22%23E0D2B4%22%20stroke-width=%221.6%22%20stroke-linecap=%22round%22/%3E%3C/g%3E%3Cg%20transform=%22translate(264%204)%22%3E%3Ccircle%20cx=%2224%22%20cy=%2224%22%20r=%2222.5%22%20fill=%22none%22%20stroke=%22%237A6A52%22%20stroke-width=%221.4%22/%3E%3Cpath%20d=%22M24%206V42M24%2010Q12%206%208%2012Q16%2012%2024%2016M24%2010Q36%206%2040%2012Q32%2012%2024%2016M24%2018Q32%2022%2024%2028Q16%2032%2024%2038%22%20fill=%22none%22%20stroke=%22%23E0D2B4%22%20stroke-width=%221.6%22%20stroke-linecap=%22round%22/%3E%3C/g%3E%3Cg%20transform=%22translate(328%204)%22%3E%3Ccircle%20cx=%2224%22%20cy=%2224%22%20r=%2222.5%22%20fill=%22none%22%20stroke=%22%237A6A52%22%20stroke-width=%221.4%22/%3E%3Cpath%20d=%22M24%2042V10M14%2010V20Q14%2026%2024%2026Q34%2026%2034%2020V10M14%2010L11%2015M14%2010L17%2015M34%2010L31%2015M34%2010L37%2015M24%2010L21%2015M24%2010L27%2015%22%20fill=%22none%22%20stroke=%22%23E0D2B4%22%20stroke-width=%221.6%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22/%3E%3C/g%3E%3Cg%20transform=%22translate(392%204)%22%3E%3Ccircle%20cx=%2224%22%20cy=%2224%22%20r=%2222.5%22%20fill=%22none%22%20stroke=%22%237A6A52%22%20stroke-width=%221.4%22/%3E%3Cpath%20d=%22M8%2034Q24%202%2040%2034ZM16%2034L22%2012M24%2034V9M32%2034L26%2012M10%2039H38%22%20fill=%22none%22%20stroke=%22%23E0D2B4%22%20stroke-width=%221.6%22%20stroke-linejoin=%22round%22/%3E%3C/g%3E%3C/svg%3E");
-  --grain-stone: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .85 0 0 0 0 .72 0 0 0 0 .5 0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+  --divider: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='12'%3E%3Cpath d='M14 6H212' stroke='%238A6A44' stroke-width='1.2'/%3E%3Cpath d='M6 1L11 6L6 11L1 6Z' fill='%238E2F2B'/%3E%3Ccircle cx='216' cy='6' r='2' fill='%238A6A44'/%3E%3C/svg%3E");
+  --temple: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'%3E%3Cg fill='none' stroke='%23F0E1BC' stroke-width='1.6' stroke-linejoin='round'%3E%3Cpath d='M2 10L14 3L26 10Z'/%3E%3Cpath d='M5 12.5V21M10.5 12.5V21M17.5 12.5V21M23 12.5V21'/%3E%3Cpath d='M2 24.5H26M3.5 21.5H24.5'/%3E%3C/g%3E%3C/svg%3E");
+  /* Taches de vieillissement (grandes, douces) puis grain fin du papier */
+  --stains: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='700' height='700'%3E%3Cfilter id='s'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.006 .008' numOctaves='4' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .36 0 0 0 0 .22 0 0 0 0 .08 0 0 0 1.1 -.4'/%3E%3C/filter%3E%3Crect width='700' height='700' filter='url(%23s)'/%3E%3C/svg%3E");
+  --grain-paper-fine: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .3 0 0 0 0 .18 0 0 0 0 .07 0 0 0 .2 0'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)'/%3E%3C/svg%3E");
+  /* Plis de la carte : deux lignes verticales, une horizontale */
+  --fold-v: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpath d='M99.6 0V100' stroke='%235A3D1E' stroke-opacity='.22' stroke-width='1' vector-effect='non-scaling-stroke'/%3E%3Cpath d='M100 0V100' stroke='%23FFF6DC' stroke-opacity='.35' stroke-width='1' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E");
+  --fold-h: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpath d='M0 99.6H100' stroke='%235A3D1E' stroke-opacity='.22' stroke-width='1' vector-effect='non-scaling-stroke'/%3E%3Cpath d='M0 100H100' stroke='%23FFF6DC' stroke-opacity='.35' stroke-width='1' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E");
 }
 
-/* Pierre : grain fin sur tout le fond */
-body::before { content: ''; position: fixed; inset: 0; z-index: -1; background-image: var(--grain-stone); pointer-events: none; }
+/* Papier : taches, grain, plis et bords brûlés couvrent tout le fond */
+body::before {
+  content: ''; position: fixed; inset: 0; z-index: -2; pointer-events: none;
+  background-image: var(--grain-paper-fine), var(--stains), var(--fold-v), var(--fold-h);
+  background-size: 220px 220px, 700px 700px, 33.333% 100%, 100% 50%;
+  box-shadow: inset 0 0 90px 24px oklch(34% 0.07 55 / 0.55), inset 0 0 12px 2px oklch(26% 0.06 50 / 0.5);
+}
+/* Bordure de carte : double filet rentré, comme les cartes anciennes */
+body::after { content: ''; position: fixed; inset: var(--s-2); border: 4px double var(--rule); pointer-events: none; z-index: 40; opacity: 0.85; }
+@media (max-width: 800px) { body::after { inset: var(--s-1); border-width: 3px; } }
 
-/* Colonnes de marbre de chaque côté de l'écran : le contenu est décalé, rien n'est recouvert */
+/* En-tête : bandeau de cuir sombre, puis la Table de Peutinger (carte routière romaine) */
+.topbar { position: relative; background: var(--ink); border-bottom: 3px double var(--rule); margin-bottom: 44px; }
+.topbar::after {
+  content: ''; position: absolute; left: 0; right: 0; top: calc(100% + 3px); height: 44px; pointer-events: none;
+  background: url('/decor/carte-peutinger.jpg') left center / auto 100% repeat-x; opacity: 0.78; border-bottom: 2px solid var(--rule);
+  filter: sepia(0.35) contrast(1.05);
+}
+.brand { display: inline-flex; align-items: center; gap: var(--s-2); font-family: var(--font-title); font-weight: 700; letter-spacing: 0.04em; color: var(--nav-ink); }
+.brand::before { content: ''; width: 28px; height: 28px; flex: none; background: var(--temple) center / contain no-repeat; }
+.topnav a { font-family: var(--font-title); font-weight: 600; letter-spacing: 0.04em; color: var(--nav-ink-2); }
+.topnav a:hover { color: var(--nav-ink); }
+.topnav a[aria-current='page'] { color: var(--nav-ink); border-bottom-color: var(--nav-ink); }
+.topbar .sync-status { color: var(--nav-ink-2); }
+.topbar .sync-status.ok { color: var(--success-on-dark); }
+.topbar .sync-status.warn { color: var(--warn-on-dark); }
+.topbar .icon-btn { color: var(--nav-ink-2); }
+.topbar .icon-btn:hover { background: color-mix(in oklab, var(--nav-ink) 14%, transparent); color: var(--nav-ink); }
+.topbar .btn-secondary, .topbar .btn-ghost { background: transparent; border-color: var(--nav-ink-2); color: var(--nav-ink); }
+.topbar .btn-secondary:hover:not(:disabled), .topbar .btn-ghost:hover:not(:disabled) { background: color-mix(in oklab, var(--nav-ink) 14%, transparent); }
+.topbar :focus-visible, .bottom-nav :focus-visible { outline-color: var(--nav-ink); }
+.tabs a[aria-current='page'] { border-bottom-color: var(--brand); }
+.bottom-nav { background: var(--ink); border-top: 3px double var(--rule); }
+.bottom-nav a { color: var(--nav-ink-2); }
+.bottom-nav a[aria-current='page'] { color: var(--nav-ink); border-top-color: var(--nav-ink); }
+.era-item.on { box-shadow: inset 0 -3px 0 var(--brand); border-color: var(--rule); }
+
+/* Titres gravés en capitales romaines */
+h1, h2, .result-name, .era-title, .stage-label { font-family: var(--font-title); letter-spacing: 0.03em; color: var(--text); }
+h1, .result-name { font-weight: 700; }
+h2, .era-title, .stage-label { font-weight: 600; }
+.screen > h1::after, .compare > h1::after, .login h1::after { content: ''; display: block; height: 12px; margin-top: var(--s-2); background: var(--divider) left center / auto 12px no-repeat; }
+.login h1::after { margin-inline: auto; background-position: center; }
+.result-name { overflow-wrap: anywhere; hyphens: auto; }
+.has-aplat .result-name { color: var(--on-brand); }
+
+/* Cartes : papier plus clair, cadre double à l'encre */
+.card, .era-picker, .message, .notice { background: var(--surface); border-color: var(--rule); box-shadow: inset 0 0 0 3px var(--surface), inset 0 0 0 4px var(--border), var(--shadow-1); }
+.filters-col { border-right-color: var(--rule); background: color-mix(in oklab, var(--surface) 70%, transparent); }
+.side { border-left-color: var(--rule); }
+.btn-primary { border-color: var(--brand-press); }
+.wheel-pointer { border-top-color: var(--text); }
+.scrim { background: oklch(26% 0.06 50 / 0.5); }
+
+/* Colonnes : tirées d'une vraie gravure du Panthéon (Piranesi), fondues dans le papier */
 @media (min-width: 900px) {
-  .app { --col-w: 40px; padding-inline: calc(var(--col-w) + var(--s-4)); }
+  .app { --col-w: 56px; padding-inline: calc(var(--col-w) + var(--s-4)); }
   .topbar { margin-inline: calc((var(--col-w) + var(--s-4)) * -1); padding-inline: calc(var(--col-w) + var(--s-4) + var(--s-5)); }
   .app::before, .app::after {
-    content: ''; position: fixed; top: 68px; bottom: 0; z-index: -1; width: var(--col-w); opacity: 0.45; pointer-events: none;
-    background-image: var(--col-capital), var(--col-base), var(--col-shaft);
-    background-size: var(--col-w) auto, var(--col-w) auto, var(--col-w) auto;
-    background-position: top center, bottom center, top center;
+    content: ''; position: fixed; top: 130px; bottom: var(--s-5); z-index: -1; width: var(--col-w); pointer-events: none; mix-blend-mode: multiply; opacity: 0.92;
+    background-image: url('/decor/pilier-haut.jpg'), url('/decor/pilier-pied.jpg'), url('/decor/pilier-fut.jpg');
+    background-size: 100% auto, 100% auto, 100% auto;
+    background-position: top center, bottom center, center;
     background-repeat: no-repeat, no-repeat, repeat-y;
   }
   .app::before { left: var(--s-4); }
   .app::after { right: var(--s-4); }
 }
-@media (min-width: 1400px) { .app { --col-w: 56px; } }
+@media (min-width: 1400px) { .app { --col-w: 64px; } }
 
-/* En-tête : or, frise de grecques, temple devant la marque */
-.topbar { position: relative; background: var(--surface); border-bottom: 2px solid var(--stone-line); }
-.topbar::after { content: ''; position: absolute; left: 0; right: 0; top: 100%; height: 12px; background-image: var(--meander); background-repeat: repeat-x; pointer-events: none; }
-.brand { display: inline-flex; align-items: center; gap: var(--s-2); font-family: var(--font-title); font-weight: 700; letter-spacing: 0.04em; color: var(--travertine); }
-.brand::before { content: ''; width: 28px; height: 28px; flex: none; background: var(--temple) center / contain no-repeat; }
-.topnav a { font-family: var(--font-title); font-weight: 600; letter-spacing: 0.04em; }
-.topnav a[aria-current='page'] { color: var(--travertine); border-bottom-color: var(--travertine); }
-.tabs a[aria-current='page'] { border-bottom-color: var(--travertine); }
-.bottom-nav { border-top: 2px solid var(--stone-line); }
-.bottom-nav a[aria-current='page'] { color: var(--travertine); border-top-color: var(--travertine); }
-.era-item.on { box-shadow: inset 0 -3px 0 var(--travertine); border-color: var(--stone-line); }
-
-/* Titres gravés */
-h1, h2, .result-name, .era-title, .stage-label { font-family: var(--font-title); letter-spacing: 0.03em; }
-h1, .result-name { font-weight: 700; }
-h2, .era-title, .stage-label { font-weight: 600; }
-h1 { color: var(--travertine); }
-.screen > h1::after, .compare > h1::after, .login h1::after { content: ''; display: block; height: 12px; margin-top: var(--s-2); background: var(--divider) left center / auto 12px no-repeat; }
-.login h1::after { margin-inline: auto; background-position: center; }
-.result-name { overflow-wrap: anywhere; hyphens: auto; }
-
-/* Cadres doubles, comme une inscription encadrée */
-.card, .era-picker, .message, .notice { border-color: var(--stone-line); box-shadow: inset 0 0 0 3px var(--surface), inset 0 0 0 4px var(--border); }
-.filters-col { border-right-color: var(--stone-line); }
-.side { border-left-color: var(--stone-line); }
-.fgroup { border-top-color: var(--border); }
-.btn-primary { border-color: var(--stone-line); }
-.btn-primary:hover:not(:disabled) { border-color: var(--travertine); }
-.wheel-pointer { border-top-color: var(--travertine); }
-
-/* Au pied des écrans : la frise des dieux (Jupiter, Minerve, Mars, Apollon, Mercure, Neptune, Vénus), puis le portique d'arcades */
-.screen:not(.notebook):not(.layout)::before, .login::before { content: ''; display: block; flex: none; order: 98; height: 52px; margin-top: auto; background: var(--pantheon) center / auto 52px no-repeat; pointer-events: none; opacity: 0.8; }
-.screen:not(.notebook):not(.layout)::after, .login::after { content: ''; display: block; flex: none; order: 99; height: 24px; background: var(--arcade) left bottom / 40px 24px repeat-x; pointer-events: none; }
-.screen:not(.notebook):not(.layout) { padding-bottom: var(--s-5); }
-@media (max-width: 800px) { .screen:not(.notebook):not(.layout)::after { display: none; } }
-
-@media (forced-colors: active) { body::before, .app::before, .app::after { display: none; } }
+/* Au pied de chaque écran : frise de vraies gravures de Piranesi, comme les vignettes d'une carte ancienne */
+.monuments { margin-top: auto; padding: var(--s-5) 0 var(--s-6); display: flex; flex-direction: column; gap: var(--s-3); align-items: center; }
+.monuments-row { display: flex; gap: var(--s-3); justify-content: center; max-width: 100%; overflow-x: auto; padding: var(--s-2); scroll-snap-type: x proximity; }
+.monument { flex: none; width: 168px; scroll-snap-align: start; }
+.monument a { display: flex; flex-direction: column; gap: var(--s-1); text-decoration: none; color: var(--text); }
+.monument img { display: block; width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; border: 2px solid var(--rule); box-shadow: 0 0 0 3px var(--surface), 0 0 0 4px var(--rule); filter: sepia(0.4) contrast(1.05); background: var(--surface-2); }
+.monument figcaption { margin-top: var(--s-2); font-family: var(--font-title); font-weight: 600; font-size: var(--t-12); text-align: center; letter-spacing: 0.04em; }
+.monuments-credit { max-width: 640px; font-size: var(--t-12); line-height: 1.4; text-align: center; color: var(--text-2); }
+.monuments-credit a { color: var(--text-2); }
 
 /* Téléphone : la marque en capitales gravées est plus large, on la resserre pour garder « Filtres » visible */
 @media (max-width: 800px) {
   .brand { letter-spacing: 0; gap: var(--s-1); font-size: var(--t-14); }
   .brand::before { width: 22px; height: 22px; }
+  .topbar { margin-bottom: 28px; }
+  .topbar::after { height: 28px; }
+  .monument { width: 136px; }
 }
-
-/* Les colonnes réduisent la largeur utile : la frise des six époques doit tenir sur une ligne */
 @media (min-width: 900px) { .era-strip { gap: 0; } .era-item { min-width: 80px; padding-inline: var(--s-1); } }
 @media (min-width: 1100px) { .layout { grid-template-columns: 288px minmax(0, 1fr) 360px; } }
+@media (forced-colors: active) { body::before, body::after, .app::before, .app::after { display: none; } }
+
+/* L'en-tête et la carte de Peutinger prennent de la hauteur : la roue rétrécit pour que « Tirer » reste visible */
+.wheel-box { width: min(100%, 640px, calc(100dvh - 500px)); }
+@media (max-width: 800px) { .wheel-box { width: min(100%, calc(100dvh - 510px), 520px); } }

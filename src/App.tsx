@@ -16,6 +16,7 @@ import { WHEEL_ERAS, eraSelection, erasForWheelEra, orderForWheel, wheelEraForFi
 import { cellKey, emptyNote, type Topic } from './lib/types'
 import { RECORD_DRAWS } from './lib/config'
 import { OWN, aplatColor } from './lib/ui'
+import Monuments from './components/Monuments'
 import { chime } from './lib/audio'
 import { href, useRoute } from './lib/route'
 import { useLoadingIndicator } from './lib/loading'
@@ -350,6 +351,8 @@ function Workspace({ st, email, onSignOut }: { st: AppState; email: string; onSi
           {side}
         </main>
       )}
+
+      <Monuments />
 
       <nav className="bottom-nav" aria-label="Navigation principale (téléphone)">
         {NAV.map(({ id, label, Icon }) => (

@@ -7,10 +7,10 @@ Source de vérité visuelle. Toute valeur utilisée dans l'interface vient d'ici
 - **Pour qui** : une seule personne, chercheuse ou chercheur autodidacte, qui explore 87 philosophies. Usage régulier, sessions longues d'écriture, sur ordinateur et téléphone.
 - **Tâche principale** : tourner la roue, puis écrire sa propre note sur la case tirée.
 - **Sentiment** : *atelier de chercheur*. Concret, précis, calme, au service du travail.
-- **Direction** : « Rome en pierre sombre » (voir §15) : bruns d'ombre, parchemin, rouge pompéien et pierre claire, colonnes, frise de grecques, arcades. Remplace l'ancien « Carnet de labo » gris-bleu ; reste : le catalogue numéroté et **l'aplat de couleur de la famille** sur la carte de résultat uniquement.
+- **Direction** : « Parchemin romain » (voir §15) : une carte ancienne, vieux papier, gravures de Piranesi, colonnes et Table de Peutinger. Remplace l'ancien « Carnet de labo » gris-bleu ; reste : le catalogue numéroté et **l'aplat de couleur de la famille** sur la carte de résultat uniquement.
 - **Évoque** : précis, posé, concret.
 - **N'évoque pas** : ludique, criard. (Décoré et « d'époque » sont voulus depuis §15.)
-- **Mode** : sombre seulement (`color-scheme: dark`), décision de l'utilisateur ; un seul thème. Le Carnet (§12) garde son papier kraft clair.
+- **Mode** : clair, parchemin (`color-scheme: light`), un seul thème. Le Carnet (§12) garde son papier kraft.
 
 ## 2. Couleurs
 
@@ -170,41 +170,37 @@ Décision de l'utilisateur : quand on compare des philosophies, chacune montre *
 - **Performance** : photos de 640 px au plus, chargées à la demande (`loading="lazy"`), mises en cache à la première visite ; aucune n'est dans le précache de la PWA.
 - **État de la collection** : 76 photos sur 87 philosophies ; 11 philosophies ont un socle vide (aucune statue libre trouvée). Photos recompressées à 640 px, JPEG, moins de 500 Ko chacune, hors précache, mises en cache à la demande (`CacheFirst`, cache `statues`).
 
-## 15. Rome en pierre sombre (thème unique, décision de l'utilisateur)
+## 15. Parchemin romain : une carte ancienne (thème unique, décision de l'utilisateur)
 
-Demande : « mode sombre avec beaucoup de brun, du beige, quelque chose d'ancien, historique, rempli d'histoire ; le site au complet représente l'architecture romaine, très décoré ». Ce paragraphe **remplace** les couleurs du §2 (rôles inchangés) et **lève, pour ce thème seulement**, les interdits « décoré », « fond sombre » et « majuscules » (le Cinzel est une police de capitales).
+Demande : le site doit ressembler à une relique, une ancienne carte, une page d'histoire ; une architecture romaine impressionnante (pas forcément le Colisée) ; l'utilisateur est un philosophe romain. Pas de recréations dessinées, pas d'images enfantines : **uniquement de vraies gravures et cartes du domaine public**. Ce paragraphe **remplace** les couleurs du §2 (les rôles des tokens ne changent pas) et lève, pour ce thème, les interdits « décoré », « majuscules », et la police Plex pour l'interface.
 
-**Palette** (contrastes vérifiés : texte 13,1:1 sur `--surface`, `--text-2` 9,1:1, `--on-brand` sur `--brand` 5,8:1, `--control-border` 3,7:1) :
+**Palette** (contrastes : `--text` 12:1 sur `--surface`, `--text-2` 7,6:1, `--control-border` 5,5:1, `--on-brand` sur `--brand` 6,8:1) :
 
 | Token | Hex | Rôle |
 |---|---|---|
-| `--bg` | `#1C1510` | brun d'ombre, fond de page |
-| `--surface` | `#271D15` | champs, panneaux, en-tête, cartes |
-| `--surface-2` | `#33271C` | survol, retrait, jauges |
-| `--border` | `#4A3A2A` | filets |
-| `--control-border` | `#8C7452` | bordure des champs |
-| `--text` | `#F0E4CC` | parchemin, texte principal |
-| `--text-2` | `#D0BEA0` | texte secondaire |
-| `--text-3` | `#8A785F` | éléments désactivés seulement |
-| `--brand` / `-hover` / `-press` | `#A8391F` / `#BC452A` / `#902F18` | rouge pompéien : actions principales |
-| `--on-brand` | `#FBF3E2` | texte sur `--brand` et sur les aplats |
-| `--travertine` | `#E0D2B4` | travertin clair : élément actif, titres d'écran, marque, repère de la roue |
-| `--stone-line` | `#7A6A52` | brun de pierre : filets, cadres, frise, médaillons |
-| `--marble` | `#E8DFCB` | colonnes (toujours estompées à 22 %) |
-| `--own` / `--own-bg` / `--own-ink` | `#D4A64A` / `#3D2F17` / `#F0D9A0` | sujet propre |
-| `--danger` / `--success` / `--warn` | `#F0958F` / `#8FD0A4` / `#E7B866` | états réels, toujours avec un mot |
+| `--bg` | `#DFCB9E` | parchemin vieilli, fond de page |
+| `--surface` | `#EADBB6` | champs, panneaux, cartes |
+| `--surface-2` | `#D6BF8E` | survol, retrait, jauges |
+| `--border` | `#B39868` | filets |
+| `--control-border` | `#6B4F32` | bordure des champs |
+| `--text` / `--text-2` / `--text-3` | `#2B1C12` / `#523B26` / `#7A6347` | encre brune ; secondaire ; désactivé seulement |
+| `--brand` / `-hover` / `-press` | `#8E2F2B` / `#7A2622` / `#661F1C` | rouge pompéien : actions principales |
+| `--on-brand` | `#F6EBD0` | texte sur `--brand` et sur les aplats |
+| `--nav-ink` / `--nav-ink-2` | `#F0E1BC` / `#CDB88A` | texte sur le bandeau de cuir (`--ink` `#2B1C12`) |
+| `--success-on-dark` / `--warn-on-dark` | `#8FD0A4` / `#E7B866` | états lus sur le bandeau de cuir |
+| `--own` / `--own-bg` / `--own-ink` | `#A6741A` / `#F0DCA6` / `#4E3500` | sujet propre |
+| `--danger` / `--success` / `--warn` | `#8F1F34` / `#22573A` / `#6B4400` | états réels, toujours avec un mot |
 
-Ombres : mêmes niveaux et mêmes couches, teintées de brun (`oklch(8% 0.02 60 / …)`, 30–60 %).
+`--rule` `#8A6A44` (trait de carte) vient du Carnet. Ombres : mêmes niveaux, teintées de brun (`oklch(30% 0.05 60 / …)`).
 
-**Typographie** : ajout de **Cinzel** (600, 700), capitales gravées de type inscription romaine, pour la marque, les onglets de navigation, `h1`, `h2`, le nom sur la carte de résultat, « Choisir son époque » et l'étiquette de la roue. Le reste ne change pas (Plex Sans pour l'interface, Source Serif pour les mots de l'utilisateur, Shantell Sans pour le Carnet). Titres d'écran (`h1`) en `--travertine`.
+**Typographie** : **Source Serif 4** pour tout le texte (livre ancien), **Cinzel** (600, 700) en capitales gravées pour la marque, la navigation, `h1`, `h2`, le nom sur la carte de résultat, « Choisir son époque » et l'étiquette de la roue. Plex Sans n'est plus utilisée ; Shantell Sans reste celle du Carnet.
 
-**Ornements** (motifs SVG dans `src/styles/roman.css`, jamais de dégradé, **plus d'or** : tout est en travertin, marbre et brun de pierre) :
-- grain de pierre fin sur tout le fond ;
-- **colonnes de marbre ioniques** (chapiteau à volutes, fût cannelé, base) de chaque côté de l'écran dès 900 px : 40 px de large, 56 px dès 1 400 px, à 45 % d'opacité ; le contenu est décalé pour qu'aucune colonne ne le recouvre ;
-- **frise de grecques** (méandre, 12 px) sous l'en-tête, filet de pierre de 2 px ;
-- **temple** (fronton + 4 colonnes) devant le nom de l'application ;
-- **frise des dieux** au pied des écrans : sept médaillons au trait, Jupiter (foudre), Minerve (hibou), Mars (casque), Apollon (lyre), Mercure (caducée), Neptune (trident), Vénus (coquille) ;
-- **portique d'arcades** sous la frise des dieux (masqué sur téléphone) ;
-- **filet à losange** sous chaque titre d'écran ; **cadres doubles** sur cartes, messages et « Choisir son époque » ;
-- élément actif (onglet, navigation du bas, époque choisie) en `--travertine`.
-Le Carnet (§12) ne reçoit ni cadres, ni colonnes de contenu, ni capitales : il garde son papier et son écriture à la main.
+**Papier et carte** (`src/styles/roman.css`) : taches de vieillissement et grain fin (SVG `feTurbulence`), **deux plis verticaux et un pli horizontal**, **bords brûlés** (ombre intérieure brune), **double filet de carte** rentré de 8 px.
+
+**Images réelles** (toutes du domaine public ou CC0, Wikimedia Commons ; `public/decor/`, source et licences dans `src/lib/decor.json`, recherche reproductible dans `scripts/decor/`) :
+- **Table de Peutinger** (carte routière romaine) : bande de 44 px sous le bandeau de cuir de l'en-tête ;
+- **colonnes** : trois découpes (chapiteau corinthien, fût, base) d'une gravure du Panthéon de Piranesi, de chaque côté de l'écran dès 900 px (56 px de large, 64 px dès 1 400 px), fondues dans le papier par `mix-blend-mode: multiply` ; le contenu est décalé, rien n'est recouvert ;
+- **frise de monuments** au pied de chaque écran : sept gravures de Piranesi (Panthéon, Colisée, Temple d'Antonin et Faustine, Arc de Constantin, Colonne Trajane, Arc de Titus, Forum romain), 168 px de large (136 px sur téléphone), cadre double, légende en Cinzel, liens vers Commons ; ligne de crédit dessous ;
+- cadres doubles à l'encre sur cartes et messages ; filet à losange rouge sous chaque titre d'écran.
+
+Le Carnet (§12) ne reçoit ni cadres ni capitales : il garde son papier et son écriture à la main.

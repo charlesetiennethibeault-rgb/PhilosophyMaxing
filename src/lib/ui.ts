@@ -15,10 +15,10 @@ const mix = (hex: string, towards: string, t: number) => {
   return '#' + [ch(16), ch(8), ch(0)].map((c) => c.toString(16).padStart(2, '0')).join('')
 }
 
-export const TEXT = '#1C1510' // encre sombre (= --bg) : texte sur parts claires et assombrissement des aplats
-export const ON_BRAND = '#FBF3E2' // --on-brand
-export const SURFACE = '#F0E4CC' // parchemin (= --text) : filets et moyeu de la roue
-export const OWN = '#D4A64A' // --own
+export const TEXT = '#2B1C12' // encre brune (= --text) : texte sur parts claires et assombrissement des aplats
+export const ON_BRAND = '#F6EBD0' // --on-brand
+export const SURFACE = '#EADBB6' // parchemin (= --surface) : filets et moyeu de la roue
+export const OWN = '#A6741A' // --own
 
 /**
  * Aplat de famille : la couleur de la famille, assombrie vers --text jusqu'à 4,5:1 contre --on-brand.
