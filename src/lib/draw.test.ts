@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { allTopics, commonTopics, families, philosophies, themes, ownTopics } from './seed'
+import { allTopics, commonTopics, families, hiddenTopics, philosophies, themes, ownTopics } from './seed'
 import {
   availableTopics, drawPhilosophy, drawTopic, emptyFilters, eraOf, matchesFilters,
   pickWeighted, topicsFor, wheelPhilosophies, type DrawContext,
@@ -55,12 +55,31 @@ describe('sujets propres', () => {
     const epic = topicsFor('epicurisme', allTopics)
     expect(epic.some((t) => t.name === 'La dichotomie du contrôle')).toBe(false)
   })
-  it('une philosophie sans sujet propre a exactement les 15 communs', () => {
-    expect(topicsFor('lumieres', allTopics)).toHaveLength(15)
+  it('une philosophie sans sujet masqué ni propre a exactement les 15 communs', () => {
+    expect(topicsFor('transhumanisme', allTopics).filter((t) => t.scope === 'common')).toHaveLength(15)
   })
   it('un sujet commun désactivé disparaît de la roue', () => {
     const off = allTopics.map((t) => (t.id === 'le-temps' ? { ...t, active: false } : t))
-    expect(topicsFor('lumieres', off)).toHaveLength(14)
+    expect(topicsFor('transhumanisme', off).filter((t) => t.scope === 'common')).toHaveLength(14)
+  })
+})
+
+describe('sujets masqués par philosophie', () => {
+  it('Pensée inuite ne montre plus ses sujets retirés ni fusionnés, mais garde son sujet propre', () => {
+    const ids = topicsFor('pensee-inuite', allTopics).map((t) => t.id)
+    for (const gone of ['determinisme-et-libre-arbitre', 'amour-relations-et-desir', 'corps-plaisir-et-emotions', 'realite-et-connaissance']) expect(ids).not.toContain(gone)
+    expect(ids).toContain('pensee-inuite--inuit-qaujimajatuqangit-savoir-traditionnel')
+    expect(ids).toContain('rapport-a-la-nature-et-au-cosmos')
+  })
+  it("n'affecte pas les autres philosophies", () => {
+    expect(topicsFor('stoicisme', allTopics).map((t) => t.id)).toContain('determinisme-et-libre-arbitre')
+  })
+  it('tous les sujets masqués existent, et aucune philosophie n’est vidée', () => {
+    const common = new Set(commonTopics.map((t) => t.id))
+    for (const [ph, ids] of Object.entries(hiddenTopics)) {
+      for (const id of ids) expect(common.has(id), `${ph} : ${id}`).toBe(true)
+      expect(topicsFor(ph, allTopics).length, ph).toBeGreaterThanOrEqual(5)
+    }
   })
 })
 

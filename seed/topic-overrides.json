@@ -1,0 +1,363 @@
+{
+  "presocratiques": [
+    "effort-travail-et-reussite",
+    "corps-plaisir-et-emotions"
+  ],
+  "sophistes": [
+    "mort-et-vie-apres-la-mort",
+    "le-temps",
+    "corps-plaisir-et-emotions"
+  ],
+  "cynisme": [
+    "le-temps",
+    "realite-et-connaissance"
+  ],
+  "hedonisme-cyrenaique": [
+    "le-temps",
+    "rapport-a-la-nature-et-au-cosmos"
+  ],
+  "pyrrhonisme-scepticisme": [
+    "amour-relations-et-desir",
+    "effort-travail-et-reussite"
+  ],
+  "neoplatonisme": [
+    "effort-travail-et-reussite",
+    "societe-et-politique"
+  ],
+  "madhyamaka-nagarjuna": [
+    "corps-plaisir-et-emotions",
+    "amour-relations-et-desir",
+    "effort-travail-et-reussite"
+  ],
+  "vedanta-advaita": [
+    "societe-et-politique",
+    "effort-travail-et-reussite"
+  ],
+  "jainisme": [
+    "amour-relations-et-desir"
+  ],
+  "charvaka-materialisme-indien": [
+    "le-temps",
+    "effort-travail-et-reussite",
+    "societe-et-politique"
+  ],
+  "samkhya-et-yoga": [
+    "societe-et-politique",
+    "amour-relations-et-desir"
+  ],
+  "nyaya-vaisesika": [
+    "amour-relations-et-desir",
+    "corps-plaisir-et-emotions",
+    "effort-travail-et-reussite",
+    "societe-et-politique"
+  ],
+  "yogacara": [
+    "societe-et-politique",
+    "effort-travail-et-reussite"
+  ],
+  "ajivika-fatalisme": [
+    "realite-et-connaissance",
+    "amour-relations-et-desir",
+    "societe-et-politique",
+    "corps-plaisir-et-emotions",
+    "determinisme-et-libre-arbitre"
+  ],
+  "pensee-indienne-moderne-gandhi-tagore-ambedkar": [
+    "le-temps",
+    "realite-et-connaissance"
+  ],
+  "confucianisme": [
+    "realite-et-connaissance"
+  ],
+  "mohisme": [
+    "le-soi-la-conscience-et-l-identite",
+    "le-temps"
+  ],
+  "legisme": [
+    "mort-et-vie-apres-la-mort",
+    "le-temps",
+    "sens-de-la-vie",
+    "le-soi-la-conscience-et-l-identite",
+    "dieu-et-le-divin",
+    "realite-et-connaissance",
+    "corps-plaisir-et-emotions",
+    "amour-relations-et-desir",
+    "rapport-a-la-nature-et-au-cosmos"
+  ],
+  "zen": [
+    "societe-et-politique",
+    "amour-relations-et-desir"
+  ],
+  "mencius": [
+    "le-temps",
+    "realite-et-connaissance"
+  ],
+  "xunzi": [
+    "amour-relations-et-desir",
+    "realite-et-connaissance"
+  ],
+  "wang-yangming": [
+    "dieu-et-le-divin",
+    "corps-plaisir-et-emotions"
+  ],
+  "ecole-de-kyoto": [
+    "corps-plaisir-et-emotions",
+    "effort-travail-et-reussite",
+    "amour-relations-et-desir"
+  ],
+  "bushido": [
+    "le-temps",
+    "realite-et-connaissance",
+    "dieu-et-le-divin",
+    "amour-relations-et-desir",
+    "determinisme-et-libre-arbitre",
+    "rapport-a-la-nature-et-au-cosmos"
+  ],
+  "bouddhisme-engage": [
+    "le-temps",
+    "realite-et-connaissance",
+    "determinisme-et-libre-arbitre"
+  ],
+  "kapwa-philippines": [
+    "mort-et-vie-apres-la-mort",
+    "le-temps",
+    "realite-et-connaissance",
+    "dieu-et-le-divin",
+    "determinisme-et-libre-arbitre",
+    "rapport-a-la-nature-et-au-cosmos",
+    "corps-plaisir-et-emotions",
+    "effort-travail-et-reussite"
+  ],
+  "philosophie-islamique-classique-et-soufisme": [
+    "effort-travail-et-reussite"
+  ],
+  "sagesse-juive-maimonide-ecclesiaste": [
+    "realite-et-connaissance"
+  ],
+  "gnosticisme": [
+    "effort-travail-et-reussite",
+    "societe-et-politique"
+  ],
+  "ibn-khaldun": [
+    "le-soi-la-conscience-et-l-identite",
+    "realite-et-connaissance",
+    "corps-plaisir-et-emotions",
+    "amour-relations-et-desir",
+    "sens-de-la-vie"
+  ],
+  "illuminationisme-persan": [
+    "societe-et-politique",
+    "effort-travail-et-reussite"
+  ],
+  "mu-tazilisme": [
+    "corps-plaisir-et-emotions",
+    "amour-relations-et-desir",
+    "effort-travail-et-reussite"
+  ],
+  "ubuntu": [
+    "realite-et-connaissance",
+    "determinisme-et-libre-arbitre"
+  ],
+  "philosophie-akan": [
+    "le-soi-la-conscience-et-l-identite"
+  ],
+  "philosophie-yoruba-ifa-ori": [
+    "determinisme-et-libre-arbitre"
+  ],
+  "maat-egypte-ancienne": [
+    "realite-et-connaissance",
+    "determinisme-et-libre-arbitre"
+  ],
+  "zera-yacob-ethiopie": [
+    "le-temps",
+    "corps-plaisir-et-emotions",
+    "effort-travail-et-reussite"
+  ],
+  "negritude-et-panafricanisme": [
+    "mort-et-vie-apres-la-mort",
+    "le-temps",
+    "dieu-et-le-divin",
+    "determinisme-et-libre-arbitre",
+    "realite-et-connaissance"
+  ],
+  "visions-du-monde-autochtones-d-amerique-du-nord": [
+    "dieu-et-le-divin",
+    "determinisme-et-libre-arbitre",
+    "effort-travail-et-reussite"
+  ],
+  "philosophie-nahua-azteque": [
+    "amour-relations-et-desir",
+    "effort-travail-et-reussite"
+  ],
+  "philosophies-andines-buen-vivir": [
+    "dieu-et-le-divin",
+    "rapport-a-la-nature-et-au-cosmos",
+    "determinisme-et-libre-arbitre",
+    "realite-et-connaissance"
+  ],
+  "pensee-inuite": [
+    "realite-et-connaissance",
+    "determinisme-et-libre-arbitre",
+    "amour-relations-et-desir",
+    "corps-plaisir-et-emotions"
+  ],
+  "philosophie-de-la-liberation-et-pensee-decoloniale": [
+    "mort-et-vie-apres-la-mort",
+    "le-temps",
+    "corps-plaisir-et-emotions"
+  ],
+  "temps-du-reve-aborigene": [
+    "rapport-a-la-nature-et-au-cosmos",
+    "determinisme-et-libre-arbitre",
+    "effort-travail-et-reussite"
+  ],
+  "vision-maorie-whakapapa": [
+    "determinisme-et-libre-arbitre",
+    "effort-travail-et-reussite"
+  ],
+  "humanisme-de-la-renaissance": [
+    "le-temps"
+  ],
+  "realisme-politique-machiavel-hobbes": [
+    "le-temps",
+    "corps-plaisir-et-emotions",
+    "amour-relations-et-desir",
+    "sens-de-la-vie"
+  ],
+  "rationalisme": [
+    "effort-travail-et-reussite",
+    "societe-et-politique"
+  ],
+  "empirisme": [
+    "mort-et-vie-apres-la-mort",
+    "corps-plaisir-et-emotions",
+    "effort-travail-et-reussite"
+  ],
+  "lumieres": [
+    "le-temps",
+    "realite-et-connaissance"
+  ],
+  "kantisme": [
+    "corps-plaisir-et-emotions",
+    "amour-relations-et-desir",
+    "effort-travail-et-reussite"
+  ],
+  "utilitarisme": [
+    "realite-et-connaissance",
+    "le-temps"
+  ],
+  "liberalisme-politique-locke-rawls": [
+    "mort-et-vie-apres-la-mort",
+    "le-temps",
+    "realite-et-connaissance",
+    "corps-plaisir-et-emotions",
+    "rapport-a-la-nature-et-au-cosmos"
+  ],
+  "idealisme-allemand-hegel": [
+    "corps-plaisir-et-emotions"
+  ],
+  "romantisme": [
+    "realite-et-connaissance",
+    "effort-travail-et-reussite"
+  ],
+  "pessimisme-de-schopenhauer": [
+    "societe-et-politique",
+    "effort-travail-et-reussite"
+  ],
+  "kierkegaard": [
+    "societe-et-politique",
+    "rapport-a-la-nature-et-au-cosmos",
+    "corps-plaisir-et-emotions"
+  ],
+  "marxisme": [
+    "mort-et-vie-apres-la-mort",
+    "corps-plaisir-et-emotions"
+  ],
+  "pragmatisme": [
+    "mort-et-vie-apres-la-mort",
+    "corps-plaisir-et-emotions",
+    "amour-relations-et-desir"
+  ],
+  "bergson-et-philosophie-du-processus": [
+    "effort-travail-et-reussite"
+  ],
+  "phenomenologie": [
+    "dieu-et-le-divin",
+    "effort-travail-et-reussite",
+    "societe-et-politique"
+  ],
+  "existentialisme": [
+    "rapport-a-la-nature-et-au-cosmos"
+  ],
+  "absurdisme": [
+    "le-temps"
+  ],
+  "philosophie-analytique-wittgenstein": [
+    "mort-et-vie-apres-la-mort",
+    "corps-plaisir-et-emotions",
+    "amour-relations-et-desir",
+    "rapport-a-la-nature-et-au-cosmos",
+    "effort-travail-et-reussite",
+    "societe-et-politique"
+  ],
+  "structuralisme-et-postmodernisme": [
+    "mort-et-vie-apres-la-mort",
+    "dieu-et-le-divin"
+  ],
+  "psychanalyse-freud-jung": [
+    "realite-et-connaissance",
+    "effort-travail-et-reussite"
+  ],
+  "ethique-de-l-alterite-levinas-buber": [
+    "rapport-a-la-nature-et-au-cosmos",
+    "effort-travail-et-reussite",
+    "realite-et-connaissance"
+  ],
+  "anarchisme": [
+    "mort-et-vie-apres-la-mort",
+    "le-temps",
+    "realite-et-connaissance"
+  ],
+  "feminisme-et-ethique-du-care": [
+    "mort-et-vie-apres-la-mort",
+    "le-temps",
+    "realite-et-connaissance"
+  ],
+  "ecologie-profonde": [
+    "le-temps",
+    "realite-et-connaissance"
+  ],
+  "altruisme-efficace": [
+    "mort-et-vie-apres-la-mort",
+    "le-temps",
+    "realite-et-connaissance",
+    "dieu-et-le-divin",
+    "corps-plaisir-et-emotions",
+    "amour-relations-et-desir",
+    "rapport-a-la-nature-et-au-cosmos"
+  ],
+  "wabi-sabi": [
+    "mort-et-vie-apres-la-mort",
+    "determinisme-et-libre-arbitre",
+    "realite-et-connaissance",
+    "societe-et-politique",
+    "nature-humaine",
+    "amour-relations-et-desir"
+  ],
+  "minimalisme": [
+    "mort-et-vie-apres-la-mort",
+    "le-temps",
+    "realite-et-connaissance",
+    "dieu-et-le-divin",
+    "determinisme-et-libre-arbitre",
+    "corps-plaisir-et-emotions",
+    "amour-relations-et-desir",
+    "nature-humaine"
+  ],
+  "philosophie-de-l-esprit-dualisme-physicalisme-panpsychisme": [
+    "societe-et-politique",
+    "amour-relations-et-desir",
+    "effort-travail-et-reussite",
+    "bonheur-et-souffrance"
+  ]
+}

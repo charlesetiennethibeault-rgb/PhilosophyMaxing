@@ -2,6 +2,7 @@ import type {
   DrawSettings, Draw, EraId, Filters, NoteStatus, Philosophy, Topic,
 } from './types'
 import { cellKey } from './types'
+import { hiddenTopics } from './seed'
 
 export const ERAS: { id: EraId; label: string; from: number; to: number }[] = [
   { id: 'antiquite', label: 'Antiquité (avant 500)', from: -Infinity, to: 500 },
@@ -31,10 +32,11 @@ export function matchesFilters(p: Philosophy, f: Filters): boolean {
   return true
 }
 
-/** Sujets de la roue pour une philosophie : communs actifs + propres à elle, seulement. */
+/** Sujets de la roue pour une philosophie : communs actifs (sauf ceux masqués pour elle) + propres à elle. */
 export function topicsFor(philosophyId: string, topics: Topic[]): Topic[] {
+  const hidden = hiddenTopics[philosophyId] ?? []
   return topics
-    .filter((t) => t.active && (t.scope === 'common' || t.philosophy === philosophyId))
+    .filter((t) => t.active && (t.scope === 'common' ? !hidden.includes(t.id) : t.philosophy === philosophyId))
     .sort((a, b) => (a.scope === b.scope ? a.order - b.order : a.scope === 'common' ? -1 : 1))
 }
 

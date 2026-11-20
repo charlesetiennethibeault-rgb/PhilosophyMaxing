@@ -1,10 +1,13 @@
 import { describe, expect, it } from 'vitest'
-import { allTopics, families, philosophies, themes, commonTopics } from './seed'
+import { allTopics, families, hiddenTopics, philosophies, themes, commonTopics } from './seed'
 import {
   move, normalize, progressSummary, searchPhilosophies, shouldSuggestSynthesis, slugify, themeReady, themeTopics,
 } from './tools'
 import { buildBackup, parseBackup } from './backup'
 import { cellKey, emptyNote, type Note, type NoteStatus } from './types'
+
+const HIDDEN = Object.values(hiddenTopics).flat().length
+const HIDDEN_TEMPS = Object.values(hiddenTopics).filter((ids) => ids.includes('le-temps')).length
 
 const note = (p: string, t: string, patch: Partial<Note> = {}): Note => ({ ...emptyNote(p, t), ...patch })
 
@@ -45,12 +48,12 @@ describe('recherche', () => {
 describe('progression', () => {
   it('global, par famille et par époque', () => {
     const statuses: Record<string, NoteStatus> = {
-      [cellKey('lumieres', 'le-temps')]: 'deep',
-      [cellKey('lumieres', 'sens-de-la-vie')]: 'deep',
+      [cellKey('kantisme', 'le-temps')]: 'deep',
+      [cellKey('kantisme', 'sens-de-la-vie')]: 'deep',
       [cellKey('stoicisme', 'le-temps')]: 'draft',
     }
     const s = progressSummary(philosophies, allTopics, statuses, families)
-    const total = 87 * 15 + 140
+    const total = 87 * 15 - HIDDEN + 140
     expect(s.global.total).toBe(total)
     expect(s.global.deep).toBe(2)
     expect(s.global.draft).toBe(1)
@@ -61,7 +64,7 @@ describe('progression', () => {
   })
   it('les sujets désactivés ne comptent plus', () => {
     const off = allTopics.map((t) => (t.id === 'le-temps' ? { ...t, active: false } : t))
-    expect(progressSummary(philosophies, off, {}, families).global.total).toBe(87 * 14 + 140)
+    expect(progressSummary(philosophies, off, {}, families).global.total).toBe(87 * 14 - (HIDDEN - HIDDEN_TEMPS) + 140)
   })
   it('0 % sans note', () => {
     expect(progressSummary(philosophies, allTopics, {}, families).global.pct).toBe(0)
