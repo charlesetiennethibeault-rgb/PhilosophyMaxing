@@ -30,7 +30,10 @@ export const statueFor = (philosophyId: string): Statue | undefined => statues.f
 /** Adresse publique de la photo (tient compte du chemin de base de GitHub Pages). */
 export const statueUrl = (file: string) => `${import.meta.env.BASE_URL}statues/${file}`
 
-/** Légende lisible : « Statue de Platon » / « Figure symbolique : … ». */
+/** Nom court de la personne représentée : « Ptahhotep, auteur de… » → « Ptahhotep ». */
+export const statueName = (s: Statue): string => s.who.split(/,| \(/)[0].trim()
+
+/** Texte alternatif de l'image (pour les lecteurs d'écran, pas affiché). */
 export function statueCaption(s: Statue): string {
   if (s.symbolic) return `Figure symbolique : ${s.who}`
   return `${s.material === 'bronze' ? 'Statue en bronze' : 'Statue'} de ${s.who}`

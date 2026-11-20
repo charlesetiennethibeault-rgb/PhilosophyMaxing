@@ -1,8 +1,8 @@
-import { statueCaption, statueFor, statueUrl } from '../lib/statues'
+import { statueCaption, statueFor, statueName, statueUrl } from '../lib/statues'
 
 /** La statue du créateur de la philosophie, dans une niche de pierre (design.md §14). */
-export default function StatueNiche({ philosophyId, philosophyName }: { philosophyId: string; philosophyName: string }) {
-  const s = statueFor(philosophyId)
+export default function StatueNiche({ philosophy }: { philosophy: { id: string; name: string; dateLabel: string; founder: string } }) {
+  const s = statueFor(philosophy.id)
   const hasPhoto = !!s?.file
   return (
     <figure className={`statue${hasPhoto ? '' : ' empty'}`}>
@@ -13,14 +13,16 @@ export default function StatueNiche({ philosophyId, philosophyName }: { philosop
             alt={`${statueCaption(s!)}${s!.material && s!.material !== 'pierre' ? ` (${s!.material})` : ''}`}
           />
         ) : (
-          <span className="niche-empty">Socle vide</span>
+          <svg className="niche-bust" viewBox="0 0 120 160" role="img" aria-label="Buste sans photo">
+            <path d="M60 22c-14 0-24 11-24 26 0 10 4 18 10 23-1 6-3 10-9 13-14 6-27 10-27 28v28h100v-28c0-18-13-22-27-28-6-3-8-7-9-13 6-5 10-13 10-23 0-15-10-26-24-26z" />
+          </svg>
         )}
         <div className="plinth" aria-hidden="true" />
       </div>
       <figcaption>
-        <span className="statue-who">{hasPhoto ? statueCaption(s!) : `Pas de statue pour ${philosophyName}`}</span>
-        {s?.symbolic && <span className="statue-note">Pas de créateur unique : choix symbolique.</span>}
-        {!hasPhoto && s && <span className="statue-note">Aucune statue libre de droits trouvée.</span>}
+        <span className="statue-who">{hasPhoto ? statueName(s!) : philosophy.founder.split(/ \(/)[0]}</span>
+        <span className="statue-note">{philosophy.name}</span>
+        <span className="statue-note">{philosophy.dateLabel}</span>
         {hasPhoto && (
           <span className="statue-credit">
             Photo : {s!.author || 'auteur inconnu'}, {s!.license} ·{' '}
