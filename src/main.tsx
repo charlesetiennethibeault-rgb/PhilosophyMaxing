@@ -1,4 +1,5 @@
 import { StrictMode } from 'react'
+import { registerSW } from 'virtual:pwa-register'
 import { createRoot } from 'react-dom/client'
 import '@fontsource/source-serif-4/latin-ext-400.css'
 import '@fontsource/source-serif-4/latin-ext-600.css'
@@ -47,3 +48,6 @@ createRoot(document.getElementById('root')!).render(
     <Root />
   </StrictMode>,
 )
+
+// Nouvelle version : le service worker s'active et la page se recharge toute seule (plus de Ctrl+Maj+R).
+registerSW({ immediate: true })

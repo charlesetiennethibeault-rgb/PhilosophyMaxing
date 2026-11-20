@@ -31,6 +31,9 @@ export default defineConfig({
       workbox: {
         globPatterns: ['**/*.{js,css,html,svg,png,woff2}'],
         globIgnores: ['statues/**'],
+        skipWaiting: true,
+        clientsClaim: true,
+        cleanupOutdatedCaches: true,
         navigateFallback: `${base}index.html`,
         // Les données vivent dans Supabase : jamais mises en cache par le service worker.
         navigateFallbackDenylist: [/^\/auth\//],
