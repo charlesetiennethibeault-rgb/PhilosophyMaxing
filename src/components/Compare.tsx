@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import Markdown from './Markdown'
+import StatueNiche from './StatueNiche'
 import { useData } from '../lib/DataContext'
 import { topicsFor } from '../lib/draw'
 import { href } from '../lib/route'
@@ -129,9 +130,11 @@ export default function Compare({ philosophies, topics, notes, syntheses, params
 
       <div className="cmp-cols">
         <section className={`cmp-col${col === 'a' ? ' show' : ''}`} aria-label={`Philosophie A : ${pa?.name ?? ''}`}>
+          {pa && <StatueNiche philosophyId={pa.id} philosophyName={pa.name} />}
           <h2>{pa?.name}</h2>{column(pa)}
         </section>
         <section className={`cmp-col${col === 'b' ? ' show' : ''}`} aria-label={`Philosophie B : ${pb?.name ?? ''}`}>
+          {pb && <StatueNiche philosophyId={pb.id} philosophyName={pb.name} />}
           <h2>{pb?.name}</h2>{column(pb)}
         </section>
       </div>

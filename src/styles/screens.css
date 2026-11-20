@@ -159,3 +159,18 @@
   .row-notes { padding-left: var(--s-2); }
   .note-head h1 { font-size: var(--t-28); }
 }
+
+/* Statue du créateur, dans une niche de pierre (design.md §14) */
+.statue { display: flex; flex-direction: column; align-items: center; gap: var(--s-2); margin: 0; }
+.niche {
+  position: relative; isolation: isolate; width: min(100%, 240px); aspect-ratio: 3 / 4; overflow: hidden;
+  background: var(--stone); border: 3px solid var(--stone-dark); border-radius: 999px 999px var(--r-card) var(--r-card); box-shadow: var(--shadow-1);
+}
+.niche img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center 20%; filter: grayscale(1) contrast(1.06); mix-blend-mode: multiply; }
+.plinth { position: absolute; left: 0; right: 0; bottom: 0; height: 9%; background: var(--stone-dark); border-top: 2px solid var(--stone-light); }
+.niche-empty { position: absolute; inset: 0 0 9%; display: grid; place-items: center; color: var(--text-2); font-size: var(--t-14); font-weight: 600; }
+.statue figcaption { display: flex; flex-direction: column; gap: var(--s-1); align-items: center; text-align: center; max-width: 280px; }
+.statue-who { font-size: var(--t-14); line-height: 1.3; font-weight: 600; }
+.statue-note { font-size: var(--t-12); line-height: 1.3; color: var(--text-2); }
+.statue-credit { font-size: var(--t-12); line-height: 1.3; color: var(--text-2); }
+.statue-credit a { color: var(--text-2); }

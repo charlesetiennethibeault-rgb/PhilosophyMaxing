@@ -1,0 +1,872 @@
+[
+  {
+    "philosophy": "presocratiques",
+    "who": "Héraclite (figure majeure des présocratiques)",
+    "symbolic": true,
+    "material": "marbre",
+    "file": "presocratiques.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File%3ABust_of_Heraclitus_-_Victoria_and_Albert_Museum.jpg",
+    "author": "Afshin Darian",
+    "license": "CC BY 2.0"
+  },
+  {
+    "philosophy": "sophistes",
+    "who": "",
+    "symbolic": false,
+    "material": "",
+    "file": "",
+    "page": "",
+    "author": "",
+    "license": ""
+  },
+  {
+    "philosophy": "platonisme",
+    "who": "Platon",
+    "symbolic": false,
+    "material": "marbre",
+    "file": "platonisme.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File%3ABust_of_Plato%2C_Vatican_Museum%2C_Rome.jpg",
+    "author": "Dudva",
+    "license": "CC BY-SA 4.0"
+  },
+  {
+    "philosophy": "aristotelisme",
+    "who": "Aristote",
+    "symbolic": false,
+    "material": "marbre",
+    "file": "aristotelisme.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File%3AAristotle_Altemps_Inv8575.jpg",
+    "author": "After Lysippos",
+    "license": "Public domain"
+  },
+  {
+    "philosophy": "cynisme",
+    "who": "Diogène de Sinope",
+    "symbolic": false,
+    "material": "marbre",
+    "file": "cynisme.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File%3AMET_-_Marble_statue_of_Diogenes.jpg",
+    "author": "Met Museum",
+    "license": "CC0"
+  },
+  {
+    "philosophy": "hedonisme-cyrenaique",
+    "who": "Asclépios, statue de marbre de Cyrène (cité d’Aristippe)",
+    "symbolic": true,
+    "material": "marbre",
+    "file": "hedonisme-cyrenaique.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File%3A4._Marble_statue_of_Asklepios%2C_god_of_medicine._From_Cyrene_(Libya)%2C_2nd_century_CE._Museum_of_Scotland%2C_Edinburgh.jpg",
+    "author": "Osama Shukir Muhammed Amin FRCP(Glasg)",
+    "license": "CC BY-SA 4.0"
+  },
+  {
+    "philosophy": "epicurisme",
+    "who": "Épicure",
+    "symbolic": false,
+    "material": "marbre",
+    "file": "epicurisme.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File%3AEpicurus_bust.jpg",
+    "author": "auteur inconnu",
+    "license": "Public domain"
+  },
+  {
+    "philosophy": "stoicisme",
+    "who": "Zénon de Kition",
+    "symbolic": false,
+    "material": "marbre",
+    "file": "stoicisme.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File%3ABust_of_Zeno_of_Citium-Ancient_Roman_busts_in_the_Neues_Museum.jpg",
+    "author": "Yair Haklai",
+    "license": "CC BY-SA 4.0"
+  },
+  {
+    "philosophy": "pyrrhonisme-scepticisme",
+    "who": "Pyrrhon d’Élis",
+    "symbolic": false,
+    "material": "marbre",
+    "file": "pyrrhonisme-scepticisme.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File%3APhilosopher%2C_marble_head%2C_Roman_copy%2C_AM_Corfu%2C_Krfm22.jpg",
+    "author": "Zde",
+    "license": "CC BY-SA 4.0"
+  },
+  {
+    "philosophy": "neoplatonisme",
+    "who": "Plotin",
+    "symbolic": false,
+    "material": "marbre",
+    "file": "neoplatonisme.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File%3AHead_of_Plotinus%2C_Museo_Ostiense_inv.JPG",
+    "author": "Sailko",
+    "license": "CC BY 3.0"
+  },
+  {
+    "philosophy": "bouddhisme-des-origines-theravada",
+    "who": "le Bouddha",
+    "symbolic": false,
+    "material": "pierre",
+    "file": "bouddhisme-des-origines-theravada.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File%3AStone_statue_of_Buddha_1st-2nd_century_CE_Pakistan.jpg",
+    "author": "Mary Harrsch",
+    "license": "CC BY-SA 4.0"
+  },
+  {
+    "philosophy": "madhyamaka-nagarjuna",
+    "who": "Nagarjuna",
+    "symbolic": false,
+    "material": "pierre",
+    "file": "madhyamaka-nagarjuna.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File%3ANagarjuna_Statue%2C_Kagyu_Samy%C3%A9_Ling_Tibetan_Centre_-_geograph.org.uk_-_3174509.jpg",
+    "author": "James T M Towill",
+    "license": "CC BY-SA 2.0"
+  },
+  {
+    "philosophy": "vedanta-advaita",
+    "who": "Śaṅkara",
+    "symbolic": false,
+    "material": "pierre",
+    "file": "vedanta-advaita.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File%3AAdi_Shankaracharya_Statue_at_Gokarna_beach_-_panoramio.jpg",
+    "author": "Deepak Patil",
+    "license": "CC BY-SA 3.0"
+  },
+  {
+    "philosophy": "jainisme",
+    "who": "un Tirthankara jaïn (Mahavira est le 24e)",
+    "symbolic": true,
+    "material": "pierre",
+    "file": "jainisme.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File%3A'8._Black_Stone_Statue_of_Jain_Tirthankara_at_Pakhbirra_Museum_in_Purulia_district.jpg",
+    "author": "amitabho58",
+    "license": "CC BY-SA 3.0"
+  },
+  {
+    "philosophy": "charvaka-materialisme-indien",
+    "who": "Brihaspati, maître légendaire",
+    "symbolic": true,
+    "material": "pierre",
+    "file": "charvaka-materialisme-indien.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File%3ASculpture_of_Brihaspati.jpg",
+    "author": "auteur inconnu",
+    "license": "CC0"
+  },
+  {
+    "philosophy": "samkhya-et-yoga",
+    "who": "Patañjali",
+    "symbolic": false,
+    "material": "pierre",
+    "file": "samkhya-et-yoga.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File%3APatanjali_Statue.jpg",
+    "author": "User:Alokprasad",
+    "license": "CC BY-SA 3.0"
+  },
+  {
+    "philosophy": "nyaya-vaisesika",
+    "who": "un sage indien (rishi)",
+    "symbolic": true,
+    "material": "pierre",
+    "file": "nyaya-vaisesika.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File%3AEkshringa_Rishi_in_Ecstasy_on_His_First_Experience_of_Sex_-_Circa_2nd_Century_CE_-_Chaubara_Mound_-_ACCN_00-J-7_-_Government_Museum_-_Mathura_2013-02-23_5660.JPG",
+    "author": "Biswarup Ganguly",
+    "license": "CC BY 3.0"
+  },
+  {
+    "philosophy": "yogacara",
+    "who": "Asaṅga (Muchaku), Kōfuku-ji",
+    "symbolic": false,
+    "material": "bois",
+    "file": "yogacara.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File%3AMuchaku_Hokuendo_Kofukuji_2.jpg",
+    "author": "Nara National Museum 奈良帝室博物館 (Showa 8 - 1933)",
+    "license": "Public domain"
+  },
+  {
+    "philosophy": "bouddhisme-tibetain",
+    "who": "Padmasambhava (Guru Rinpoché)",
+    "symbolic": true,
+    "material": "statue peinte",
+    "file": "bouddhisme-tibetain.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File%3AStatue_of_Guru_Padmasambhava_(Guru_Rinpoche)%2C_the_patron_saint_of_Sikkim.jpg",
+    "author": "Subhrajyoti07",
+    "license": "CC BY-SA 4.0"
+  },
+  {
+    "philosophy": "ajivika-fatalisme",
+    "who": "les Six maîtres hérétiques, dont Makkhali Gosāla (relief de Dazu)",
+    "symbolic": true,
+    "material": "pierre (relief)",
+    "file": "ajivika-fatalisme.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File%3ADazu_Six_Heretical_Teachers.jpg",
+    "author": "Gwydion M. Williams from Coventry, Great Britain",
+    "license": "CC BY 2.0"
+  },
+  {
+    "philosophy": "pensee-indienne-moderne-gandhi-tagore-ambedkar",
+    "who": "Rabindranath Tagore",
+    "symbolic": true,
+    "material": "bronze",
+    "file": "pensee-indienne-moderne-gandhi-tagore-ambedkar.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File%3ARabindranath_Tagore_statue_in_Dublin%2C_Ireland_02.jpg",
+    "author": "Satdeep Gill",
+    "license": "CC BY-SA 4.0"
+  },
+  {
+    "philosophy": "confucianisme",
+    "who": "Confucius",
+    "symbolic": false,
+    "material": "marbre",
+    "file": "confucianisme.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File%3AStatue_of_Confucius_at_Beijing_temple.JPG",
+    "author": "Mx. Granger",
+    "license": "CC0"
+  },
+  {
+    "philosophy": "taoisme",
+    "who": "Laozi",
+    "symbolic": false,
+    "material": "pierre",
+    "file": "taoisme.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File%3AStone_statue_of_Lao_Tzu_at_Qingyuanshan_(20200930154018).jpg",
+    "author": "N509FZ",
+    "license": "CC BY-SA 4.0"
+  },
+  {
+    "philosophy": "mohisme",
+    "who": "Mozi",
+    "symbolic": false,
+    "material": "statue",
+    "file": "mohisme.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File%3AStatue_of_Mozi_Ruding.jpg",
+    "author": "Yoshi Canopus",
+    "license": "CC0"
+  },
+  {
+    "philosophy": "legisme",
+    "who": "Shang Yang",
+    "symbolic": false,
+    "material": "granit",
+    "file": "legisme.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File%3AStatue_of_Shang_Yang.jpg",
+    "author": "Taken by Fanghong",
+    "license": "CC BY 2.5"
+  },
+  {
+    "philosophy": "zen",
+    "who": "Bodhidharma (Daruma), fondateur légendaire du chan",
+    "symbolic": true,
+    "material": "bois",
+    "file": "zen.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File%3AH%C3%B4rin-ji_Daruma-dera_(Kamigyo_Kyoto)_hdsr_Statue_S5_a35.jpg",
+    "author": "Hyppolyte de Saint-Rambert",
+    "license": "CC BY 4.0"
+  },
+  {
+    "philosophy": "mencius",
+    "who": "Mencius",
+    "symbolic": false,
+    "material": "statue",
+    "file": "mencius.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File%3AYushima_Seido_-_seated_statue_of_Mencius.jpg",
+    "author": "Guilhem Vellut",
+    "license": "CC BY 2.0"
+  },
+  {
+    "philosophy": "xunzi",
+    "who": "",
+    "symbolic": false,
+    "material": "",
+    "file": "",
+    "page": "",
+    "author": "",
+    "license": ""
+  },
+  {
+    "philosophy": "neo-confucianisme-zhu-xi-avec-yi-hwang-en-coree",
+    "who": "Zhu Xi (avec Zhang Shi), académie de Yuelu",
+    "symbolic": false,
+    "material": "bronze",
+    "file": "neo-confucianisme-zhu-xi-avec-yi-hwang-en-coree.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File%3AYuelu_Academy_129.jpg",
+    "author": "Huangdan2060",
+    "license": "CC BY 3.0"
+  },
+  {
+    "philosophy": "wang-yangming",
+    "who": "Wang Yangming",
+    "symbolic": false,
+    "material": "pierre",
+    "file": "wang-yangming.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File%3AStatue_of_Wang_Yangming_(Yangmingshan)_20240807.jpg",
+    "author": "阿道",
+    "license": "CC BY-SA 4.0"
+  },
+  {
+    "philosophy": "ecole-de-kyoto",
+    "who": "",
+    "symbolic": false,
+    "material": "",
+    "file": "",
+    "page": "",
+    "author": "",
+    "license": ""
+  },
+  {
+    "philosophy": "bushido",
+    "who": "Kusunoki Masashige, samouraï modèle de loyauté",
+    "symbolic": true,
+    "material": "bronze",
+    "file": "bushido.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File%3AStatue_of_masashige_kusunoki.jpg",
+    "author": "No machine-readable author provided. Volfgang assumed (based on copyright claims).",
+    "license": "CC BY-SA 3.0"
+  },
+  {
+    "philosophy": "bouddhisme-engage",
+    "who": "Thích Quảng Đức (monument)",
+    "symbolic": false,
+    "material": "bronze",
+    "file": "bouddhisme-engage.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File%3ATh%C3%ADch_Qu%E1%BA%A3ng_%C4%90%E1%BB%A9c.JPG",
+    "author": "Ngô Trung",
+    "license": "CC BY 3.0"
+  },
+  {
+    "philosophy": "kapwa-philippines",
+    "who": "José Rizal, héros philippin (monument)",
+    "symbolic": true,
+    "material": "pierre",
+    "file": "kapwa-philippines.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File%3ADr._Jose_Rizal_Monument_at_night_02.jpg",
+    "author": "IndayLiburan",
+    "license": "CC BY-SA 4.0"
+  },
+  {
+    "philosophy": "philosophie-islamique-classique-et-soufisme",
+    "who": "Averroès",
+    "symbolic": true,
+    "material": "pierre",
+    "file": "philosophie-islamique-classique-et-soufisme.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File%3AClose_up_shot_of_Averroes_statue_in_C%C3%B3rdoba%2C_Spain.jpg",
+    "author": "AbdullahAlhariri0",
+    "license": "CC0"
+  },
+  {
+    "philosophy": "sagesse-juive-maimonide-ecclesiaste",
+    "who": "Maïmonide",
+    "symbolic": true,
+    "material": "bronze",
+    "file": "sagesse-juive-maimonide-ecclesiaste.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File%3AMaimonides_statue_-_Cordoba.jpg",
+    "author": "David Baron",
+    "license": "CC BY-SA 2.0"
+  },
+  {
+    "philosophy": "scolastique-chretienne-augustin-thomas-d-aquin",
+    "who": "saint Augustin",
+    "symbolic": true,
+    "material": "pierre",
+    "file": "scolastique-chretienne-augustin-thomas-d-aquin.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File%3AStatue_de_saint_Augustin_dans_la_fa%C3%A7ade_de_l'%C3%A9glise_Saint-%C3%89tienne%2C_Rennes%2C_France.jpg",
+    "author": "Jean-Baptiste Barré",
+    "license": "Public domain"
+  },
+  {
+    "philosophy": "gnosticisme",
+    "who": "Sophia, la Sagesse (figure gnostique)",
+    "symbolic": true,
+    "material": "pierre",
+    "file": "gnosticisme.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File%3AStatue_of_Sophia_(Celsus_library_in_Ephesus).jpg",
+    "author": "Yair Haklai",
+    "license": "CC BY-SA 4.0"
+  },
+  {
+    "philosophy": "ibn-khaldun",
+    "who": "Ibn Khaldūn",
+    "symbolic": false,
+    "material": "bronze",
+    "file": "ibn-khaldun.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File%3AIbn_Khaldun_Statue.jpg",
+    "author": "Original picture by Kassus , this cropped version is own work ( Al Ameer son )",
+    "license": "CC BY 2.5"
+  },
+  {
+    "philosophy": "illuminationisme-persan",
+    "who": "",
+    "symbolic": true,
+    "material": "",
+    "file": "",
+    "page": "",
+    "author": "",
+    "license": ""
+  },
+  {
+    "philosophy": "mu-tazilisme",
+    "who": "",
+    "symbolic": true,
+    "material": "",
+    "file": "",
+    "page": "",
+    "author": "",
+    "license": ""
+  },
+  {
+    "philosophy": "zoroastrisme-et-manicheisme",
+    "who": "Zarathoustra",
+    "symbolic": false,
+    "material": "pierre sculptée",
+    "file": "zoroastrisme-et-manicheisme.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File%3AZoroaster_Bust_-_DPLA_-_e7b3dc9cdb0d24feb660790feef994ce.jpg",
+    "author": "auteur inconnu",
+    "license": "Public domain"
+  },
+  {
+    "philosophy": "ubuntu",
+    "who": "Nelson Mandela, porte-voix de l’ubuntu",
+    "symbolic": true,
+    "material": "bronze",
+    "file": "ubuntu.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File%3AMadiba_Statue_Nelson_Mandela_Square.jpg",
+    "author": "Jeff Attaway",
+    "license": "CC BY 2.0"
+  },
+  {
+    "philosophy": "philosophie-akan",
+    "who": "Kwame Nkrumah, penseur et homme d’État akan",
+    "symbolic": true,
+    "material": "bronze doré",
+    "file": "philosophie-akan.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File%3AA_statue_of_Dr._Kwame_Nkrumah.jpg",
+    "author": "Kwameghana(Bright Kwame Ayisi)",
+    "license": "CC0"
+  },
+  {
+    "philosophy": "philosophie-yoruba-ifa-ori",
+    "who": "statues d’Esie (pierre, Yoruba)",
+    "symbolic": true,
+    "material": "pierre (stéatite)",
+    "file": "philosophie-yoruba-ifa-ori.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File%3AEsie_Soap_stone.jpg",
+    "author": "CloudyMyst",
+    "license": "CC BY-SA 4.0"
+  },
+  {
+    "philosophy": "maat-egypte-ancienne",
+    "who": "Ptahhotep, auteur de maximes sur la Maât",
+    "symbolic": true,
+    "material": "pierre peinte",
+    "file": "maat-egypte-ancienne.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File%3A26690-_Statue_of_Ptahhotep.jpg",
+    "author": "Panegyrics of Granovetter",
+    "license": "CC BY-SA 2.0"
+  },
+  {
+    "philosophy": "zera-yacob-ethiopie",
+    "who": "une figurine éthiopienne ancienne",
+    "symbolic": true,
+    "material": "terre cuite",
+    "file": "zera-yacob-ethiopie.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File%3AAncient_Figurine%2C_National_Museum%2C_Addis_Ababa%2C_Ethiopia_(2130296832).jpg",
+    "author": "A. Davey from Where I Live Now: Pacific Northwest",
+    "license": "CC BY 2.0"
+  },
+  {
+    "philosophy": "negritude-et-panafricanisme",
+    "who": "",
+    "symbolic": false,
+    "material": "",
+    "file": "",
+    "page": "",
+    "author": "",
+    "license": ""
+  },
+  {
+    "philosophy": "visions-du-monde-autochtones-d-amerique-du-nord",
+    "who": "une figure mississippienne en pierre (Amérique du Nord)",
+    "symbolic": true,
+    "material": "pierre",
+    "file": "visions-du-monde-autochtones-d-amerique-du-nord.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File%3AMississippian_Figure_MET_DP100985.jpg",
+    "author": "auteur inconnu",
+    "license": "CC0"
+  },
+  {
+    "philosophy": "philosophie-nahua-azteque",
+    "who": "Macuilxochitl (Xochipilli), sculpture aztèque",
+    "symbolic": true,
+    "material": "pierre",
+    "file": "philosophie-nahua-azteque.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File%3AAztec_Macuilxochitl_(Xochipilli).jpg",
+    "author": "https://www.flickr.com/photos/rosemania/",
+    "license": "CC BY 2.0"
+  },
+  {
+    "philosophy": "philosophies-andines-buen-vivir",
+    "who": "un monolithe de Tiwanaku",
+    "symbolic": true,
+    "material": "pierre",
+    "file": "philosophies-andines-buen-vivir.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File%3ATiwanaku1.jpg",
+    "author": "auteur inconnu",
+    "license": "CC BY-SA 2.0 fr"
+  },
+  {
+    "philosophy": "pensee-inuite",
+    "who": "un inuksuk",
+    "symbolic": true,
+    "material": "pierre",
+    "file": "pensee-inuite.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File%3AInukshuk_Park_05.jpg",
+    "author": "Fabian Roudra Baroi",
+    "license": "CC BY-SA 4.0"
+  },
+  {
+    "philosophy": "philosophie-de-la-liberation-et-pensee-decoloniale",
+    "who": "Bartolomé de las Casas, défenseur des peuples colonisés",
+    "symbolic": true,
+    "material": "pierre",
+    "file": "philosophie-de-la-liberation-et-pensee-decoloniale.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File%3AStatue_of_Bartolome_de_las_Casas_-_San_Cristobal_de_las_Casas_-_Chiapas_-_Mexico_(15024584504).jpg",
+    "author": "Adam Jones from Kelowna, BC, Canada",
+    "license": "CC BY-SA 2.0"
+  },
+  {
+    "philosophy": "temps-du-reve-aborigene",
+    "who": "une sculpture aborigène contemporaine",
+    "symbolic": true,
+    "material": "bronze",
+    "file": "temps-du-reve-aborigene.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File%3AContemporary_aboriginal_sculpture_-_Royal_Ontario_Museum_(42454900721).jpg",
+    "author": "Thomas Quine",
+    "license": "CC BY 2.0"
+  },
+  {
+    "philosophy": "vision-maorie-whakapapa",
+    "who": "une statue maorie sculptée",
+    "symbolic": true,
+    "material": "pierre",
+    "file": "vision-maorie-whakapapa.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File%3AMaori_Carving_Statue_On_Twin_Streams_Cycleway.jpg",
+    "author": "Ingolfson",
+    "license": "CC0"
+  },
+  {
+    "philosophy": "humanisme-de-la-renaissance",
+    "who": "Montaigne",
+    "symbolic": false,
+    "material": "marbre",
+    "file": "humanisme-de-la-renaissance.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File%3ABordeaux_-_Statue_Montaigne_(2).JPG",
+    "author": "Remi Jouan",
+    "license": "CC BY 3.0"
+  },
+  {
+    "philosophy": "realisme-politique-machiavel-hobbes",
+    "who": "Machiavel",
+    "symbolic": false,
+    "material": "marbre",
+    "file": "realisme-politique-machiavel-hobbes.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File%3AStatue_of_Niccol%C3%B2_Machiavelli.jpg",
+    "author": "Satdeep Gill",
+    "license": "Public domain"
+  },
+  {
+    "philosophy": "rationalisme",
+    "who": "Descartes",
+    "symbolic": false,
+    "material": "bronze",
+    "file": "rationalisme.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File%3ATours_-_Statue_of_Ren%C3%A9_Descartes.jpg",
+    "author": "Benjamin Smith",
+    "license": "CC BY-SA 4.0"
+  },
+  {
+    "philosophy": "spinozisme",
+    "who": "Spinoza",
+    "symbolic": false,
+    "material": "buste",
+    "file": "spinozisme.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File%3AA.H._H%C3%BCttenbach_-_Buste_van_Benedictus_de_Spinoza_-_Spinozahuis%2C_Den_Haag%2C_1931.jpg",
+    "author": "Alfred H. Hüttenbach. Photograph: Unknown author Unknown author",
+    "license": "Public domain"
+  },
+  {
+    "philosophy": "empirisme",
+    "who": "John Locke",
+    "symbolic": false,
+    "material": "marbre",
+    "file": "empirisme.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File%3AWestmacott's_Statue_of_John_Locke_in_UCL_Main_Building_(detail).jpg",
+    "author": "Ethan Doyle White",
+    "license": "CC BY-SA 4.0"
+  },
+  {
+    "philosophy": "lumieres",
+    "who": "Voltaire (buste de Houdon)",
+    "symbolic": true,
+    "material": "marbre",
+    "file": "lumieres.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File%3ABuste_de_Voltaire_par_Jean_Antoine_Houdon_(Louvre_RF_1426).jpg",
+    "author": "JackyM59",
+    "license": "Public domain"
+  },
+  {
+    "philosophy": "kantisme",
+    "who": "Emmanuel Kant",
+    "symbolic": false,
+    "material": "bronze",
+    "file": "kantisme.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File%3AKant_Kaliningrad.jpg",
+    "author": "photo taken by myself",
+    "license": "CC BY-SA 2.5"
+  },
+  {
+    "philosophy": "utilitarisme",
+    "who": "John Stuart Mill, héritier de Bentham",
+    "symbolic": true,
+    "material": "bronze",
+    "file": "utilitarisme.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File%3AAt_London_2025_310_-_Statue_of_John_Stuart_Mill%2C_London.jpg",
+    "author": "Photograph by Mike Peel ( www.mikepeel.net ).",
+    "license": "CC BY-SA 4.0"
+  },
+  {
+    "philosophy": "liberalisme-politique-locke-rawls",
+    "who": "Montesquieu, penseur de la liberté politique",
+    "symbolic": true,
+    "material": "marbre",
+    "file": "liberalisme-politique-locke-rawls.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File%3ABordeaux_-_Statue_Montesquieu_(2).JPG",
+    "author": "Remi Jouan",
+    "license": "CC BY 3.0"
+  },
+  {
+    "philosophy": "idealisme-allemand-hegel",
+    "who": "Hegel",
+    "symbolic": true,
+    "material": "bronze",
+    "file": "idealisme-allemand-hegel.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File%3AHegel_B_Mitte.jpg",
+    "author": "Miriam Guterland",
+    "license": "CC BY-SA 3.0"
+  },
+  {
+    "philosophy": "romantisme",
+    "who": "Johann Gottfried Herder",
+    "symbolic": true,
+    "material": "bronze",
+    "file": "romantisme.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File%3AJohann-Gottfried-Herder-statue-Weimar-2025.jpg",
+    "author": "Acediscovery",
+    "license": "CC BY 4.0"
+  },
+  {
+    "philosophy": "pessimisme-de-schopenhauer",
+    "who": "Arthur Schopenhauer (buste d’Elisabet Ney)",
+    "symbolic": false,
+    "material": "marbre",
+    "file": "pessimisme-de-schopenhauer.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File%3AArthur_Schopenhauer_Ney.jpg",
+    "author": "Bryan Rutherford",
+    "license": "CC BY-SA 4.0"
+  },
+  {
+    "philosophy": "kierkegaard",
+    "who": "Søren Kierkegaard",
+    "symbolic": false,
+    "material": "bronze",
+    "file": "kierkegaard.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File%3AKirkegaard_statue_Hasselriis_Copenhagen_Denmark.jpg",
+    "author": "Jebulon",
+    "license": "CC0"
+  },
+  {
+    "philosophy": "marxisme",
+    "who": "Karl Marx et Friedrich Engels",
+    "symbolic": false,
+    "material": "bronze",
+    "file": "marxisme.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File%3AKarl_Marx_anf_Friedrich_Engels_statue_in_Berlin.jpg",
+    "author": "Dudva",
+    "license": "CC BY-SA 4.0"
+  },
+  {
+    "philosophy": "pragmatisme",
+    "who": "Ralph Waldo Emerson, précurseur américain du pragmatisme",
+    "symbolic": true,
+    "material": "marbre",
+    "file": "pragmatisme.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File%3AStatue_of_Ralph_Waldo_Emerson.png",
+    "author": "Cincinnati Art Museum",
+    "license": "Public domain"
+  },
+  {
+    "philosophy": "nietzsche",
+    "who": "Friedrich Nietzsche",
+    "symbolic": false,
+    "material": "marbre",
+    "file": "nietzsche.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File%3AWeimar%2C_Museum_Neues_Weimar%2C_Siegfried_Schellbach%2C_B%C3%BCste_von_Friedrich_Nietzsche.jpg",
+    "author": "Dguendel",
+    "license": "CC BY 4.0"
+  },
+  {
+    "philosophy": "bergson-et-philosophie-du-processus",
+    "who": "",
+    "symbolic": false,
+    "material": "",
+    "file": "",
+    "page": "",
+    "author": "",
+    "license": ""
+  },
+  {
+    "philosophy": "phenomenologie",
+    "who": "Edmund Husserl",
+    "symbolic": false,
+    "material": "bronze",
+    "file": "phenomenologie.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File%3AProst%C4%9Bjov%2C_pam%C4%9Btn%C3%AD_deska_Husserl_(3).jpg",
+    "author": "Palickap",
+    "license": "CC BY-SA 4.0"
+  },
+  {
+    "philosophy": "existentialisme",
+    "who": "Karl Jaspers",
+    "symbolic": false,
+    "material": "bronze",
+    "file": "existentialisme.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File%3AKarl_Jaspers_B%C3%BCste.JPG",
+    "author": "Dbleicher ( Diskussion )",
+    "license": "CC BY-SA 3.0 de"
+  },
+  {
+    "philosophy": "absurdisme",
+    "who": "Albert Camus",
+    "symbolic": false,
+    "material": "bronze",
+    "file": "absurdisme.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File%3AAlbert_Camus_B%C3%BCste%2C_2021_R%C3%A1kospalota.jpg",
+    "author": "Globetrotter19",
+    "license": "CC BY-SA 3.0"
+  },
+  {
+    "philosophy": "philosophie-analytique-wittgenstein",
+    "who": "Bertrand Russell",
+    "symbolic": true,
+    "material": "bronze",
+    "file": "philosophie-analytique-wittgenstein.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File%3ABust_Of_Bertrand_Russell-Red_Lion_Square-London.jpg",
+    "author": "Lonpicman",
+    "license": "CC BY-SA 3.0"
+  },
+  {
+    "philosophy": "structuralisme-et-postmodernisme",
+    "who": "",
+    "symbolic": true,
+    "material": "",
+    "file": "",
+    "page": "",
+    "author": "",
+    "license": ""
+  },
+  {
+    "philosophy": "psychanalyse-freud-jung",
+    "who": "Sigmund Freud",
+    "symbolic": false,
+    "material": "bronze",
+    "file": "psychanalyse-freud-jung.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File%3A20180608_Statue_Sigmund_Freud_Vienna_850_1438.jpg",
+    "author": "Granada",
+    "license": "CC BY-SA 4.0"
+  },
+  {
+    "philosophy": "ethique-de-l-alterite-levinas-buber",
+    "who": "",
+    "symbolic": true,
+    "material": "",
+    "file": "",
+    "page": "",
+    "author": "",
+    "license": ""
+  },
+  {
+    "philosophy": "anarchisme",
+    "who": "",
+    "symbolic": false,
+    "material": "",
+    "file": "",
+    "page": "",
+    "author": "",
+    "license": ""
+  },
+  {
+    "philosophy": "feminisme-et-ethique-du-care",
+    "who": "Mary Wollstonecraft (sculpture « Mary on the Green »)",
+    "symbolic": true,
+    "material": "métal argenté",
+    "file": "feminisme-et-ethique-du-care.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File%3AMary_wollstonecraft_statue_2020.jpg",
+    "author": "Grim23",
+    "license": "CC BY-SA 4.0"
+  },
+  {
+    "philosophy": "ecologie-profonde",
+    "who": "John Muir, précurseur de la protection de la nature",
+    "symbolic": true,
+    "material": "bronze",
+    "file": "ecologie-profonde.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File%3AJohn_Muir_Statue_-_geograph.org.uk_-_6176762.jpg",
+    "author": "Adam Ward",
+    "license": "CC BY-SA 2.0"
+  },
+  {
+    "philosophy": "transhumanisme",
+    "who": "Prométhée délivré (frise de Pergame)",
+    "symbolic": true,
+    "material": "marbre",
+    "file": "transhumanisme.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File%3APergamon_Panorama_Heracles_frees_Prometheus_8264.jpg",
+    "author": "Dosseman",
+    "license": "CC BY-SA 4.0"
+  },
+  {
+    "philosophy": "altruisme-efficace",
+    "who": "le Bon Samaritain (sculpture)",
+    "symbolic": true,
+    "material": "pierre",
+    "file": "altruisme-efficace.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File%3AGood_Samaritan_sculpture%2C_Glenrothes.jpg",
+    "author": "RRRW001",
+    "license": "CC BY-SA 4.0"
+  },
+  {
+    "philosophy": "wabi-sabi",
+    "who": "",
+    "symbolic": false,
+    "material": "",
+    "file": "",
+    "page": "",
+    "author": "",
+    "license": ""
+  },
+  {
+    "philosophy": "minimalisme",
+    "who": "Le Baiser de Brâncuși",
+    "symbolic": true,
+    "material": "pierre",
+    "file": "minimalisme.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File%3AThe_Kiss_LCCN93511527.jpg",
+    "author": "Brancusi, Constantin, 1876-1957, artist",
+    "license": "Public domain"
+  },
+  {
+    "philosophy": "philosophie-de-l-esprit-dualisme-physicalisme-panpsychisme",
+    "who": "Le Penseur de Rodin",
+    "symbolic": true,
+    "material": "bronze",
+    "file": "philosophie-de-l-esprit-dualisme-physicalisme-panpsychisme.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File%3ALe_Penseur_Mus%C3%A9e_Rodin_Paris_S.1295.jpg",
+    "author": "Auguste Rodin",
+    "license": "CC0"
+  }
+]

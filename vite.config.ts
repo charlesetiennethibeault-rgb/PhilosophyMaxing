@@ -30,11 +30,13 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,svg,png,woff2}'],
+        globIgnores: ['statues/**'],
         navigateFallback: `${base}index.html`,
         // Les données vivent dans Supabase : jamais mises en cache par le service worker.
         navigateFallbackDenylist: [/^\/auth\//],
         runtimeCaching: [
           { urlPattern: ({ url }) => url.hostname.endsWith('.supabase.co'), handler: 'NetworkOnly' },
+          { urlPattern: ({ url }) => url.pathname.includes('/statues/'), handler: 'CacheFirst', options: { cacheName: 'statues', expiration: { maxEntries: 100, maxAgeSeconds: 60 * 60 * 24 * 365 } } },
         ],
       },
     }),

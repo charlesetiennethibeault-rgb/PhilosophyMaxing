@@ -42,6 +42,11 @@
   --ribbon: #8E2F2B;
   --silver: #C5CCD3;
 
+  /* Pierre des statues de « Comparer » (voir design.md §14) */
+  --stone: #CFCBC2;
+  --stone-dark: #A39E92;
+  --stone-light: #E4E1DA;
+
   /* Typographie */
   --font-ui: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-write: 'Source Serif 4', Georgia, serif;

@@ -1,0 +1,390 @@
+{
+  "presocratiques": {
+    "i": 3,
+    "material": "marbre",
+    "who": "Héraclite (figure majeure des présocratiques)",
+    "symbolic": true
+  },
+  "platonisme": {
+    "i": 3,
+    "material": "marbre"
+  },
+  "aristotelisme": {
+    "i": 3,
+    "material": "marbre"
+  },
+  "cynisme": {
+    "i": 0,
+    "material": "marbre"
+  },
+  "epicurisme": {
+    "i": 1,
+    "material": "marbre"
+  },
+  "stoicisme": {
+    "i": 1,
+    "material": "marbre"
+  },
+  "pyrrhonisme-scepticisme": {
+    "i": 1,
+    "material": "marbre"
+  },
+  "neoplatonisme": {
+    "i": 0,
+    "material": "marbre"
+  },
+  "bouddhisme-des-origines-theravada": {
+    "i": 0,
+    "material": "pierre"
+  },
+  "madhyamaka-nagarjuna": {
+    "i": 0,
+    "material": "pierre"
+  },
+  "vedanta-advaita": {
+    "i": 1,
+    "material": "pierre"
+  },
+  "jainisme": {
+    "i": 4,
+    "material": "pierre",
+    "who": "un Tirthankara jaïn (Mahavira est le 24e)",
+    "symbolic": true
+  },
+  "charvaka-materialisme-indien": {
+    "i": 0,
+    "material": "pierre"
+  },
+  "samkhya-et-yoga": {
+    "i": 0,
+    "material": "pierre"
+  },
+  "bouddhisme-tibetain": {
+    "i": 0,
+    "material": "statue peinte",
+    "who": "Padmasambhava (Guru Rinpoché)",
+    "symbolic": true
+  },
+  "ajivika-fatalisme": {
+    "i": 0,
+    "material": "pierre (relief)",
+    "who": "les Six maîtres hérétiques, dont Makkhali Gosāla (relief de Dazu)",
+    "symbolic": true
+  },
+  "pensee-indienne-moderne-gandhi-tagore-ambedkar": {
+    "i": 1,
+    "material": "bronze",
+    "who": "Rabindranath Tagore",
+    "symbolic": true
+  },
+  "taoisme": {
+    "i": 3,
+    "material": "pierre"
+  },
+  "mohisme": {
+    "i": 0,
+    "material": "statue"
+  },
+  "legisme": {
+    "i": 0,
+    "material": "granit"
+  },
+  "mencius": {
+    "i": 0,
+    "material": "statue"
+  },
+  "neo-confucianisme-zhu-xi-avec-yi-hwang-en-coree": {
+    "i": 0,
+    "material": "bronze",
+    "who": "Zhu Xi (avec Zhang Shi), académie de Yuelu"
+  },
+  "wang-yangming": {
+    "i": 0,
+    "material": "pierre"
+  },
+  "bushido": {
+    "i": 6,
+    "material": "bronze",
+    "who": "Kusunoki Masashige, samouraï modèle de loyauté",
+    "symbolic": true
+  },
+  "bouddhisme-engage": {
+    "i": 1,
+    "material": "bronze",
+    "who": "Thích Quảng Đức (monument)"
+  },
+  "kapwa-philippines": {
+    "i": 0,
+    "material": "pierre",
+    "who": "José Rizal, héros philippin (monument)",
+    "symbolic": true
+  },
+  "philosophie-islamique-classique-et-soufisme": {
+    "i": 5,
+    "material": "pierre",
+    "who": "Averroès",
+    "symbolic": true
+  },
+  "sagesse-juive-maimonide-ecclesiaste": {
+    "i": 0,
+    "material": "bronze",
+    "who": "Maïmonide",
+    "symbolic": true
+  },
+  "scolastique-chretienne-augustin-thomas-d-aquin": {
+    "i": 0,
+    "material": "pierre",
+    "who": "saint Augustin",
+    "symbolic": true
+  },
+  "gnosticisme": {
+    "i": 1,
+    "material": "pierre"
+  },
+  "ibn-khaldun": {
+    "i": 0,
+    "material": "bronze"
+  },
+  "zoroastrisme-et-manicheisme": {
+    "i": 0,
+    "material": "pierre sculptée",
+    "who": "Zarathoustra"
+  },
+  "philosophie-akan": {
+    "i": 2,
+    "material": "bronze doré",
+    "who": "Kwame Nkrumah, penseur et homme d’État akan",
+    "symbolic": true
+  },
+  "philosophie-yoruba-ifa-ori": {
+    "i": 0,
+    "material": "pierre (stéatite)"
+  },
+  "maat-egypte-ancienne": {
+    "i": 4,
+    "material": "pierre peinte",
+    "who": "Ptahhotep, auteur de maximes sur la Maât",
+    "symbolic": true
+  },
+  "zera-yacob-ethiopie": {
+    "i": 0,
+    "material": "terre cuite",
+    "who": "une figurine éthiopienne ancienne",
+    "symbolic": true
+  },
+  "visions-du-monde-autochtones-d-amerique-du-nord": {
+    "i": 4,
+    "material": "pierre",
+    "who": "une figure mississippienne en pierre (Amérique du Nord)",
+    "symbolic": true
+  },
+  "philosophie-nahua-azteque": {
+    "i": 4,
+    "material": "pierre",
+    "who": "Macuilxochitl (Xochipilli), sculpture aztèque",
+    "symbolic": true
+  },
+  "philosophies-andines-buen-vivir": {
+    "i": 0,
+    "material": "pierre",
+    "who": "un monolithe de Tiwanaku",
+    "symbolic": true
+  },
+  "pensee-inuite": {
+    "i": 3,
+    "material": "pierre",
+    "who": "un inuksuk",
+    "symbolic": true
+  },
+  "realisme-politique-machiavel-hobbes": {
+    "i": 2,
+    "material": "marbre"
+  },
+  "rationalisme": {
+    "i": 0,
+    "material": "bronze"
+  },
+  "spinozisme": {
+    "i": 0,
+    "material": "buste"
+  },
+  "empirisme": {
+    "i": 5,
+    "material": "marbre",
+    "who": "John Locke"
+  },
+  "lumieres": {
+    "i": 0,
+    "material": "marbre",
+    "who": "Voltaire (buste de Houdon)",
+    "symbolic": true
+  },
+  "kantisme": {
+    "i": 1,
+    "material": "bronze"
+  },
+  "utilitarisme": {
+    "i": 0,
+    "material": "bronze",
+    "who": "John Stuart Mill, héritier de Bentham",
+    "symbolic": true
+  },
+  "liberalisme-politique-locke-rawls": {
+    "i": 4,
+    "material": "marbre",
+    "who": "Montesquieu, penseur de la liberté politique",
+    "symbolic": true
+  },
+  "idealisme-allemand-hegel": {
+    "i": 1,
+    "material": "bronze",
+    "who": "Hegel",
+    "symbolic": true
+  },
+  "romantisme": {
+    "i": 1,
+    "material": "bronze",
+    "who": "Johann Gottfried Herder",
+    "symbolic": true
+  },
+  "pessimisme-de-schopenhauer": {
+    "i": 1,
+    "material": "marbre",
+    "who": "Arthur Schopenhauer (buste d’Elisabet Ney)"
+  },
+  "kierkegaard": {
+    "i": 0,
+    "material": "bronze"
+  },
+  "marxisme": {
+    "i": 4,
+    "material": "bronze",
+    "who": "Karl Marx et Friedrich Engels"
+  },
+  "nietzsche": {
+    "i": 3,
+    "material": "marbre"
+  },
+  "phenomenologie": {
+    "i": 0,
+    "material": "bronze"
+  },
+  "absurdisme": {
+    "i": 0,
+    "material": "bronze"
+  },
+  "philosophie-analytique-wittgenstein": {
+    "i": 0,
+    "material": "bronze",
+    "who": "Bertrand Russell",
+    "symbolic": true
+  },
+  "psychanalyse-freud-jung": {
+    "i": 0,
+    "material": "bronze"
+  },
+  "feminisme-et-ethique-du-care": {
+    "i": 1,
+    "material": "métal argenté",
+    "who": "Mary Wollstonecraft (sculpture « Mary on the Green »)",
+    "symbolic": true
+  },
+  "ecologie-profonde": {
+    "i": 0,
+    "material": "bronze",
+    "who": "John Muir, précurseur de la protection de la nature",
+    "symbolic": true
+  },
+  "transhumanisme": {
+    "i": 2,
+    "material": "marbre",
+    "who": "Prométhée délivré (frise de Pergame)",
+    "symbolic": true
+  },
+  "altruisme-efficace": {
+    "i": 4,
+    "material": "pierre",
+    "who": "le Bon Samaritain (sculpture)",
+    "symbolic": true
+  },
+  "philosophie-de-l-esprit-dualisme-physicalisme-panpsychisme": {
+    "i": 1,
+    "material": "bronze",
+    "who": "Le Penseur de Rodin",
+    "symbolic": true
+  },
+  "hedonisme-cyrenaique": {
+    "i": 5,
+    "material": "marbre",
+    "who": "Asclépios, statue de marbre de Cyrène (cité d’Aristippe)",
+    "symbolic": true
+  },
+  "nyaya-vaisesika": {
+    "i": 0,
+    "material": "pierre",
+    "who": "un sage indien (rishi)",
+    "symbolic": true
+  },
+  "yogacara": {
+    "i": 3,
+    "material": "bois",
+    "who": "Asaṅga (Muchaku), Kōfuku-ji"
+  },
+  "confucianisme": {
+    "i": 1,
+    "material": "marbre",
+    "who": "Confucius"
+  },
+  "zen": {
+    "i": 4,
+    "material": "bois",
+    "who": "Bodhidharma (Daruma), fondateur légendaire du chan",
+    "symbolic": true
+  },
+  "ubuntu": {
+    "i": 2,
+    "material": "bronze",
+    "who": "Nelson Mandela, porte-voix de l’ubuntu",
+    "symbolic": true
+  },
+  "philosophie-de-la-liberation-et-pensee-decoloniale": {
+    "i": 4,
+    "material": "pierre",
+    "who": "Bartolomé de las Casas, défenseur des peuples colonisés",
+    "symbolic": true
+  },
+  "temps-du-reve-aborigene": {
+    "i": 3,
+    "material": "bronze",
+    "who": "une sculpture aborigène contemporaine",
+    "symbolic": true
+  },
+  "vision-maorie-whakapapa": {
+    "i": 1,
+    "material": "pierre",
+    "who": "une statue maorie sculptée",
+    "symbolic": true
+  },
+  "humanisme-de-la-renaissance": {
+    "i": 4,
+    "material": "marbre",
+    "who": "Montaigne"
+  },
+  "pragmatisme": {
+    "i": 6,
+    "material": "marbre",
+    "who": "Ralph Waldo Emerson, précurseur américain du pragmatisme",
+    "symbolic": true
+  },
+  "existentialisme": {
+    "i": 3,
+    "material": "bronze",
+    "who": "Karl Jaspers"
+  },
+  "minimalisme": {
+    "i": 5,
+    "material": "pierre",
+    "who": "Le Baiser de Brâncuși",
+    "symbolic": true
+  }
+}

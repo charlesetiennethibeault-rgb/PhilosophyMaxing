@@ -1,0 +1,28 @@
+// Seconde passe : requêtes de remplacement pour les philosophies dont la première recherche n'a rien donné de bon.
+// Même format que specs.mjs : id → [[requête, qui est représenté, filtre], …]. Utilisé avec : node search.mjs --only id1,id2
+export const EXTRA = {
+  sophistes: [['Protagoras', 'Protagoras', 'protagoras'], ['Gorgias statue', 'Gorgias', 'gorgias'], ['Prodicus Hippias sophist', 'un sophiste grec', 'sophist']],
+  'hedonisme-cyrenaique': [['Aristippus of Cyrene', 'Aristippe de Cyrène', 'aristipp'], ['Cyrene Libya marble statue', 'statue de Cyrène (Libye)', 'cyrene|kyrene']],
+  'nyaya-vaisesika': [['cat:Gautama Maharishi', 'Gautama (sage indien)', 'gautam'], ['Kanada rishi', 'Kaṇāda', 'kanada'], ['Indian rishi stone sculpture', 'un sage indien (rishi)', 'rishi|sage|muni']],
+  yogacara: [['Muchaku Kofukuji', 'Asaṅga (Muchaku), Kōfuku-ji', 'muchaku|asanga'], ['Seshin Kofukuji', 'Vasubandhu (Seshin), Kōfuku-ji', 'seshin|vasubandhu'], ['Asanga Vasubandhu statue', 'Asaṅga et Vasubandhu', 'asanga|vasubandhu']],
+  confucianisme: [['Statue of Confucius', 'Confucius', 'confucius'], ['Confucius statue temple', 'Confucius', 'confucius'], ['Confucius sculpture', 'Confucius', 'confucius'], ['Kong Qiu statue Qufu', 'Confucius', 'confucius|kong']],
+  zen: [['Bodhidharma statue', 'Bodhidharma', 'bodhidharma|daruma|damo'], ['Daruma statue', 'Bodhidharma (Daruma)', 'daruma|bodhidharma'], ['Huineng statue', 'Huineng', 'huineng|hui neng']],
+  xunzi: [['Xunzi', 'Xunzi', 'xunzi|xun zi|xun kuang'], ['Xun Qing statue', 'Xunzi', 'xun qing|xunzi']],
+  'ecole-de-kyoto': [['Nishida Kitaro', 'Nishida Kitarō', 'nishida'], ['Tanabe Hajime', 'Tanabe Hajime', 'tanabe'], ['Philosopher\'s Path Kyoto stone', 'le Chemin de la philosophie, Kyoto', 'philosopher']],
+  'illuminationisme-persan': [['Suhrawardi', 'Sohravardī', 'suhraward|sohraward'], ['Mulla Sadra', 'Mullā Ṣadrā', 'mulla sadra'], ['Avicenna Hamadan statue', 'Avicenne (Hamadan), pour la philosophie persane', 'avicenna|ibn sina']],
+  'mu-tazilisme': [['Al-Jahiz', 'Al-Jāḥiẓ', 'jahiz'], ['Abbasid stucco Samarra sculpture', 'sculpture abbasside de Samarra', 'abbasid|samarra']],
+  ubuntu: [['Nelson Mandela statue', 'Nelson Mandela', 'mandela'], ['Steve Biko statue', 'Steve Biko', 'biko'], ['Desmond Tutu statue', 'Desmond Tutu', 'tutu']],
+  'negritude-et-panafricanisme': [['Aime Cesaire', 'Aimé Césaire', 'cesaire|césaire'], ['Leopold Sedar Senghor', 'Léopold Sédar Senghor', 'senghor'], ['Frantz Fanon statue', 'Frantz Fanon', 'fanon']],
+  'philosophie-de-la-liberation-et-pensee-decoloniale': [['Paulo Freire', 'Paulo Freire', 'freire'], ['Bartolome de las Casas statue', 'Bartolomé de las Casas', 'casas'], ['Simon Bolivar statue', 'Simón Bolívar', 'bolivar|bolívar']],
+  'temps-du-reve-aborigene': [['Aboriginal sculpture', 'sculpture aborigène', 'aborigin'], ['Rainbow Serpent', 'le Serpent arc-en-ciel', 'rainbow serpent']],
+  'vision-maorie-whakapapa': [['Maori carving', 'sculpture maorie', 'maori|māori'], ['Hei-tiki', 'un hei-tiki maori', 'tiki'], ['Pou whenua', 'un pou maori', 'pou']],
+  'humanisme-de-la-renaissance': [['Erasmus statue', 'Érasme', 'erasmus'], ['Montaigne statue', 'Montaigne', 'montaigne'], ['Petrarch statue', 'Pétrarque', 'petrarc'], ['Pico della Mirandola statue', 'Pic de la Mirandole', 'pico']],
+  pragmatisme: [['William James bust', 'William James', 'william james'], ['John Dewey bust', 'John Dewey', 'dewey'], ['Ralph Waldo Emerson statue', 'Ralph Waldo Emerson, précurseur américain', 'emerson']],
+  'bergson-et-philosophie-du-processus': [['Henri Bergson', 'Henri Bergson', 'bergson'], ['Bergson monument', 'Henri Bergson', 'bergson']],
+  existentialisme: [['Sartre', 'Jean-Paul Sartre', 'sartre'], ['Simone de Beauvoir sculpture', 'Simone de Beauvoir', 'beauvoir'], ['Karl Jaspers', 'Karl Jaspers', 'jaspers']],
+  'structuralisme-et-postmodernisme': [['Claude Levi-Strauss', 'Claude Lévi-Strauss', 'levi-strauss|lévi-strauss'], ['Michel Foucault', 'Michel Foucault', 'foucault'], ['Ferdinand de Saussure', 'Ferdinand de Saussure', 'saussure']],
+  'ethique-de-l-alterite-levinas-buber': [['Emmanuel Levinas', 'Emmanuel Levinas', 'levinas'], ['Martin Buber', 'Martin Buber', 'buber'], ['Franz Rosenzweig', 'Franz Rosenzweig', 'rosenzweig']],
+  anarchisme: [['Proudhon', 'Pierre-Joseph Proudhon', 'proudhon'], ['Bakunin', 'Mikhaïl Bakounine', 'bakunin'], ['Kropotkin', 'Pierre Kropotkine', 'kropotkin'], ['Emma Goldman', 'Emma Goldman', 'goldman']],
+  'wabi-sabi': [['Sen no Rikyu', 'Sen no Rikyū', 'rikyu|rikyū'], ['Jizo stone statue moss Japan', 'un Jizō de pierre couvert de mousse (Japon)', 'jizo|jizō']],
+  minimalisme: [['Brancusi', 'Constantin Brâncuși', 'brancusi|brâncuși'], ['The Kiss Brancusi', 'Le Baiser de Brâncuși', 'kiss|baiser'], ['Sleeping Muse Brancusi', 'La Muse endormie de Brâncuși', 'muse']],
+}

@@ -157,3 +157,15 @@ Décision de l'utilisateur, d'après ses photos de roues alignées (meule de pie
 - **Performance** : la roue est dessinée une seule fois dans un bitmap (à chaque changement de parts, de période ou de taille), puis seulement tournée pendant le tirage.
 - **Roue des sujets** : elle garde la roue de la période de la philosophie tirée ; les noms et pastilles d'état sont écrits sur les parts (contraste ≥ 4,5:1 comme avant).
 - **Accessibilité** : la grande roue annonce sa période (« meule de pierre »…) ; les mini-roues sont décoratives (`aria-hidden`) et chaque bouton de la frise porte un libellé complet (période, objet, nombre de philosophies) ; aucune animation ajoutée.
+
+## 14. Les statues de « Comparer » (illustration de contenu)
+
+Décision de l'utilisateur : quand on compare des philosophies, chacune montre **le créateur en statue de pierre**, d'où qu'elle vienne (romaine, chinoise, indienne…), d'après ses deux exemples (un buste de marbre sur fond neutre, une statuette de pierre claire).
+
+- **Source et licences** : photos de **Wikimedia Commons** uniquement, sous licence libre (CC0, domaine public, CC BY, CC BY-SA), copiées dans `public/statues/` (aucun lien vers un serveur extérieur à l'affichage). Chaque photo garde son **crédit visible** : auteur, licence et lien vers la page Commons, 12 px `--text-2` sous la statue. Données dans `seed/statues.json`, recherche reproductible dans `scripts/statues/`.
+- **Choix** : pierre ou marbre d'abord ; à défaut, bronze, plâtre ou bois, **indiqué dans la légende**. Quand la philosophie n'a pas de créateur unique (32 sur 87), la statue est **symbolique** (un penseur emblématique, une divinité, une sculpture de la culture concernée) et la légende le dit : « Pas de créateur unique : choix symbolique ». Quand aucune photo libre n'existe, un **socle vide** est affiché avec la mention « Aucune statue libre de droits trouvée ».
+- **Niche de pierre** (`StatueNiche`) : cadre en arche (le haut est un demi-cercle, le bas a le rayon des cartes, 6 px), rapport 3:4, 240 px au plus, bordure 3 px `--stone-dark`, fond `--stone`, socle en bas (9 % de la hauteur, `--stone-dark` avec filet `--stone-light`). La photo est passée en niveaux de gris (`grayscale(1)`, contraste 1,06) puis **fondue dans la niche par `mix-blend-mode: multiply`** : les fonds clairs prennent la couleur de la pierre, ce qui unifie des photos très différentes.
+- **Pierre** (valeurs d'illustration) : `--stone` `#CFCBC2`, `--stone-dark` `#A39E92`, `--stone-light` `#E4E1DA`.
+- **Légende** sous la niche : qui est représenté (14/600), note éventuelle (12), crédit (12). Alternative texte de l'image : « Statue de … (matière) ».
+- **Performance** : photos de 640 px au plus, chargées à la demande (`loading="lazy"`), mises en cache à la première visite ; aucune n'est dans le précache de la PWA.
+- **État de la collection** : 76 photos sur 87 philosophies ; 11 philosophies ont un socle vide (aucune statue libre trouvée). Photos recompressées à 640 px, JPEG, moins de 500 Ko chacune, hors précache, mises en cache à la demande (`CacheFirst`, cache `statues`).
