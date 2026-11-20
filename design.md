@@ -7,14 +7,14 @@ Source de vérité visuelle. Toute valeur utilisée dans l'interface vient d'ici
 - **Pour qui** : une seule personne, chercheuse ou chercheur autodidacte, qui explore 87 philosophies. Usage régulier, sessions longues d'écriture, sur ordinateur et téléphone.
 - **Tâche principale** : tourner la roue, puis écrire sa propre note sur la case tirée.
 - **Sentiment** : *atelier de chercheur*. Concret, précis, calme, au service du travail.
-- **Direction** : « Carnet de labo » (papier gris-bleu froid, encre, filets fins, catalogue numéroté) + **l'aplat de couleur de la famille** sur la carte de résultat uniquement.
+- **Direction** : « Rome en pierre sombre » (voir §15) : bruns d'ombre, parchemin, rouge pompéien et or, colonnes, frise de grecques, arcades. Remplace l'ancien « Carnet de labo » gris-bleu ; reste : le catalogue numéroté et **l'aplat de couleur de la famille** sur la carte de résultat uniquement.
 - **Évoque** : précis, posé, concret.
-- **N'évoque pas** : ludique, décoré, « bibliothèque d'époque ».
-- **Mode** : clair seulement (`color-scheme: light`).
+- **N'évoque pas** : ludique, criard. (Décoré et « d'époque » sont voulus depuis §15.)
+- **Mode** : sombre seulement (`color-scheme: dark`), décision de l'utilisateur ; un seul thème. Le Carnet (§12) garde son papier kraft clair.
 
 ## 2. Couleurs
 
-Neutres teintés bleu-gris (teinte OKLCH 250, chroma 0,002 à 0,026). Jamais de `#000` ni de `#fff` purs. ~90 % de l'écran est neutre ; la couleur est un signal.
+**Ce tableau décrit l'ancien thème gris-bleu : les valeurs en vigueur sont celles du §15 et de `tokens.css`.** Les rôles des tokens, eux, ne changent pas. Jamais de `#000` ni de `#fff` purs. ~90 % de l'écran est neutre ; la couleur est un signal.
 
 | Token | Hex | OKLCH | Rôle |
 |---|---|---|---|
@@ -35,7 +35,7 @@ Neutres teintés bleu-gris (teinte OKLCH 250, chroma 0,002 à 0,026). Jamais de 
 - **Les 9 couleurs de familles sont des données**, pas des tokens. Elles identifient du contenu (roue, repères, barres de progression) et ne décorent jamais l'interface.
 - **Sujet propre** : signal ocre, toujours avec l'icône étoile et le mot « Propre à … » : `--own` `#C9962B` (parts de roue), `--own-bg` `#F5EBD0`, `--own-ink` `#5E4300` (7,8:1).
 - **États réels seulement**, toujours avec un mot : `--danger` `#A4243B` (suppression, erreur), `--success` `#2B6B49` (« Enregistré », « Vérifiée »), `--warn` `#8A5A00` (« Hors ligne »).
-- Fond sombre : non prévu.
+- Fond sombre : voir §15.
 
 ## 3. Typographie
 
@@ -169,3 +169,42 @@ Décision de l'utilisateur : quand on compare des philosophies, chacune montre *
 - **Légende** sous la niche : qui est représenté (14/600), note éventuelle (12), crédit (12). Alternative texte de l'image : « Statue de … (matière) ».
 - **Performance** : photos de 640 px au plus, chargées à la demande (`loading="lazy"`), mises en cache à la première visite ; aucune n'est dans le précache de la PWA.
 - **État de la collection** : 76 photos sur 87 philosophies ; 11 philosophies ont un socle vide (aucune statue libre trouvée). Photos recompressées à 640 px, JPEG, moins de 500 Ko chacune, hors précache, mises en cache à la demande (`CacheFirst`, cache `statues`).
+
+## 15. Rome en pierre sombre (thème unique, décision de l'utilisateur)
+
+Demande : « mode sombre avec beaucoup de brun, du beige, quelque chose d'ancien, historique, rempli d'histoire ; le site au complet représente l'architecture romaine, très décoré ». Ce paragraphe **remplace** les couleurs du §2 (rôles inchangés) et **lève, pour ce thème seulement**, les interdits « décoré », « fond sombre » et « majuscules » (le Cinzel est une police de capitales).
+
+**Palette** (contrastes vérifiés : texte 13,1:1 sur `--surface`, `--text-2` 9,1:1, `--on-brand` sur `--brand` 5,8:1, `--control-border` 3,7:1) :
+
+| Token | Hex | Rôle |
+|---|---|---|
+| `--bg` | `#1C1510` | brun d'ombre, fond de page |
+| `--surface` | `#271D15` | champs, panneaux, en-tête, cartes |
+| `--surface-2` | `#33271C` | survol, retrait, jauges |
+| `--border` | `#4A3A2A` | filets |
+| `--control-border` | `#8C7452` | bordure des champs |
+| `--text` | `#F0E4CC` | parchemin, texte principal |
+| `--text-2` | `#D0BEA0` | texte secondaire |
+| `--text-3` | `#8A785F` | éléments désactivés seulement |
+| `--brand` / `-hover` / `-press` | `#A8391F` / `#BC452A` / `#902F18` | rouge pompéien : actions principales |
+| `--on-brand` | `#FBF3E2` | texte sur `--brand` et sur les aplats |
+| `--gold` | `#D4AF5F` | or de laurier : élément actif, titres d'écran, marque, repère de la roue |
+| `--gold-dim` | `#8F7435` | or de bronze : filets, cadres, frise |
+| `--marble` | `#E8DFCB` | colonnes (toujours estompées à 22 %) |
+| `--own` / `--own-bg` / `--own-ink` | `#D4A64A` / `#3D2F17` / `#F0D9A0` | sujet propre |
+| `--danger` / `--success` / `--warn` | `#F0958F` / `#8FD0A4` / `#E7B866` | états réels, toujours avec un mot |
+
+Ombres : mêmes niveaux et mêmes couches, teintées de brun (`oklch(8% 0.02 60 / …)`, 30–60 %).
+
+**Typographie** : ajout de **Cinzel** (600, 700), capitales gravées de type inscription romaine, pour la marque, les onglets de navigation, `h1`, `h2`, le nom sur la carte de résultat, « Choisir son époque » et l'étiquette de la roue. Le reste ne change pas (Plex Sans pour l'interface, Source Serif pour les mots de l'utilisateur, Shantell Sans pour le Carnet). Titres d'écran (`h1`) en `--gold`.
+
+**Ornements** (motifs SVG dans `src/styles/roman.css`, jamais de dégradé) :
+- grain de pierre fin sur tout le fond ;
+- **frise de grecques** (méandre, 12 px) sous l'en-tête, avec filet or de bronze de 2 px ;
+- **temple** (fronton + 4 colonnes) devant le nom de l'application ;
+- **colonnes de marbre ioniques** de chaque côté de l'écran, à partir de 1 400 px, derrière le contenu, sauf sur la roue (pleine largeur) ;
+- **filet à losange** sous chaque titre d'écran ;
+- **cadres doubles** (bordure or de bronze + filet intérieur) sur cartes, messages et « Choisir son époque » ;
+- **portique d'arcades** au pied des écrans hors Carnet (masqué sur téléphone) ;
+- or `--gold` pour tout élément actif (onglet, navigation du bas, époque choisie).
+Le Carnet (§12) ne reçoit ni cadres ni capitales : il garde son papier et son écriture à la main.

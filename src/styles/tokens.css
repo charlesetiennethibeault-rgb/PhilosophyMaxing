@@ -1,32 +1,39 @@
 /* Tokens : source = design.md. Ne pas ajouter de valeur ici sans la décrire dans design.md. */
 :root {
-  color-scheme: light;
+  color-scheme: dark;
 
-  /* Neutres teintés (teinte 250) */
-  --bg: #F1F3F5;
-  --surface: #FAFBFC;
-  --surface-2: #E7EAEE;
-  --border: #D3D9E0;
-  --control-border: #7B8795;
-  --text: #1B2530;
-  --text-2: #4F5B68;
-  --text-3: #6B7785;
+  /* Rome en pierre sombre : bruns d'ombre, parchemin, rouge pompéien, or (voir design.md §15) */
+  --bg: #1C1510;
+  --surface: #271D15;
+  --surface-2: #33271C;
+  --border: #4A3A2A;
+  --control-border: #8C7452;
+  --text: #F0E4CC;
+  --text-2: #D0BEA0;
+  --text-3: #8A785F;
 
-  /* Marque : actions principales et élément actif */
-  --brand: #C0451A;
-  --brand-hover: #A93C15;
-  --brand-press: #923312;
-  --on-brand: #FBFCFD;
+  /* Marque : actions principales (rouge pompéien) */
+  --brand: #A8391F;
+  --brand-hover: #BC452A;
+  --brand-press: #902F18;
+  --on-brand: #FBF3E2;
+
+  /* Or de laurier et de bronze : élément actif, filets, ornements */
+  --gold: #D4AF5F;
+  --gold-dim: #8F7435;
+
+  /* Marbre des colonnes (ornement, toujours estompé) */
+  --marble: #E8DFCB;
 
   /* Sujet propre */
-  --own: #C9962B;
-  --own-bg: #F5EBD0;
-  --own-ink: #5E4300;
+  --own: #D4A64A;
+  --own-bg: #3D2F17;
+  --own-ink: #F0D9A0;
 
   /* États réels (toujours avec un mot) */
-  --danger: #A4243B;
-  --success: #2B6B49;
-  --warn: #8A5A00;
+  --danger: #F0958F;
+  --success: #8FD0A4;
+  --warn: #E7B866;
 
   /* Carnet : cuir et papier kraft (voir design.md §12). Les SVG de carnet.css recopient ces couleurs. */
   --kraft: #E4CC9F;
@@ -50,6 +57,7 @@
   /* Typographie */
   --font-ui: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-write: 'Source Serif 4', Georgia, serif;
+  --font-title: 'Cinzel', 'Trajan Pro', Georgia, serif;
   --font-hand: 'Shantell Sans Variable', 'Segoe Print', 'Comic Sans MS', cursive;
   --t-12: 0.75rem;
   --t-14: 0.875rem;
@@ -74,10 +82,10 @@
   --r-sheet: 10px;
   --r-tag: 999px;
 
-  /* Ombres : deux couches, teintées vers la teinte 250 */
-  --shadow-1: 0 1px 1px oklch(26% 0.025 251 / 0.06), 0 1px 3px oklch(26% 0.025 251 / 0.1);
-  --shadow-2: 0 2px 4px oklch(26% 0.025 251 / 0.08), 0 8px 24px oklch(26% 0.025 251 / 0.14);
-  --shadow-3: 0 4px 8px oklch(26% 0.025 251 / 0.1), 0 16px 48px oklch(26% 0.025 251 / 0.18);
+  /* Ombres : deux couches, teintées de brun */
+  --shadow-1: 0 1px 1px oklch(8% 0.02 60 / 0.3), 0 1px 3px oklch(8% 0.02 60 / 0.4);
+  --shadow-2: 0 2px 4px oklch(8% 0.02 60 / 0.35), 0 8px 24px oklch(8% 0.02 60 / 0.5);
+  --shadow-3: 0 4px 8px oklch(8% 0.02 60 / 0.4), 0 16px 48px oklch(8% 0.02 60 / 0.6);
 
   /* Mouvement */
   --ease: cubic-bezier(0.23, 1, 0.32, 1);
